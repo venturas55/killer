@@ -1,0 +1,25 @@
+<h1>Cambios en las caracteristicas de  {{item.columnaA}}</h1>
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/items1/edit/{{item.columnaA}}" method="POST">
+                    <div class="form-group"><label for="columnaA">columnaA</label><input value="{{item.columnaA}}" class="form-control" type="text" name="columnaA" placeholder="columnaA" autofocus /> </div>
+                        <div class="form-group"><label for="columnaB">columnaB</label><input value="{{item.columnaB}}" class="form-control" type="text" name="columnaB" placeholder="columnaB" autofocus /> </div>
+                        <div class="form-group"> <label for="columnaC">columnaC</label><input value="{{item.columnaC}}" class="form-control" type="text" name="columnaC" placeholder="columnaC"  /> </div>
+                        <div class="form-group"> <label for="columnaD">columnaD</label><input value="{{item.columnaD}}" class="form-control" type="text" name="columnaD" placeholder="columnaD" />  </div>
+                        <div class="form-group"><label for="columnaE">columnaE</label><input value="{{item.columnaE}}" class="form-control" type="text" name="columnaE" placeholder="columnaE"  />  </div>
+                        <div class="form-group"><label for="columnaF">columnaF</label><input value="{{item.columnaF}}" class="form-control" type="number" name="columnaF" placeholder="columnaF"/> </div>
+                        <div class="form-group"><label for="columnaG">columnaG</label><input value="{{item.columnaG}}" class="form-control" type="text" name="columnaG" placeholder="columnaG" /> </div>
+                            
+                        <button class="btn btn-success btn-block">Guardar</button>
+                    </form>
+                    <form action="/items1/plantilla/{{item.columnaA}}" method="GET">
+                                <button class="btn btn-danger btn-block">Cancelar</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+

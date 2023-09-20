@@ -1,0 +1,41 @@
+<div class="container p-4 pb-2 mb-5">
+  <div class="row">
+    <div class="col-md-12">
+      {{#if items}}
+      <table class="listado">
+        <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Imagen</th>
+        </tr>
+        {{#each items}}
+        <tr>
+          <td><a href="/objetos/plantilla/{{id}}">{{id}}</a></td>
+          <td>{{nombre}}</td>
+          <td>{{descripcion}} </td>
+          <td>{{imageURL}}</td>
+        </tr>
+
+        {{/each}}
+      </table>
+      {{else}}
+      <div class="col-md-4-mx-auto">
+        <div class="card card-body text-center">
+          {{#if obj}}
+          <tr>No hay objetos guardados con {{obj.filtro}} que contenga {{obj.valor}} <a href="/objetos/add"> Crea
+              una!</a>
+          </tr>
+          {{else}}
+          <tr>No hay objetos guardados <a href="/objetos/add"> Crea uno!</a></tr>
+
+          {{/if}}
+        </div>
+      </div>
+      {{/if}}
+      <h1>TOTAL: {{suma items}}</h1>
+      <a href="/objetos/add" class="btn btn-primary"> Añadir objeto</a>
+
+    </div>
+  </div>
+</div>

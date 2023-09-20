@@ -1,0 +1,67 @@
+
+<div class="container-fluid">
+    <div class="row m-1">
+
+        <div class="col-4 calculos mx-auto" id="app1">
+            <h1> I. APP1 en VUE</h1>
+              <i> Pie app1</i>
+        </div>
+        <div class="col-6 calculos mx-auto" id="app2">
+            <h1> II. APP2 en VUE  </h1>
+           
+            <i> Pie app2</i>
+        </div>
+    </div>
+
+</div>
+<script>
+ 
+
+var app = new Vue({
+  el: "#app1",
+  data: {
+    var: "3",
+   
+  },
+
+  filters: {
+    redondeo2: function (value) {
+      if (value != null) return value.toFixed(2);
+    },
+    redondeo6: function (value) {
+      if (value != null) return value.toFixed(6);
+    },
+  },
+  methods: {
+    dormir: function (milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if (new Date().getTime() - start > milliseconds) {
+          break;
+        }
+      }
+    },
+  },
+  computed: {
+    resultado1: function () {
+     
+    },
+  },
+  mounted: function () {},
+});
+
+var app = new Vue({
+  el: "#app2",
+  data: {
+  },
+  filters: {
+  },
+  methods: {
+  },
+  computed: {
+  },
+  mounted: function () {
+  },
+});
+
+</script>

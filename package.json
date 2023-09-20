@@ -1,0 +1,41 @@
+{
+  "name": "dev-mysql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "build": "^0.1.4",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.17.3",
+    "express-handlebars": "^6.0.3",
+    "express-mysql-session": "^2.1.8",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.14.0",
+    "fs-extra": "^10.1.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysqldump": "^3.2.0",
+    "node-alerts": "^2.0.2",
+    "node-notifier": "^10.0.1",
+    "node-popup": "^0.1.14",
+    "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "sessions": "^0.0.2-7",
+    "timeago.js": "^4.0.2",
+    "uglify": "^0.1.5",
+    "uuid": "^9.0.1",
+    "vue": "^3.2.37"
+  }
+}

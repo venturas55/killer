@@ -1,0 +1,18 @@
+<div class="container p-4">
+    <div class="row ">
+        <a href="/items1/plantilla/{{nif}}" class="btn btn-primary btn-block"> Volver atras</a>
+        <div class="card-columns">
+            {{#each fotos}}
+            <div class="card m-4" style="max-width: 18rem;">
+                <a href="/img/imagenes/{{../nif}}/{{this}}" target="_blank">
+                    <img src="/img/imagenes/{{../nif}}/{{this}}" alt="Una imagen" class="card-img-top">
+                </a>
+                <div class="card-body">
+                    <a href="/img/imagenes/{{../nif}}/{{this}}" target="_blank" class="btn btn-primary btn-block"> Ver Foto</a>
+                    <a href="/items1/fotos/{{../nif}}/{{this}}/delete" class="btn btn-danger btn-block"> Delete</a>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

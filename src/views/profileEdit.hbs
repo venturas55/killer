@@ -1,0 +1,73 @@
+<div class="container p-4">
+  <div class="row4">
+    <div class="col-md-5 mx-auto">
+      <div class="card text-center">
+        <div class="card-body">
+
+          <h3>Bienvenid@ {{user.usuario}} </h3>
+          <img
+            src="/img/profiles/{{user.usuario}}.jpg"
+            class="avatar avatar-l m-2"
+            alt="avatar"
+          />
+          <input type="hidden" name="user" value="{{user.usuario}}" />
+
+          <form
+            action="/profile/edit/"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+
+
+
+            <div class="form-group">
+              <label for="full_name">Nombre completo</label>
+              <input type="text" value="{{user.full_name}}" name="full_name"  class="form-control"/>
+
+            </div>
+            <div class="form-group">
+              <label for="usuario">Usuario</label>
+              <input type="text" value="{{user.usuario}}" name="usuario"  class="form-control"/>
+            </div>
+            <div class="form-group">
+              <label for="email">eMail</label>
+              <input type="text" value="{{user.email}}" name="email"  class="form-control"/>
+            </div>
+
+            <div class="form-group">
+              <label for="newcontrasena">Nueva Contraseña</label>
+              <input
+                type="password"
+                placeholder="Nueva contraseña"
+                name="newcontrasena"  class="form-control"
+              />
+                 <div class="form-group">
+              <label for="newcontrasena2">Nueva Contraseña</label>
+              <input
+                type="password"
+                placeholder="Repita contraseña"
+                name="newcontrasena2"  class="form-control"
+              />
+                    <div class="form-group">
+              <label for="oldcontrasena">Vieja Contraseña</label>
+              <input
+                type="password"
+                value="{{user.contrasena}}"
+                name="oldcontrasena"  class="form-control"
+              />
+            </div>
+            <button id="enviarCambios" class="btn btn-primary m-4 d-none">
+              Guardar cambios form
+            </button>
+          </form>
+          <div class="form-group">
+            <button onclick="abreModal3(); " class="btn btn-primary m-4">
+              Guardar cambios
+            </button>
+            <a href="/profile" class="btn btn-danger m-4"> Cancelar cambios </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

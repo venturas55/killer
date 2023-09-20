@@ -1,0 +1,42 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <h1>Datos de la partida {{ partidita.titulo }} - {{ partidita.descripcion }}</h1>
+            <div class="card">
+                <div>
+                    <h2> Jugadores</h2>
+                    {{#if partida}}
+                    <table class="listado">
+                        <tr>
+                            <th>Asesino</th>
+                            <th>Victima</th>
+                            <th>Objeto</th>
+                        {{!--     <th>Options</th> --}}
+                        </tr>
+                        {{#each partida}}
+                        <tr>
+                            <td>{{this.jugador}} </td>
+                            <td>{{this.victima}}</td>
+                            <td>{{this.objeto}}</td>
+                            <td>
+                                {{!-- <a href="/partidas/{{../partida.id}}/deleteplayer/{{this.id_jugador}}"
+                                    class="text-primary"><i class="fa-solid fa-trash"></i>Del</a> --}}
+                            </td>
+                        </tr>
+
+                        {{/each}}
+                    </table>
+                    {{else}}
+                    <div class="col-md-4-mx-auto">
+                        <div class="card card-body text-center">
+                            <tr>No hay jugadores guardados <a href="/partidas/{{id}}/add_player"> Crea uno!</a></tr>
+                        </div>
+                    </div>
+                    {{/if}}
+
+             
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
