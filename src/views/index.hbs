@@ -1,34 +1,29 @@
-<div class="fondo">
-    <div class="container text-center">
-        <h1 class="mb-1">KILLER</h1>
-    </div>
+<div class="container text-center">
+    <h1 class="mb-1">KILLER</h1>
+</div>
+{{!-- <div class="hazard-background">
+</div>
+<div class="container text-center">
+    <a href="/partidas/list" class="btn btn-warning"> VER PARTIDAS</a>
+</div> --}}
+<div class="hazard-background">
+</div>
+{{#if user}}
+<div class="container text-center mb-4"> <a href="/partidas/inicio"> <button
+            class="btn btn-warning">PARTIDAS</button></a></div>
+{{!-- <div class="container text-center"> <a href="/logout">
+        <button class="btn btn-warning">LOGOUT</button></a></div> --}}
+{{else}}
+<div class="container text-center mb-5">
+    <a href="/signin"> <button class="btn btn-warning">INICIAR SESION</button></a>
+</div>
 
-    {{!-- <div class="hazard-background">
-    </div>
-    <div class="container text-center">
-        <a href="/partidas/list" class="btn btn-warning"> VER PARTIDAS</a>
-    </div> --}}
-
-    <div class="hazard-background">
-    </div>
-
-    {{#if user}}
-    <div class="container text-center mb-4"> <a href="/partidas/inicio"> <button
-                class="btn btn-warning">PARTIDAS</button></a></div>
-
-
-{{!--     <div class="container text-center"> <a href="/logout">
-           <button class="btn btn-warning">LOGOUT</button></a></div> --}}
-
-    {{else}}
-    <div class="container text-center mb-5">
-        <a href="/signin"> <button class="btn btn-warning">INICIAR SESION</button></a>
-    </div>
+<div class="container text-center mb-5">
     <a href="/signup">
-        <div class="container text-center"> <button class="btn btn-warning">REGISTRARSE</button>
+        <button class="btn btn-warning">REGISTRARSE</button>
     </a>
-    {{/if}}
+</div>
+{{/if}}
 
-    <div class="hazard-background">
-    </div>
+<div class="hazard-background">
 </div>

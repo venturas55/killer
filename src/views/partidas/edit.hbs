@@ -33,7 +33,8 @@
                     {{else}}
                     <div class="col-md-4-mx-auto">
                         <div class="card card-body text-center">
-                            <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea uno!</a></tr>
+                            <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea
+                                    uno!</a></tr>
                         </div>
                     </div>
                     {{/if}}
@@ -64,8 +65,8 @@
                             <td>{{this.descripcion}} </td>
                             <td>{{this.imageURL}}</td>
                             <td>
-                                <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id_objeto}}" class="text-primary"><i
-                                        class="fa-solid fa-trash"></i>Del</a>
+                                <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id_objeto}}"
+                                    class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
                             </td>
                         </tr>
 
@@ -74,7 +75,8 @@
                     {{else}}
                     <div class="col-md-4-mx-auto">
                         <div class="card card-body text-center">
-                            <tr>No hay objetos guardados <a href="/partidas/{{datospartida.id}}/add_object"> Crea uno!</a></tr>
+                            <tr>No hay objetos guardados <a href="/partidas/{{datospartida.id}}/add_object"> Crea
+                                    uno!</a></tr>
                         </div>
                     </div>
                     {{/if}}
@@ -91,9 +93,11 @@
                 <h2>Partida activa!</h2>
                 <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
                 {{else}}
-                {{#when objetos.length 'gt' partida.length }}
+                {{#when objetos.length 'gte' jugadores.length }}
+                {{#when ../jugadores.length 'gte' 2 }}
                 <h2>Partida Pausada</h2>
                 <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> EMPEZAR PARTIDA</a>
+                {{/when}}
                 {{/when}}
                 {{/if}}
             </div>

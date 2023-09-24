@@ -3,6 +3,10 @@ body{
     font-family: sans-serif;
 }
 
+.tachado{
+  text-decoration: line-through;
+  color: rgb(134, 131, 131) !important;
+}
 
 .listado tr:hover, .listado tr:hover a{
   background-color: rgb(98, 150, 234);
@@ -29,6 +33,10 @@ a{
 
 .cajita:hover{
   opacity:1;
+}
+
+.cajita h1{
+  color:rgb(222, 222, 22);
 }
 .cajita h3{
   color:rgb(222, 222, 22);

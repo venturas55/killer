@@ -137,17 +137,23 @@ router.get("/plantilla/:id", funciones.isAuthenticated, async (req, res) => {
   const { id } = req.params;
   id_jugador = req.user.id;
   const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id,]);
+  let victimaenpartida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? and pej.id_victima=? ", [id,id_jugador]);
+  let alive=!victimaenpartida[0].victima_killed;
   let tickets = []
+  let objetivo =[];
   for (let i = 0; i < partida.length; i++) {
     if (partida[i].ticket == 1 && partida[i].id_victima == req.user.id) {
       tickets.push(partida[i]);
     }
+    if (alive && partida[i].id_jugador == req.user.id) {
+      objetivo.push(partida[i]);
+    }
   }
   // console.log(tickets);
   const top_killers = await db.query(queries.queryPartidasActivas + " where pej.id_partida=? order by asesinatos desc limit 3", [id,]);
-  const last_kill = await db.query(queries.queryPartidasActivas + " where pej.id_partida=? order by fecha_asesinato desc limit 1", [id,]);
+  const last_kill = await db.query(queries.queryPartidasActivas + " where pej.id_partida=? and pej.victima_killed=true order by fecha_asesinato desc limit 1", [id,]);
   console.log(last_kill);
-  res.render("partidas/plantilla", { partida, ticket: tickets[0], top_killers, last_kill:last_kill[0] });
+  res.render("partidas/plantilla", { partida, ticket: tickets[0], top_killers, last_kill:last_kill[0] , objetivo: objetivo[0],alive,victimaenpartida });
 });
 
 
@@ -216,11 +222,8 @@ router.get("/pause/:id", funciones.isAuthenticated, async (req, res) => {
 
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
-  console.log(id_partida + " " + req.user.id + " " + id_victima);
-  //const objetos = await db.query(queries.queryObjetos + " WHERE id_partida=?", [id_victima,]);
-  //const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_victima,]);
   await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
-  // res.redirect("/profile");
+  res.redirect("/partidas/plantilla/"+id_partida);
 });
 
 router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (req, res) => {
@@ -235,7 +238,13 @@ router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (
   console.log(item);
   console.log(id_partida + " " + id_victima + " " + item.id_jugador);
   await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_victima=? AND id_jugador=?", [item, id_partida, id_victima, item.id_jugador]);
-  res.redirect("/partidas/plantilla/" + id_victima);
+  res.redirect("/partidas/plantilla/" + id_partida);
+});
+
+router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, async (req, res) => {
+  const { id_victima, id_partida } = req.params;
+  await db.query("update partidasenjuego set ticket = false where id_partida=?  AND id_victima=?", [id_partida, id_victima])
+  res.redirect("/partidas/plantilla/"+id_partida);
 });
 
 //DELETE
@@ -256,5 +265,22 @@ router.get("/:id_partida/deleteobject/:id_objecto", funciones.isAuthenticated, a
   res.redirect("/partidas/edit/" + id_partida);
 });
 
+router.get("/delete/:id_partida", funciones.isAuthenticated, async (req, res) => {
+  const {id_partida } = req.params;
+  let a = await db.query("DELETE FROM partidasenjuego WHERE id_partida=?", [id_partida]);
+  console.log("a");
+  console.log(a);
+  let b = await db.query("DELETE FROM partidaobjetos WHERE id_partida=?", [id_partida]);
+  console.log("b");
+  console.log(b);
+  let c = await db.query("DELETE FROM partidajugadores WHERE id_partida=?", [id_partida]);
+  console.log("c");
+  console.log(c);
+  let d = await db.query("DELETE FROM partidas WHERE id=?", [id_partida]);
+  console.log("d");
+  console.log(d);
+  req.flash("success", "Partida borrada correctamente");
+  res.redirect("/partidas/list");
+});
 
 module.exports = router;

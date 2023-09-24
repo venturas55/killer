@@ -20,10 +20,8 @@ router.get('/pagina_aux2',(req,res)=>{
 } );
 
 router.get('/profile', funciones.isAuthenticated, async (req, res) => {
-    const partida = await db.query(queries.queryPartidasActivas);
-    const partidas = await db.query(queries.queryPartidasActivas+ " where pej.id_jugador=?",[req.user.id]);
-    console.log(partidas);
-    res.render('profile', { partidas });
+
+    res.render('profile');
 });
 /* router.get('/profile/edit', funciones.isAuthenticated, (req, res) => {
     res.render('profileEdit');

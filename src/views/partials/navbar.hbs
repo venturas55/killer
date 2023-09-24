@@ -2,52 +2,21 @@
   {{#if user}}
   {{>avatar}}
   {{/if}}
-  <div class="container">
-    <a class="navbar-brand" href="/">INICIO</a>
-    <a href="/profile" class="navbar-brand">PERFIL</a>
-     <a href="/partidas/list" class="navbar-brand"> PARTIDAS</a>
+  <a class="navbar-brand" href="/">KILLER</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-      {{!--  <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Listado
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/items1/list">Listado global</a>
-
-          </div>
-        </li>
-         {{#if user}}
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Panel Adm
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/items1/add ">Baliza Nueva</a>
-            <a class="dropdown-item" onclick="abreModal2();return false;">Forzar un borrado</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/profile">Ver Perfil</a>
-            <a class="dropdown-item" href="/logout ">Logout</a>
-          </div>
-        </li>
-
-        {{/if}}
-        <li class="nav-item">
-          <a class="nav-link" href="/pagina_aux1" tabindex="-1" aria-disabled="true">WEB1</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/pagina_aux2" tabindex="-1" aria-disabled="true">WEB2</a>
-        </li>
- --}}
         {{#if user}}
+        <li class="nav-item">
+          <a href="/profile" class="nav-link" tabindex="-1" aria-disabled="true">PERFIL</a>
+        </li>
+        <li class="nav-item">
+          <a href="/partidas/list" class="nav-link" tabindex="-1" aria-disabled="true">PARTIDAS</a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" href="/logout " tabindex="-1" aria-disabled="true">Logout</a>
         </li>
@@ -64,5 +33,5 @@
       </ul>
 
     </div>
-  </div>
+
 </nav>

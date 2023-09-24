@@ -7,8 +7,8 @@
                     <form action="/partidas/add" method="POST">
                          <div class="form-group"><input class="form-control" type="text" name="titulo" placeholder="Titulo" autofocus /> </div>
                         <div class="form-group"><input class="form-control" type="text" name="descripcion" placeholder="Descripcion"  /> </div>
-                        <div class="form-group"><input class="form-control" type="date" name="fecha_inicio" placeholder="Inicio"  /> </div>
-                        <div class="form-group"><input class="form-control" type="date" name="fecha_fin" placeholder="Fin"  /> </div>
+                        <div class="form-group"><input class="form-control" type="datetime-local" name="fecha_inicio" placeholder="" required /> </div>
+                        <div class="form-group"><input class="form-control" type="datetime-local" name="fecha_fin" placeholder="" required /> </div>
                         <button class="btn btn-success btn-block">AÑADIR</button>
                     </form>
                     <form action="/" method="GET">
