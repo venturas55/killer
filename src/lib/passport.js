@@ -23,7 +23,7 @@ passport.use(
                 console.log("Pass "+prueba);
                 const validPassword = await funciones.verifyPassword(password,user.contrasena);
                 if (validPassword)
-                    done(null, user, req.flash('success', "Welcome" + user.usuario));
+                    done(null, user, req.flash('success', "Welcome " + user.usuario));
                 else
                     done(null, false, req.flash('message', "El password introducido es incorrecto"));
             } else {

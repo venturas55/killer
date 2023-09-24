@@ -11,13 +11,20 @@
                             <th>Asesino</th>
                             <th>Victima</th>
                             <th>Objeto</th>
-                        {{!--     <th>Options</th> --}}
+                            <th>Ticket</th>
+                            <th>Muerto?</th>
+                            <th>Fecha muerte</th>
+                            <th>Bajas</th>
+                            {{!-- <th>Options</th> --}}
                         </tr>
                         {{#each partida}}
                         <tr>
-                            <td>{{this.jugador}} </td>
-                            <td>{{this.victima}}</td>
-                            <td>{{this.objeto}}</td>
+                            <td>{{this.id_jugador}} - {{this.jugador_user}} - {{this.jugador_name}}</td>
+                            <td>{{this.id_victima}} - {{this.victima_user}} - {{this.victima_name}}</td>
+                            <td>{{this.objeto}} - {{this.descripcion_objeto}}</td>
+                            <td>{{this.ticket}}</td>
+                            <td>{{this.victima_killed}}</td>
+                            <td>{{this.fecha_asesinato}}</td>
                             <td>
                                 {{!-- <a href="/partidas/{{../partida.id}}/deleteplayer/{{this.id_jugador}}"
                                     class="text-primary"><i class="fa-solid fa-trash"></i>Del</a> --}}
@@ -34,7 +41,7 @@
                     </div>
                     {{/if}}
 
-             
+
                 </div>
             </div>
         </div>

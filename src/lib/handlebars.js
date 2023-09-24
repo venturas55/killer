@@ -28,6 +28,15 @@ helpers.suma = (balizas)=>{
     return total;
 }
 
+helpers.supervivientes = (partida)=>{
+  var total=0;
+/*   partida.forEach(element => {
+    if(element.victima_killed==0)
+      total++;
+  }); */
+  return total;
+}
+
 
 //Se usa asi:   {{#when jugadores.length 'eq' objetos.length }}
 helpers.when =(operand_1, operator, operand_2, options)=> {

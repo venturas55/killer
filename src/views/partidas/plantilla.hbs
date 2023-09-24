@@ -1,139 +1,55 @@
-<div class="row m-5">
-    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 m-2">
+<div class="container p-4 text-center">
+    <div class="row">
+        {{#if ticket}}
 
-        <h1>Fotos</h1>
-            <div class="miCarrusel">
-                {{#each imagen}}
-                    <img src="/img/imagenes/{{../item.columnaA}}/{{this}}" alt="/img/imagenes/{{../item.columnaA}}/{{this}}">
-                {{/each}}
-            </div>
-        <form action="/items1/upload/{{item.columnaA}}" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="columnaA" value="{{item.columnaA}}">
+        <div class="col-md-12 mx-auto cajita">
+            <p> <span> '{{ticket.jugador_name}}' ha reportado que te ha matado. Es verdad?</span></p>
+            <button class="btn btn-warning" id="btndie" id_partida="{{ticket.id_partida}}"
+                id_victima="{{ticket.id_victima}}">Aceptar</button>
+        </div>
+        {{/if}}
 
-            <div class="input-group mb-3">
-                <div class="custom-file">
-                    <input type="file" name="imagen" class="custom-file-input" id="inputGroupFile02">
-                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+
+        <div class="col-md-12 mx-auto">
+            <h1>Datos de la partida {{ partida.titulo }} - {{ partida.descripcion }}</h1>
+            <div class="cajita">
+                <div>
+                    <h3> Listado Jugadores</h3>
+                    {{#each partida}}
+                    {{#if this.victima_killed}}
+                    <p> <span data-bs-toggle="popover" title="{{this.victima_name}}"
+                            data-content="{{this.victima_name}}" class="text-decoration-line-through">
+                            {{this.victima_user}} </span> </p>
+                    {{else}}
+                    <p> <span data-bs-toggle="popover" title="{{this.victima_name}}"
+                            data-content="{{this.victima_name}}">
+                            {{this.victima_user}} </span> </p>
+                    {{/if}}
+                    {{/each}}
                 </div>
-                <div class="input-group-append">
-                    <button type="submit" class="input-group-text">Upload</button>
+                <div>
+                    <h3> Listado Armas</h3>
+                    {{#each partida}}
+                    <p> <span data-bs-toggle="popover" title="{{this.descripcion_objeto}}">
+                            {{this.objeto}}</span> </p>
+                              {{/each}}
+                </div>
+                <div>
+                    <h3>Asesinos más Sanguinarios</h3>
+                    {{#each top_killers}}
+                    <p> {{this.jugador_user}} con {{this.asesinatos}} bajas</p>
+                    {{/each}}
+                </div>
+                   <div>
+                    <h3>Última baja</h3>
+             
+                    <p> {{last_kill.jugador_user}} ha matado a {{last_kill.victima_user}} con {{last_kill.objeto}} </p>
+                
                 </div>
             </div>
-
-        </form>
-          <a href="/items1/fotos/{{item.columnaA}}" class="btn btn-primary btn-block"> GALERIA DE FOTOS</a>
-    </div>
-    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 m-2">
-        <h1> Caracteristicas </h1>
-        <table class="table table-bordered table-dark table-hover">
-            <tr>
-                <th>columnaA</th>
-                <td >{{item.columnaA}}</td>
-            </tr>
-            <tr>
-                <th>columnaB</th>
-                <td>{{item.columnaB}}</td>
-            </tr>
-            <tr>
-                <th>columnaC</th>
-                <td >{{item.columnaC}}</td>
-            </tr>
-            <tr>
-                <th>columnaD</th>
-                <td> {{item.columnaD}}</td>
-            </tr>
-            <tr>
-                <th>columnaE</th>
-                <td >{{item.columnaE}} s</td>
-            </tr>
-            <tr>
-                <th>columnaF</th>
-                <td>{{item.columnaF}}</td>
-            </tr>
-                   <tr>
-                <th>columnaG</th>
-                <td>{{item.columnaG}}</td>
-            </tr>
-
-        </table>;
-        <a class="btn btn-primary btn-xs btn-block" href="/items1/edit/{{item.columnaA}}"
-            class="btn btn-primary btn-lg btn-block"> ACTUALIZAR item</a>
-    </div>
+        </div>
     
-</div>
 
-<div class="row m-5">
-    <div class="col-sm-12">
-        <h1> Observaciones </h1>
-        <table class="table table-bordered table-dark table-hover">
-            {{#each obs}}
-            <tr>
-                <td>{{this.observaciones}}</td>
-                <td> <a href="/items1/observaciones/edit/{{this.id_observacion}}"  class="text-primary"><i
-                            class="fa-solid fa-pen-to-square"></i>Edit</a>
-                    <a type="submit" href="/items1/observaciones/delete/{{this.id_observacion}}"  class="text-primary"><i
-                            class="fa-solid fa-trash"></i>Del</a>
-                </td>
-            </tr>
-            {{/each}}
-            <form action="/items1/observaciones/add" method="POST">
-                <input type="hidden" name="columnaA" value="{{item.columnaA}}">
-                <tr>
-                    <td><input type="text" name="observaciones" style="width: 100%;" /></td>
-                    <td> <input type="submit" value="añadir" class="btn btn-primary btn-xs btn-block" /></td>
-                </tr>
-            </form>
-        </table>
+    <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
     </div>
-</div>
-
-<div class="row m-5">
-    <div class="col-sm-12">
-        <h1> Mantenimiento </h1>
-        <table class="table table-bordered table-dark table-hover">
-            <tr>
-                <th>Fecha</th>
-                <th>Descripcion</th>
-                <th>Edicion</th>
-            </tr>
-            {{#each mant}}
-            <tr>
-
-                {{!-- <td>{{timeago fecha}}</td> asi haciendo uso del timeago--}}
-                <td> {{timeago fecha}} [] {{formatearSp fecha}}</td>
-                <td>{{mantenimiento}}</td>
-                {{!-- <td> <a href="" class="btn btn-primary btn-xs btn-block"><i
-                            class="fa-solid fa-pen-to-square">borrar</i> </a> </td> --}}
-                <td>
-                    <input type="hidden" name="columnaA" value='{{item.columnaA}}' />
-                    <input type="hidden" name="fecha" value='{{fecha}}' />
-                    <input type="hidden" name="mantenimiento" value='{{mantenimiento}}' />
-                    <a href="/items1/mantenimiento/edit/{{this.id_mantenimiento}}"  class="text-primary"><i
-                            class="fa-solid fa-pen-to-square"></i>Edit</a>
-                    <a href="/items1/mantenimiento/delete/{{this.id_mantenimiento}}" class="text-primary"><i
-                            class="fa-solid fa-trash"></i>Del</a>
-                </td>
-            </tr>
-            {{!-- <form action="./modBBDDmantenimiento.php" method="post">
-
-                <tr class='modificarnomostrar'>
-                    <td><input type='date' name='fechaout' value="$i[fecha]" /> </td>
-                    <td><input type='text' name='mantenimientoout' value="{{mantenimiento}}" /></td>
-                    <td>
-                        <input type="submit" value="modificar" class="btn btn-warning btn-lg btn-block disabled" />
-                    </td>
-                </tr>
-            </form> --}}
-            {{/each}}
-            <form action="/items1/mantenimiento/add" method="POST">
-                <input type="hidden" name="columnaA" value='{{item.columnaA}}' />
-                <tr>
-                    <td><input type="date" name="fecha" /></td>
-                    <td><input type="text" name="mantenimiento" /></td>
-                    <td> <input type="submit" value="añadir" class="btn btn-primary btn-xs btn-block" /></td>
-                </tr>
-            </form>
-        </table>
-    </div>
-    <button onclick="abreModal1();" class="btn btn-danger">BORRAR ATON</button>
 </div>

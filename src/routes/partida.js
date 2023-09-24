@@ -2,12 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { unlink } = require('fs-extra');
 const path = require('path');
-const queryUsuarios = "select * from usuarios";
-const queryPartidas = "select * from partidas";
-const queryObjetos = "select * from partidaobjetos po LEFT JOIN objetos o ON po.id_objeto=o.id";
-const queryJugadores = "select * from partidajugadores pj LEFT JOIN usuarios u ON pj.id_jugador=u.id";
-const queryPartidasActivas = "select pej.id_partida,pej.id_jugador,pej.victima as id_victima, pej.id_objeto,pej.asesinatos,p.titulo,p.descripcion,p.fecha_inicio,p.fecha_fin,p.activa,uv.full_name as victima,uv.pictureURL as foto_victima, ua.full_name as jugador ,o.nombre as objeto,o.descripcion as descripcion_objeto from partidasenjuego pej LEFT JOIN partidas p ON pej.id_partida=p.id LEFT JOIN usuarios uv ON uv.id=pej.victima LEFT JOIN objetos o ON o.id=pej.id_objeto LEFT JOIN usuarios ua ON ua.id=pej.id_jugador";
-//const queryJugadores = "select pa.id_partida,pa.id_jugador,pa.id_objeto,p.titulo,p.fecha_inicio,p.fecha_fin,u.full_name,u.pictureURL,o.nombre,o.descripcion,o.pictureURL FROM partidasALL pa LEFT JOIN usuarios u ON pa.id_jugador=u.id LEFT JOIN objetos o ON pa.id_objeto=o.id LEFT JOIN partidas p ON pa.id_partida=p.id";
+const queries = require("./queries");
 
 const funciones = require("../lib/funciones");
 
@@ -50,7 +45,7 @@ router.post("/add", funciones.isAdmin, async (req, res) => {
 
 router.get("/:id/add_player", funciones.isAdmin, async (req, res) => {
   const { id } = req.params;
-  const usuarios = await db.query(queryUsuarios);
+  const usuarios = await db.query(queries.queryUsuarios);
   res.render("partidas/add_player", { usuarios, id });
 });
 router.post("/:id/add_player", funciones.isAdmin, async (req, res) => {
@@ -116,32 +111,59 @@ router.post("/:id_partida/add_object", funciones.isAuthenticated, async (req, re
 });
 
 //READ
-router.get("/list", funciones.isAdmin, async (req, res) => {
-  const items = await db.query(queryPartidas,);
+router.get("/list", funciones.isAuthenticated, async (req, res) => {
+  const items = await db.query(queries.queryPartidas,);
   console.log(items);
   res.render("partidas/list", { items });
 });
+
+router.get('/inicio', async (req, res) => {
+  id_jugador = req.user.id;
+  const partidas = await db.query(queries.queryPartidasActivas + " where pej.id_jugador=?", [id_jugador]);
+  console.log(partidas);
+  res.render('inicio', { partidas });
+});
+
 router.get("/plantillaindividual/:id", funciones.isAuthenticated, async (req, res) => {
   const { id } = req.params;
   id_jugador = req.user.id;
-  const partida = await db.query(queryPartidasActivas + " WHERE pej.id_partida=?", [id,]);
+  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id,]);
   //console.log(partida);
-  console.log("=>"+partida[0].titulo);
-  res.render("partidas/plantillaindividual", { partida , partidita:partida[0] });
+  //console.log(partida[0]);
+  res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
+});
+
+router.get("/plantilla/:id", funciones.isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+  id_jugador = req.user.id;
+  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id,]);
+  let tickets = []
+  for (let i = 0; i < partida.length; i++) {
+    if (partida[i].ticket == 1 && partida[i].id_victima == req.user.id) {
+      tickets.push(partida[i]);
+    }
+  }
+  // console.log(tickets);
+  const top_killers = await db.query(queries.queryPartidasActivas + " where pej.id_partida=? order by asesinatos desc limit 3", [id,]);
+  const last_kill = await db.query(queries.queryPartidasActivas + " where pej.id_partida=? order by fecha_asesinato desc limit 1", [id,]);
+  console.log(last_kill);
+  res.render("partidas/plantilla", { partida, ticket: tickets[0], top_killers, last_kill:last_kill[0] });
 });
 
 
 //UPDATE
-router.get("/edit/:id", funciones.isAuthenticated, async (req, res) => {
+router.get("/edit/:id", funciones.isAdmin, async (req, res) => {
   const { id } = req.params;
   console.log(id);
-  const partida = await db.query(queryPartidas + " WHERE id=?", [id,]);
-  const objetos = await db.query(queryObjetos + " WHERE id_partida=?", [id,]);
-  const jugadores = await db.query(queryJugadores + " WHERE id_partida=?", [id,]);
+  const datospartida = await db.query(queries.queryPartidas + " WHERE id=?", [id,]);
+  const objetos = await db.query(queries.queryPartidaObjetos + " WHERE id_partida=?", [id,]);
+  const jugadores = await db.query(queries.queryPartidaJugadores + " WHERE id_partida=?", [id,]);
+  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id,]);
+  //TODO: poder editar objetos... Como gestionar eso con las bases de datos...
   console.log(partida);
-  res.render("partidas/edit", { partida: partida[0], objetos, jugadores, id });
+  res.render("partidas/edit", { datospartida: datospartida[0], objetos, jugadores, partida });
 });
-router.post("/edit/:id", funciones.isAuthenticated, async (req, res) => {
+router.post("/edit/:id", funciones.isAdmin, async (req, res) => {
   const idviejo = req.params.id;
   var {
     columnaA,
@@ -169,11 +191,10 @@ router.post("/edit/:id", funciones.isAuthenticated, async (req, res) => {
   res.redirect("/partidas/plantilla/" + newItem.columnaA);
 });
 
-router.get("/start/:id", funciones.isAuthenticated, async (req, res) => {
+router.get("/start/:id", funciones.isAdmin, async (req, res) => {
   const { id } = req.params;
-  const partida = await db.query("UPDATE partidas set activa = true WHERE id=?", [id,]);
-  const objetos = await db.query(queryObjetos + " WHERE id_partida=?", [id,]);
-  const jugadores = await db.query(queryJugadores + " WHERE id_partida=?", [id,]);
+  const objetos = await db.query(queries.queryPartidaObjetos + " WHERE po.id_partida=?", [id,]);
+  const jugadores = await db.query(queries.queryPartidaJugadores + " WHERE pj.id_partida=?", [id,]);
   let items = [];
   for (var i = 0; i < jugadores.length; i++) {
     if (i + 1 == jugadores.length)
@@ -182,7 +203,8 @@ router.get("/start/:id", funciones.isAuthenticated, async (req, res) => {
       items.push([parseInt(id), jugadores[i].id_jugador, jugadores[i + 1].id_jugador, objetos[i].id_objeto]);
   }
   console.log(items);
-  await db.query("insert into partidasenjuego (id_partida,id_jugador,victima,id_objeto) values ?", [items])
+  await db.query("insert into partidasenjuego (id_partida,id_jugador,id_victima,id_objeto) values ?", [items])
+  const partida = await db.query("UPDATE partidas set activa = true WHERE id=?", [id,]);
   res.redirect("/partidas/edit/" + id);
 });
 
@@ -190,6 +212,30 @@ router.get("/pause/:id", funciones.isAuthenticated, async (req, res) => {
   const { id } = req.params;
   const partida = await db.query("UPDATE partidas set activa = false WHERE id=?", [id,]);
   res.redirect("/partidas/edit/" + id);
+});
+
+router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
+  const { id_victima, id_partida } = req.params;
+  console.log(id_partida + " " + req.user.id + " " + id_victima);
+  //const objetos = await db.query(queries.queryObjetos + " WHERE id_partida=?", [id_victima,]);
+  //const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_victima,]);
+  await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
+  // res.redirect("/profile");
+});
+
+router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (req, res) => {
+  const { id_victima, id_partida } = req.params;
+  let item = await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_victima, id_partida]);
+  item = item[0];
+  console.log(item);
+  item.victima_killed = true;
+  item.ticket = false;
+  item.asesinatos++;
+  item.fecha_asesinato = new Date();
+  console.log(item);
+  console.log(id_partida + " " + id_victima + " " + item.id_jugador);
+  await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_victima=? AND id_jugador=?", [item, id_partida, id_victima, item.id_jugador]);
+  res.redirect("/partidas/plantilla/" + id_victima);
 });
 
 //DELETE

@@ -41,6 +41,7 @@ app.use(express.json()); //Para enviar y recibir jsons.
 app.use(passport.initialize()); //iniciar passport
 app.use(passport.session());    //para que sepa donde guardar y como manejar los datos
 
+
 //Variables globales
 
 app.use((req,res,next) =>{
@@ -56,15 +57,18 @@ app.use((req,res,next) =>{
 //Routes
 app.use(require('./routes')); //busca automaticamente el archivo index.js
 app.use(require('./routes/authentication'));
-app.use('/objetos',require('./routes/items1')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
-app.use('/jugadores',require('./routes/items2')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
-app.use('/partidas',require('./routes/items3')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
+//app.use('/objetos',require('./routes/items1')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
+//app.use('/jugadores',require('./routes/items2')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
+app.use('/partidas',require('./routes/partida')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
 app.use(require('./routes/api'));
 app.use(require('./routes/fotos'));
 
+
 //Public
 app.use(express.static(path.join(__dirname,'public')));
-
+/* app.use(
+    express.static(path.join(__dirname, "../node_modules/bootstrap/dist/"))
+  ); */
 //Starting
 app.listen(app.get('port'),()=>{
     console.log("Running on http://localhost:4000", app.get('port'));

@@ -1,26 +1,9 @@
 body{
-    background: #bec2be;
+    background: #252525;
     font-family: sans-serif;
 }
-#simulacionLuz{
-  float: right;
-  width: 40px;
-  height: 40px;
-  margin-top: 5px;
-  border:1px solid rgb(76, 75, 75);
-  border-radius: 50%;
-}
 
-#luz{
-  width: 40px;
-  height: 40px;
-  background-color: rgb(240, 240, 240);
-  border-radius: 50%;
-  display: block;
-  z-index:100;
-  margin: 0 auto;
 
-}
 .listado tr:hover, .listado tr:hover a{
   background-color: rgb(98, 150, 234);
   color:whitesmoke;
@@ -36,34 +19,32 @@ a{
   color:black;
 }
 
-.miCarrusel img{
- max-height: 400px;
-  
+.cajita{
+  border: 2px rgb(222, 222, 22) solid;
+  padding:1em;
   border-radius: 10px;
+  background: linear-gradient(rgba(56, 65, 73, 0.99), rgba(32, 34, 38, 0.7));
+  opacity: 0.85;
 }
-.foto{
-  height: 200px;
-  width: 200px;
-  border: 1px solid black;
- 
+
+.cajita:hover{
+  opacity:1;
 }
-.uno{
-  background-color: rgb(174, 116, 148);
+.cajita h3{
+  color:rgb(222, 222, 22);
 }
-.dos{
-  background-color: rgb(111, 136, 129);
-}
-.tres{
-  background-color: rgb(202, 202, 241);
+
+.cajita p{
+  color: whitesmoke;
 }
 
 .fondo{
-   /*   color: rgba(24, 59, 214, 0.182); */
+     color: rgb(163, 166, 185);
     min-height: 30rem; 
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     padding-top: 1rem;
-    background: linear-gradient(rgba(121, 151, 179, 0.6), rgba(166, 188, 218, 0.6)), url('/img/bg.jpg');
+    background: linear-gradient(rgba(2, 19, 34, 0.6), rgba(31, 32, 34, 0.6)), url('/img/policescene3.jpg');
    /*  background: url('/img/bg.jpg') no-repeat center center; */
     background-size: cover;
     -moz-background-size: cover;
@@ -79,16 +60,6 @@ a{
   object-position: center;
 }
 
-#formularioBusqueda{
-  padding: 5px;
-  height: 60px;
-  border: 2px solid black;
-  border-radius: 5px;
-  margin: 0 10px;
-}
-select{
-  text-align-last:center;
-}
 
 .avatar-s{
   height: 64px;
@@ -170,7 +141,30 @@ select{
     cursor: pointer;
   }
   
- 
+  .hazard-background {
+    height: 40px;
+    margin: 50px 0px 50px 0px;
+    color: white;
+    padding: 5px;
+    background-image: repeating-linear-gradient(
+      -55deg,
+      #000,
+      #000 20px,
+      #ffb101 20px,
+      #ffb101 40px
+    );
+  }
+  
+  .hazard-border {
+    border: 10px solid pink;
+    border-image: repeating-linear-gradient(
+      -55deg,
+      #000,
+      #000 20px,
+      #ffb101 20px,
+      #ffb101 40px
+    ) 10;
+  }
 
 
 @media (min-width: 992px){

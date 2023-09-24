@@ -13,26 +13,32 @@
                     <th class="text-center" colspan="5">Tiene los siguientes asesinatos pendientes </th>
                 </tr>
                 <tr>
-                     <th>Id</th> 
+                    <th>Id</th>
                     <th>Partida</th>
-                   {{!--   <th>Descripcion</th>
-                   <th>Fecha inicio</th>
+                    {{!-- <th>Descripcion</th>
+                    <th>Fecha inicio</th>
                     <th>Fecha fin</th> --}}
                     <th>Victima</th>
                     <th>Objeto</th>
+                    <th>Accion</th>
                 </tr>
 
+
+                {{!-- //MI OBJETIVO --}}
                 {{#each partidas}}
                 <tr class="text-center">
                     <td><a href="/partidas/plantillaindividual/{{this.id_partida}}"> {{this.id_partida}} </a></td>
                     <td>{{this.titulo}}</td>
-                   {{!--  <td>{{this.descripcion}}</td>
+                    {{!-- <td>{{this.descripcion}}</td>
                     <td>{{formatearSp this.fecha_inicio}}</td>
                     <td>{{formatearSp this.fecha_fin}}</td> --}}
-                    <td>{{this.victima}}</td>
+                    <td>{{this.id_victima}} - {{this.victima_name}}</td>
                     <td>{{this.objeto}}</td>
+                    <td> <button class="btn btn-warning" id="btnkill" id_partida="{{this.id_partida}}"
+                            victima="{{this.victima}}" id_victima="{{this.id_victima}}">Asesinar</button> </td>
                 </tr>
                 {{/each}}
+                {{!-- //FIN MI OBJETIVO --}}
             </table>
         </div>
         {{/if}}

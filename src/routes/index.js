@@ -1,12 +1,15 @@
 const express= require('express');
 const router = express.Router();
 const db = require("../database"); //db hace referencia a la BBDD
-const queryObjetos= "SELECT * FROM objetos";
-const queryJugadores = "select j.id_partida,j.id_jugador,u.usuario,u.full_name,u.pictureURL FROM jugadores j LEFT JOIN usuarios u ON j.id_jugador=u.id ";
+const queries = require("./queries");
+
+const funciones = require('../lib/funciones');
 
 router.get('/', async (req,res)=>{
     res.render('index');
 } );
+
+
 
 router.get('/pagina_aux1',(req,res)=>{
     res.render('pagina_aux1');
@@ -16,6 +19,27 @@ router.get('/pagina_aux2',(req,res)=>{
     res.render('pagina_aux2');
 } );
 
-
+router.get('/profile', funciones.isAuthenticated, async (req, res) => {
+    const partida = await db.query(queries.queryPartidasActivas);
+    const partidas = await db.query(queries.queryPartidasActivas+ " where pej.id_jugador=?",[req.user.id]);
+    console.log(partidas);
+    res.render('profile', { partidas });
+});
+/* router.get('/profile/edit', funciones.isAuthenticated, (req, res) => {
+    res.render('profileEdit');
+});
+router.post('/profile/edit/', funciones.isAuthenticated, async (req, res) => {
+    const newUser = {
+        usuario: req.body.usuario,
+        contrasena: req.body.contrasena,
+        email: req.body.email,
+        full_name: req.body.fullname,
+        privilegio: "san",
+    };
+    //newUser.contrasena = await funciones.encryptPass(password);
+    console.log("guardando en la BBDD");
+    //console.log(user);
+    res.render('profile');
+}); */
 
 module.exports=router;
