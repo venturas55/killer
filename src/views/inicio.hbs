@@ -3,12 +3,6 @@
         <h1 class="mb-1">KILLER</h1>
     </div>
 
-    {{!-- <div class="hazard-background">
-    </div>
-    <div class="container text-center">
-        <a href="/partidas/list" class="btn btn-warning"> VER PARTIDAS</a>
-    </div> --}}
-
     <div class="hazard-background">
     </div>
 
@@ -16,30 +10,34 @@
     <div class="container text-center">
         {{#if partidas}}
         <div class="col-md-5 mx-auto mb-3">
-            <a type="button"  class="btn btn-danger">
+            <a type="button" class="btn btn-danger">
                 Tienes <span class="badge text-bg-secondary">{{partidas.length}}</span> partidas activas
             </a>
         </div>
         {{#each partidas}}
         <div class="col-md-5 mx-auto mb-3">
             <a href="/partidas/plantilla/{{this.id_partida}}">
-                <div class="cajita">
-                    <h3>{{this.titulo}}</h3>
-                    <p>{{this.descripcion}}</p>
-                    <p>{{formatearSp this.fecha_inicio}} - {{formatearSp this.fecha_fin}}</p>
-                    {{!-- <td> <button class="btn btn-warning" id="btnkill" id_partida="{{this.id_partida}}"
-                            victima="{{this.victima}}" id_victima="{{this.id_victima}}">Asesinar</button> </td> --}}
-                </div>
+                {{#if this.activa}} <div class="cajita"> {{else}}
+                    <div class="cajita cajita_disabled">
+                    {{/if}}
+                        <h3>{{this.titulo}}</h3>
+                        <p>{{this.descripcion}}</p>
+                        <p>{{formatearSp this.fecha_inicio}} - {{formatearSp this.fecha_fin}}</p>
+                        {{!-- <td> <button class="btn btn-warning" id="btnkill" id_partida="{{this.id_partida}}"
+                                victima="{{this.victima}}" id_victima="{{this.id_victima}}">Asesinar</button> </td> --}}
+                              {{#unless this.activa}}  <p>Partida inactiva</p> {{/unless}}
+                    </div>
             </a>
         </div>
         {{/each}}
         {{/if}}
     </div>
-    
-        <div class="container text-center mb-4">    <a href="/"> <button class="btn btn-warning">INICIO</button> </a></div>
-    
 
-{{!--         <div class="container text-center">     <a href="/logout"><button class="btn btn-warning">LOGOUT</button>    </a></div> --}}
+    <div class="container text-center mb-4"> <a href="/"> <button class="btn btn-warning">INICIO</button> </a></div>
+
+
+    {{!-- <div class="container text-center"> <a href="/logout"><button class="btn btn-warning">LOGOUT</button> </a>
+    </div> --}}
 
 
 

@@ -21,7 +21,7 @@
                         <h3> Asesinos</h3>
                         {{#each jugadores}}
                         <p {{#if this.eliminado}} class="tachado" {{/if}}> <span data-bs-toggle="popover"
-                                title="{{this.full_name}}" data-content="{{this.full_name}}"
+                                title="{{this.full_name}}" data-content="{{this.id}} - {{this.full_name}}"
                                 class="text-decoration-line-through">
                                 {{this.usuario}} </span> </p>
                         {{/each}}
@@ -31,7 +31,7 @@
                         <h3> Armas</h3>
                         {{#each objetos}}
                         <p {{#if this.eliminado}} class="tachado" {{/if}}> <span data-bs-toggle="popover"
-                                title="{{this.descripcion}}">
+                                title="{{this.descripcion}}" data-content="{{this.descripcion}}">
                                 {{this.nombre}}</span> </p>
                         {{/each}}
                     </div>
@@ -78,7 +78,7 @@
                 <h1>MI OBJETIVO</h1>
                 <p>Tu objetivo es <strong> {{../jugador.victima_user}} {{!-- - {{../jugador.victima_name}} --}} </strong>
                     entregandole en mano <strong>{{!-- {{../jugador.id_objeto}} - --}}{{../jugador.objeto}} </strong> </p>
-                <p> <button class="btn btn-warning" id="btnkill" id_partida="{{../jugador.id_partida}}"
+                <p> <button class="btn btn-danger" id="btnkill" id_partida="{{../jugador.id_partida}}"
                         victima="{{../this.victima}}" id_victima="{{../jugador.id_victima}}">Asesinar</button> </p>
             </div>
             {{/when}}
