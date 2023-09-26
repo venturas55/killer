@@ -10,20 +10,20 @@ const db = require("../database"); //db hace referencia a la BBDD
 
 //GESTION DEL CRUD
 //CREATE
-router.get("/add", funciones.isAdmin, async (req, res) => {
+router.get("/add", funciones.isAuthenticated, async (req, res) => {
   res.render("partidas/add", {});
 });
-router.post("/add", funciones.isAdmin, async (req, res) => {
+router.post("/add", funciones.isAuthenticated, async (req, res) => {
   const {
     titulo, descripcion, fecha_inicio, fecha_fin,
   } = req.body;
   try {
-    const item = { titulo, descripcion, fecha_inicio, fecha_fin };
+    const item = { titulo, descripcion, fecha_inicio, fecha_fin, 'id_creador':req.user.id };
     console.log(item);
 
     await db.query("INSERT INTO partidas set ?", [item]);
     req.flash("success", "Partida insertado correctamente");
-    res.redirect("/partidas/list"); //te redirige una vez insertado el item
+    res.redirect("/partidas/listar"); //te redirige una vez insertado el item
   } catch (error) {
     console.error(error.code);
     switch (error.code) {
@@ -39,38 +39,41 @@ router.post("/add", funciones.isAdmin, async (req, res) => {
     }
     req.flash("error", "Hubo algun error");
 
-    res.redirect("/partidas/list");
+    res.redirect("/partidas/listar");
   }
 
 });
 
-router.get("/:id/add_player", funciones.isAdmin, async (req, res) => {
-  const { id } = req.params;
+router.get("/:id_partida/add_player", funciones.hasPermission, async (req, res) => {
+  const { id_partida } = req.params;
   try {
     const usuarios = await db.query("Select * from usuarios");
-    res.render("partidas/add_player", { usuarios, id });
+    res.render("partidas/add_player", { usuarios, id_partida });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
-router.post("/:id/add_player", funciones.isAdmin, async (req, res) => {
+router.post("/:id_partida/add_player", funciones.hasPermission, async (req, res) => {
   const {
     jugador,
   } = req.body;
-  const { id } = req.params;
-  const item = { id_partida: id, id_jugador: jugador };
+  const { id_partida } = req.params;
+  const item = { id_partida, id_jugador: jugador };
   console.log(item);
+  
   try {
     await db.query("INSERT INTO jugadores set ?", [item]);
     req.flash("success", "Jugador insertado correctamente");
-    res.redirect("/partidas/edit/" + id); //te redirige una vez insertado el item
+    res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
+
   } catch (error) {
     console.error(error.code);
     switch (error.code) {
       case "ER_DUP_ENTRY":
-        req.flash("error", "El jugador seleccionado ya esta agregado.");
+        console.log("Error ya estas agregado");
+        req.flash("error", "El jugador ya esta agregado.");
         break;
       case "ER_BAD_NULL_ERROR":
         req.flash("error", "El campo NIF es obligatorio");
@@ -78,22 +81,21 @@ router.post("/:id/add_player", funciones.isAdmin, async (req, res) => {
       case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
         req.flash("error", "Hay un campo con valor incorrecto");
         break;
-
+/* 
       default:
-        req.flash("error", "Hubo algun error al intentar añadir el jugador");
+        req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
     }
     req.flash("error", "Hubo algun error");
-
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 
 });
 
-router.get("/:id_partida/add_object", funciones.isAuthenticated, (req, res) => {
+router.get("/:id_partida/add_object", funciones.hasPermission, (req, res) => {
   const { id_partida } = req.params;
   res.render("partidas/add_object", { id_partida });
 });
-router.post("/:id_partida/add_object", funciones.isAuthenticated, async (req, res) => {
+router.post("/:id_partida/add_object", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   try {
     const {
@@ -114,40 +116,71 @@ router.post("/:id_partida/add_object", funciones.isAuthenticated, async (req, re
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 
 //READ
-router.get("/list", funciones.isAdmin, async (req, res) => {
+//Para mostrar listado de partidas para el admin
+router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
   try {
-    const items = await db.query(queries.queryPartidas,);
-    console.log(items);
-    res.render("partidas/list", { items });
+    const id_jugador = req.user.id;
+    const partidas = await db.query(queries.queryPartidasDistinc+" where p.status='encreacion'  group by p.id",[id_jugador]);
+    console.log(partidas);
+    res.render("partidas/listarotras", { partidas });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 
+router.get("/listedit", funciones.isAuthenticated, async (req, res) => {
+  try {
+    const partidas = await db.query(queries.queryPartidas,);
+    console.log(partidas);
+    res.render("partidas/listedit", { partidas });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+});
+
+//Para mostrar listado de partidas en las que esta incluido el jugador
+router.get('/listar', async (req, res) => {
+  id_jugador = req.user.id;
+  try {
+    //const partidas = await db.query(queries.queryPartidasAjenas + " where pej.id_jugador!=?", [id_jugador]);
+    const partidas = await db.query(queries.queryPartidasJugador+" where j.id_jugador=?",[id_jugador,]);
+    console.log(partidas);
+    res.render('partidas/listar', { partidas, });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+});
+
+
+//Para mostrar listado de partidas en las que NO esta incluido el jugador
 router.get('/inicio', async (req, res) => {
   id_jugador = req.user.id;
   try {
     const partidas = await db.query(queries.queryPartidasActivas + " where pej.id_jugador=?", [id_jugador]);
     console.log(partidas);
-    res.render('inicio', { partidas });
+    res.render('inicio', { partidas, });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 
-router.get("/plantillaindividual/:id", funciones.isAuthenticated, async (req, res) => {
-  const { id } = req.params;
+router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
+  const { id_partida } = req.params;
   id_jugador = req.user.id;
-  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id,]);
+  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
   //console.log(partida);
   //console.log(partida[0]);
   res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
@@ -159,7 +192,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     let ganador = false;
     id_jugador = req.user.id;
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
-    //console.log(partida);
+    console.log(partida);
 
     //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
     const jugadores = partida.map(function (el) {
@@ -170,7 +203,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       var textB = b.usuario.toUpperCase();
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
-    //console.log(jugadores);
+    console.log(jugadores);
 
     //==============Obtengo un listado de los OBJETOS ordenados alfabeticamente.===========
     const objetos = partida.map(function (el) {
@@ -227,95 +260,62 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 
 
 //UPDATE
-router.get("/edit/:id", funciones.isAdmin, async (req, res) => {
-  const { id } = req.params;
+router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
+  const { id_partida } = req.params;
   //console.log(id);
   try {
-    const datospartida = await db.query("select * from partidas WHERE id=?", [id,]);
-    const objetos = await db.query("select * from objetos WHERE id_partida=?", [id,]);
-    const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id,]);
-    const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id,]);
-    //TODO: poder editar objetos... Como gestionar eso con las bases de datos...
-    //console.log(partida);
-    res.render("partidas/edit", { datospartida: datospartida[0], objetos, jugadores, partida });
+    const datospartida = (await db.query("select * from partidas WHERE id=?", [id_partida,]))[0];
+    const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
+    const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_partida,]);
+    const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
+    console.log(datospartida);
+    res.render("partidas/edit", { datospartida, objetos, jugadores, partida });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
-router.post("/edit/:id", funciones.isAdmin, async (req, res) => {
-  const idviejo = req.params.id;
-  var {
-    columnaA,
-    columnaB,
-    columnaC,
-    columnaD,
-    columnaE,
-    columnaF,
-    columnaGnum,
-  } = req.body;
-  //TODO: PARSEAR LAS COLUMNAS QUE SEAN INT/FLOAT eg: columnaF = parseInt(columnaF);
-  const newItem = {
-    columnaA,
-    columnaB,
-    columnaC,
-    columnaD,
-    columnaE,
-    columnaF,
-    columnaGnum,
-  };
+router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
+  const { id_partida } = req.params;
   try {
-    //console.log(newItem);
-    console.log("req.params " + req.params.columnaA);
-    await db.query("UPDATE partidas set ? WHERE columnaA = ?", [newItem, columnaAviejo,]);
-    req.flash("success", "Item1 modificado correctamente");
-    res.redirect("/partidas/plantilla/" + newItem.columnaA);
-  } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
-  }
-});
-router.get("/start/:id", funciones.isAdmin, async (req, res) => {
-  const { id } = req.params;
-  try {
-    let objetos = await db.query(queries.queryObjetos + " WHERE id_partida=?", [id,]);
+    let objetos = await db.query(queries.queryObjetos + " WHERE id_partida=?", [id_partida,]);
     objetos = objetos.sort((a, b) => 0.5 - Math.random());
-    let jugadores = await db.query(queries.queryJugadores + " WHERE j.id_partida=?", [id,]);
+    let jugadores = await db.query(queries.queryJugadores + " WHERE j.id_partida=?", [id_partida,]);
     jugadores = jugadores.sort((a, b) => 0.5 - Math.random());
     let items = [];
     for (var i = 0; i < jugadores.length; i++) {
       if (i + 1 == jugadores.length)
-        items.push([parseInt(id), jugadores[i].id_jugador, jugadores[0].id_jugador, objetos[i].id]);
+        items.push([parseInt(id_partida), jugadores[i].id_jugador, jugadores[0].id_jugador, objetos[i].id]);
       else
-        items.push([parseInt(id), jugadores[i].id_jugador, jugadores[i + 1].id_jugador, objetos[i].id]);
+        items.push([parseInt(id_partida), jugadores[i].id_jugador, jugadores[i + 1].id_jugador, objetos[i].id]);
     }
     console.log(items);
     await db.query("insert into partidasenjuego (id_partida,id_jugador,id_victima,id_objeto) values ?", [items])
-    const partida = await db.query("UPDATE partidas set activa = true WHERE id=?", [id,]);
-    res.redirect("/partidas/edit/" + id);
+    const partida = await db.query("UPDATE partidas set status = 'enjuego' WHERE id=?", [id_partida,]);
+    req.flash("succes", "Partida lanzada con exito");
+    res.redirect("/partidas/edit/" + id_partida);
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
-router.get("/pause/:id", funciones.isAuthenticated, async (req, res) => {
-  const { id } = req.params;
+router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
+  const { id_partida } = req.params;
   try {
-    const partida = await db.query("UPDATE partidas set activa = false WHERE id=?", [id,]);
-    res.redirect("/partidas/edit/" + id);
+    const partida = await db.query("UPDATE partidas set status = 'enpausa' WHERE id=?", [id_partida,]);
+    res.redirect("/partidas/edit/" + id_partida);
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
@@ -326,7 +326,7 @@ router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (req, res) => {
@@ -374,14 +374,14 @@ router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (
     let supervivientes = await db.query("select * from partidasenjuego WHERE eliminado=false and id_partida=?", [id_partida]);
     //console.log(supervivientes);
     if (supervivientes.length == 1) {
-      await db.query("UPDATE partidas set activa=false WHERE id=?", [id_partida,]);
+      await db.query("UPDATE partidas set status='finalizada' WHERE id=?", [id_partida,]);
     }
 
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, async (req, res) => {
@@ -392,12 +392,12 @@ router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, asy
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 
 //DELETE
-router.get("/:id_partida/deleteplayer/:id_jugador", funciones.isAuthenticated, async (req, res) => {
+router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, async (req, res) => {
   const { id_jugador, id_partida } = req.params;
   try {
     await db.query("DELETE FROM jugadores WHERE id_jugador=? AND id_partida=?", [id_jugador, id_partida]);
@@ -407,23 +407,23 @@ router.get("/:id_partida/deleteplayer/:id_jugador", funciones.isAuthenticated, a
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
-router.get("/:id_partida/deleteobject/:id_objecto", funciones.isAuthenticated, async (req, res) => {
+router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, async (req, res) => {
   const { id_objecto, id_partida } = req.params;
   try {
-    await db.query("DELETE FROM bjetos WHERE id_objeto=? AND id_partida=?", [id_objecto, id_partida]);
+    await db.query("DELETE FROM objetos WHERE id=?", [id_objecto]);
     req.flash("success", "Objeto quitado de la lista correctamente");
-    console.log("=>" + id_partida);
+    console.log("borrado objeto");
     res.redirect("/partidas/edit/" + id_partida);
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
-router.get("/delete/:id_partida", funciones.isAuthenticated, async (req, res) => {
+router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   try {
     let a = await db.query("DELETE FROM partidasenjuego WHERE id_partida=?", [id_partida]);
@@ -439,11 +439,11 @@ router.get("/delete/:id_partida", funciones.isAuthenticated, async (req, res) =>
     console.log("d");
     console.log(d);
     req.flash("success", "Partida borrada correctamente");
-    res.redirect("/partidas/list");
+    res.redirect("/partidas/listar");
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/partidas/list");
+    res.redirect("/error");
   }
 });
 

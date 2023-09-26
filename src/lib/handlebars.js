@@ -30,7 +30,6 @@ helpers.formatearSpHora = (fecha) => {
     return '';
   }
 }
-
 //Este es el formateo necesario para encajar una fecha en un input de type="date"
 helpers.formatearEn = (fecha) => {
   var timestamp = new Date(fecha);
@@ -39,14 +38,13 @@ helpers.formatearEn = (fecha) => {
   return [timestamp.getFullYear(), mnth, day].join("-");
 }
 
-
 helpers.counter = (index) => {
   return index + 1;
 };
 
-helpers.suma = (balizas) => {
+helpers.suma = (vector) => {
   var total = 0;
-  balizas.forEach(element => {
+  vector.forEach(element => {
     total++;
   });
   return total;
@@ -54,13 +52,12 @@ helpers.suma = (balizas) => {
 
 helpers.supervivientes = (partida) => {
   var total = 0;
-  /*   partida.forEach(element => {
-      if(element.victima_killed==0)
+    partida.forEach(element => {
+      if(element.eliminado==0)
         total++;
-    }); */
+    });
   return total;
 }
-
 
 //Se usa asi:   {{#when jugadores.length 'eq' objetos.length }}
 helpers.when = (operand_1, operator, operand_2, options) => {
@@ -79,5 +76,33 @@ helpers.when = (operand_1, operator, operand_2, options) => {
   else return options.inverse(this);
 }
 
+helpers.enJuego = (value, options) => {
+  if (value == "enjuego") {
+      return options.fn(this);
+  }
+  return options.inverse(this);
+};
+
+helpers.esFinalizada = (value, options) => {
+  if (value == "finalizada") {
+      return options.fn(this);
+  }
+  return options.inverse(this);
+};
+
+
+helpers.enPausa = (value, options) => {
+  if (value == "enpausa") {
+      return options.fn(this);
+  }
+  return options.inverse(this);
+};
+
+helpers.enCreacion = (value, options) => {
+  if (value == "encreacion") {
+      return options.fn(this);
+  }
+  return options.inverse(this);
+};
 
 module.exports = helpers;

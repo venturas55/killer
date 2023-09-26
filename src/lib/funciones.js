@@ -47,13 +47,13 @@ helpers.listadoBackups = (req, res, next) => {
     return documentos;
 }
 
-helpers.encryptPass = async(password) => {
+helpers.encryptPass = async (password) => {
     const sal = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, sal);
     return password;
 };
 
-helpers.verifyPassword = async(password, hashedPassword) => {
+helpers.verifyPassword = async (password, hashedPassword) => {
     try {
         return await bcrypt.compare(password, hashedPassword);
     } catch (e) {
@@ -76,9 +76,24 @@ helpers.isNotAuthenticated = (req, res, next) => {
 }
 
 helpers.isAdmin = (req, res, next) => {
-    if(req.user && req.user.privilegio == "admin") {
+    if (req.user && req.user.privilegio == "admin") {
         return next();
     }
+    return res.render('noPermission');
+}
+
+helpers.hasPermission = async (req, res, next) => {
+    const partida = (await db.query("select * from partidas where id = ?", [req.params.id_partida]))[0];
+    //si es admin
+    if (req.user && req.user.privilegio == "admin") {
+        return next();
+    }
+    //Si es el creador de la partida
+    if (partida.id_creador == req.user.id)
+        return next();
+    //si opera sobre el mismo.
+    if(req.params.id_jugador && req.params.id_jugador == req.user.id)
+        return next();
     return res.render('noPermission');
 }
 
@@ -89,7 +104,7 @@ helpers.isNotAdmin = (req, res, next) => {
     return res.render('noPermission');
 }
 
-helpers.insertarLog = async(usuario, accion, observacion) => {
+helpers.insertarLog = async (usuario, accion, observacion) => {
     const log = {
         usuario,
         accion,

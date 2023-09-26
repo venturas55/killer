@@ -65,7 +65,7 @@
                             <td>{{this.descripcion}} </td>
                             <td>{{this.imageURL}}</td>
                             <td>
-                                <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id_objeto}}"
+                                <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}"
                                     class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
                             </td>
                         </tr>
@@ -89,17 +89,19 @@
         </div>
         <div class="col-md-12 mx-auto">
             <div class="card">
-                {{#if datospartida.activa}}
+                {{#enJuego partida.status}}
                 <h2>Partida activa!</h2>
                 <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
-                {{else}}
+                {{/enJuego}}
+
+                {{#enCreacion partida.status}}
                 {{#when jugadores.length 'gte' 2 }}
                 {{#when ../objetos.length 'gte' ../jugadores.length }}
 
                 <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> CREAR PARTIDA</a>
                 {{/when}}
                 {{/when}}
-                {{/if}}
+                {{/enCreacion}}
             </div>
         </div>
     </div>

@@ -28,10 +28,11 @@ CREATE TABLE `partidas` (
   `descripcion` varchar(250) DEFAULT NULL,
   `fecha_inicio` TIMESTAMP,
   `fecha_fin` TIMESTAMP,
-  `activa` boolean default 0
+  'id_creador' int(11) NOT NULL,
+  `status` enum ('encreacion', 'enpausa', 'enjuego'.'enedicion') default 'encreacion'
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de info de partidas';
 
-CREATE TABLE `jugadores` (
+/ / onpause onplay oncreation CREATE TABLE `jugadores` (
   `id_partida` int(11) NOT NULL,
   `id_jugador` int(11) DEFAULT NULL,
   primary key (id_partida, id_jugador),
@@ -49,7 +50,7 @@ CREATE TABLE `objetos` (
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1 COMMENT = 'tabla de objetos';
 
 CREATE TABLE `partidasenjuego` (
-    `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `id_partida` int(11) NOT NULL,
   `id_jugador` int(11) NOT NULL,
   `id_victima` int(11) NOT NULL,
@@ -76,6 +77,14 @@ CREATE TABLE eliminaciones (
   FOREIGN KEY (id_victima) REFERENCES usuarios(id),
   FOREIGN KEY (id_objeto) REFERENCES objetos(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de eliminaciones en juego';
+
+CREATE TABLE solicitudes (
+  id_partida int(11) NOT NULL,
+  id_jugador int(11) NOT NULL,
+  FOREIGN KEY (id_partida) REFERENCES partidas(id),
+  FOREIGN KEY (id_jugador) REFERENCES usuarios(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de solicituddes en juego';
+
 
 INSERT INTO
   `usuarios` (
@@ -144,9 +153,11 @@ VALUES
     0
   );
 
-  INSERT INTO `objetos` (`id`, `nombre`, `descripcion`, `pictureURL`) VALUES
-(1, 'cuchara', 'Una cuchara de metal', 'asd'),
-(2, 'Botella de agua', 'de 1,5L', ''),
-(3, 'ventilador', 'de 230v', ''),
-(4, 'telefono', 'movil', ''),
-(5, 'Ordenador', 'laptop', '');
+INSERT INTO
+  `objetos` (`id`, `nombre`, `descripcion`, `pictureURL`)
+VALUES
+  (1, 'cuchara', 'Una cuchara de metal', 'asd'),
+  (2, 'Botella de agua', 'de 1,5L', ''),
+  (3, 'ventilador', 'de 230v', ''),
+  (4, 'telefono', 'movil', ''),
+  (5, 'Ordenador', 'laptop', '');

@@ -1,7 +1,7 @@
 <div class="container p-4 pb-2 mb-5">
   <div class="row">
     <div class="col-md-12">
-      {{#if items}}
+      {{#if partidas}}
       <table class="listado">
         <tr>
           <th>Id Partida</th>
@@ -10,7 +10,7 @@
           <th>Fecha Inicio</th>
           <th>Fecha Fin</th>
         </tr>
-        {{#each items}}
+        {{#each partidas}}
         <tr>
           <td>{{titulo}}</td>
           <td>{{descripcion}}</td>
@@ -30,8 +30,9 @@
           <tr>No hay partidas guardados <a href="/partidas/add"> Crea uno!</a></tr>
         </div>
       </div>
-      <h1>TOTAL: {{suma items}}</h1>
+    
       {{/if}}
+        <h1>TOTAL: {{suma partidas}}</h1>
       <a href="/partidas/add" class="btn btn-primary"> Añadir partida</a>
     </div>
   </div>
