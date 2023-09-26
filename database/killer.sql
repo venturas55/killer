@@ -28,11 +28,13 @@ CREATE TABLE `partidas` (
   `descripcion` varchar(250) DEFAULT NULL,
   `fecha_inicio` TIMESTAMP,
   `fecha_fin` TIMESTAMP,
-  'id_creador' int(11) NOT NULL,
-  `status` enum ('encreacion', 'enpausa', 'enjuego'.'enedicion') default 'encreacion'
+  `id_creador` int(11),
+  `status` enum ('encreacion', 'enpausa', 'enjuego','enedicion') default 'encreacion',
+  FOREIGN KEY (id_creador) REFERENCES usuarios(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de info de partidas';
 
-/ / onpause onplay oncreation CREATE TABLE `jugadores` (
+/* / / onpause onplay oncreation  */
+CREATE TABLE `jugadores` (
   `id_partida` int(11) NOT NULL,
   `id_jugador` int(11) DEFAULT NULL,
   primary key (id_partida, id_jugador),
@@ -85,7 +87,6 @@ CREATE TABLE solicitudes (
   FOREIGN KEY (id_jugador) REFERENCES usuarios(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de solicituddes en juego';
 
-
 INSERT INTO
   `usuarios` (
     `id`,
@@ -133,31 +134,3 @@ VALUES
     'none',
     NULL
   );
-
-INSERT INTO
-  `partidas` (
-    `id`,
-    `titulo`,
-    `descripcion`,
-    `fecha_inicio`,
-    `fecha_fin`,
-    `activa`
-  )
-VALUES
-  (
-    1,
-    'Escola Destiu',
-    'Partida con los compis',
-    '2023-09-13',
-    '2023-10-26',
-    0
-  );
-
-INSERT INTO
-  `objetos` (`id`, `nombre`, `descripcion`, `pictureURL`)
-VALUES
-  (1, 'cuchara', 'Una cuchara de metal', 'asd'),
-  (2, 'Botella de agua', 'de 1,5L', ''),
-  (3, 'ventilador', 'de 230v', ''),
-  (4, 'telefono', 'movil', ''),
-  (5, 'Ordenador', 'laptop', '');

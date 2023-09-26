@@ -427,17 +427,9 @@ router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   try {
     let a = await db.query("DELETE FROM partidasenjuego WHERE id_partida=?", [id_partida]);
-    console.log("a");
-    console.log(a);
     let b = await db.query("DELETE FROM objetos WHERE id_partida=?", [id_partida]);
-    console.log("b");
-    console.log(b);
     let c = await db.query("DELETE FROM jugadores WHERE id_partida=?", [id_partida]);
-    console.log("c");
-    console.log(c);
     let d = await db.query("DELETE FROM partidas WHERE id=?", [id_partida]);
-    console.log("d");
-    console.log(d);
     req.flash("success", "Partida borrada correctamente");
     res.redirect("/partidas/listar");
   } catch (error) {
