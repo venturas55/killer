@@ -8,13 +8,16 @@
 
     {{#if user}}
     <div class="container text-center">
+                <div class="col-md-5 mx-auto mb-3">
+            <a type="button" class="btn btn-danger" href="/partidas/listarotras"> Unirme a otra Partida </a>
+
+                </div>
+
         {{#if partidas}}
         <div class="col-md-5 mx-auto mb-3">
             <a type="button" class="btn btn-danger">
                 Tienes <span class="badge text-bg-secondary">{{partidas.length}}</span> partidas activas
             </a>
-
-            <a type="button" class="btn btn-danger" href="/partidas/listarotras"> Unirme a otra Partida </a>
         </div>
         {{#each partidas}}
 
