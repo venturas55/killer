@@ -13,6 +13,7 @@
     {{/if}}
 
     <div class="row">
+       Quedan {{tiempoHasta partida.0.fecha_fin}}
         <div class="col-12 mx-auto">
             <div class="cajita">
                 <h1> {{ partida.0.titulo }} - {{ partida.0.descripcion }}</h1>
@@ -20,10 +21,11 @@
                     <div>
                         <h3> Asesinos</h3>
                         {{#each jugadores}}
-                        <p {{#if this.eliminado}} class="tachado" {{/if}}> <span data-bs-toggle="popover"
+                        <a href="/foto/{{this.id}}">
+                        <p {{#if this.eliminado}} class="tachado" {{/if}}>{{!--  <span data-bs-toggle="popover"
                                 title="{{this.full_name}}" data-content="{{this.id}} - {{this.full_name}}"
-                                class="text-decoration-line-through">
-                                {{this.usuario}} </span> </p>
+                                class="text-decoration-line-through"> --}}
+                                {{this.usuario}} {{!-- </span>  --}}</p> </a>
                         {{/each}}
                     </div>
 

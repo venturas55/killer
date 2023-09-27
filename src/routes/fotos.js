@@ -10,7 +10,7 @@ const { access, constants } = require('fs');
 const funciones = require("../lib/funciones.js");
 const { v4: uuidv4 } = require('uuid');
 
-const storage = multer.diskStorage({
+/* const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const { user } = req.body;
         const dir = path.join(__dirname, '../public/img/profiles/');
@@ -35,10 +35,10 @@ const uploadFoto = multer({
         return cb(("Error: Archivo debe ser una imagen valida jpeg,jpg,png,bmp o gif"));
     }
 }).single('imagen');
-
+ */
 
 //GESTION  foto perfil
-router.post('/profile/upload/:id', funciones.isAuthenticated, uploadFoto, async (req, res) => {
+/* router.post('/profile/upload/:id', funciones.isAuthenticated, uploadFoto, async (req, res) => {
     const { id } = req.params;
     //console.log(req.file);
     //console.log(req.params);
@@ -83,6 +83,14 @@ router.get("/profile/borrarfoto/:id/:url", funciones.isAuthenticated, async (req
     funciones.insertarLog(req.user.usuario, "DELETE fotografia perfil", "");
     req.flash("success", "Imagen borrada correctamente");
     res.redirect('/profile');
+}); */
+
+
+router.get("/foto/:id_jugador",async (req,res)=>{
+    const {id_jugador} = req.params;
+    const jugador= (await db.query("select * from usuarios WHERE id=?", [id_jugador, ]))[0];
+    console.log(jugador);
+    res.render("foto",{jugador});
 });
 
 

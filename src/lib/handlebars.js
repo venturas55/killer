@@ -14,7 +14,6 @@ helpers.formatearSp = (fecha) => {
   } else {
     return '';
   }
-
 }
 
 helpers.formatearSpHora = (fecha) => {
@@ -38,6 +37,24 @@ helpers.formatearEn = (fecha) => {
   return [timestamp.getFullYear(), mnth, day].join("-");
 }
 
+helpers.tiempoHasta = (fecha) => {
+  var limite = new Date(fecha);
+  var ahora = new Date();
+  var diff = limite - ahora;
+  let date = new Date(diff);
+  let dias,horas,segundos;
+  date.getDay()>0?dias=date.getDay():dias="";
+  date.getHours()>0?horas=date.getHours():horas="";
+  date.getMinutes()>0?segundos=date.getMinutes():segundos="";
+
+
+
+  if (diff > 0)
+    return dias+"d " + horas+"h " + segundos+"s";
+  else
+    return "finalizado";
+}
+
 helpers.counter = (index) => {
   return index + 1;
 };
@@ -52,10 +69,10 @@ helpers.suma = (vector) => {
 
 helpers.supervivientes = (partida) => {
   var total = 0;
-    partida.forEach(element => {
-      if(element.eliminado==0)
-        total++;
-    });
+  partida.forEach(element => {
+    if (element.eliminado == 0)
+      total++;
+  });
   return total;
 }
 
@@ -78,14 +95,14 @@ helpers.when = (operand_1, operator, operand_2, options) => {
 
 helpers.enJuego = (value, options) => {
   if (value == "enjuego") {
-      return options.fn(this);
+    return options.fn(this);
   }
   return options.inverse(this);
 };
 
 helpers.esFinalizada = (value, options) => {
   if (value == "finalizada") {
-      return options.fn(this);
+    return options.fn(this);
   }
   return options.inverse(this);
 };
@@ -93,14 +110,14 @@ helpers.esFinalizada = (value, options) => {
 
 helpers.enPausa = (value, options) => {
   if (value == "enpausa") {
-      return options.fn(this);
+    return options.fn(this);
   }
   return options.inverse(this);
 };
 
 helpers.enCreacion = (value, options) => {
   if (value == "encreacion") {
-      return options.fn(this);
+    return options.fn(this);
   }
   return options.inverse(this);
 };

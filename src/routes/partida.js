@@ -126,7 +126,12 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
   try {
     const id_jugador = req.user.id;
     const partidas = await db.query(queries.queryPartidasDistinc+" where p.status='encreacion'  group by p.id",[id_jugador]);
+    const aplica = await db.query(queries.queryJugadores+" where id_jugador=?",[id_jugador]);
     console.log(partidas);
+    console.log(aplica);
+    //TODO: comprobar si cada partida[i] se encuentra en alguna de las aplicadas. Meter la info en el array partidas
+    
+
     res.render("partidas/listarotras", { partidas });
   } catch (error) {
     console.error(error.code);
