@@ -9,15 +9,28 @@ const multer = require('multer');
 const { access, constants } = require('fs');
 const funciones = require("../lib/funciones.js");
 const { v4: uuidv4 } = require('uuid');
+const queries = require("./queries");
 
-/* const storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const { user } = req.body;
-        const dir = path.join(__dirname, '../public/img/profiles/');
-        return cb(null, dir);
+        if (typeof user === 'undefined') {
+            const dir = path.join(__dirname, '../public/img/imagenes/');
+
+            fs.exists(dir, exist => {
+                if (!exist) {
+                    return fs.mkdir(dir, error => cb(error, dir));
+                }
+                return cb(null, dir);
+            })
+        } else {//si no, entonces es una foto de perfil y va a otra carpeta
+            const dir = path.join(__dirname, '../public/img/profiles/');
+            console.log("dir" + dir);
+            return cb(null, dir);
+        }
     },
     filename: (req, file, cb) => {
-        cb(null, (uuidv4()+ path.extname(file.originalname)).toLowerCase());
+        cb(null, (uuidv4() + path.extname(file.originalname)).toLowerCase());
     }
 });
 
@@ -31,20 +44,15 @@ const uploadFoto = multer({
         if (mimetype && extname) {
             return cb(null, true);
         }
-
         return cb(("Error: Archivo debe ser una imagen valida jpeg,jpg,png,bmp o gif"));
     }
 }).single('imagen');
- */
 
 //GESTION  foto perfil
-/* router.post('/profile/upload/:id', funciones.isAuthenticated, uploadFoto, async (req, res) => {
+router.post('/profile/upload/:id', funciones.isAuthenticated, uploadFoto, async (req, res) => {
     const { id } = req.params;
-    //console.log(req.file);
-    //console.log(req.params);
     var usuario = await db.query("select * from usuarios where id = ?", id);
     usuario = usuario[0];
-
     //borramos la foto anterior del perfil
     if (usuario.pictureURL != "") {
         const filePath = path.resolve('src/public/img/profiles/' + usuario.pictureURL);
@@ -83,14 +91,80 @@ router.get("/profile/borrarfoto/:id/:url", funciones.isAuthenticated, async (req
     funciones.insertarLog(req.user.usuario, "DELETE fotografia perfil", "");
     req.flash("success", "Imagen borrada correctamente");
     res.redirect('/profile');
-}); */
+});
 
+//FOTOS DEL JUEGO KILLER, VIVO Y MUERTO
+router.get("/jugador/foto/:id_jugador/:eliminado", async (req, res) => {
+    let { id_jugador,eliminado } = req.params;
+    const jugador = (await db.query(queries.queryJugadores+" WHERE id_jugador=?", [id_jugador,]))[0];
+    eliminado==1?eliminado=true:eliminado=false;
+    console.log(eliminado);
+    res.render("foto", { jugador,eliminado });
+});
 
-router.get("/foto/:id_jugador",async (req,res)=>{
-    const {id_jugador} = req.params;
-    const jugador= (await db.query("select * from usuarios WHERE id=?", [id_jugador, ]))[0];
+router.get("/jugador/fotosjuego/", async (req, res) => {
+    const jugador = (await db.query("select * from jugadores j LEFT JOIN usuarios u on u.id=j.id_jugador WHERE id_jugador=?", [req.user.id,]))[0];
+
     console.log(jugador);
-    res.render("foto",{jugador});
+    res.render("fotos", { jugador, });
+});
+
+router.get("/jugador/foto/delete/:tipo", funciones.isAuthenticated, async (req, res) => {
+    //console.log(req.params);
+    const { tipo } = req.params;
+    const { id } = req.user.id;
+    let url;
+    console.log(id);
+    const jugador = (await db.query("select * from jugadores WHERE id_jugador=?", [req.user.id,]))[0];
+    console.log(jugador);
+    if (tipo == 'alive') {
+        await db.query("UPDATE jugadores set imagenAlive = NULL WHERE id_jugador=?", [req.user.id]);
+        url = jugador.imagenAlive;
+    }
+    else if (tipo == 'dead') {
+        await db.query("UPDATE jugadores set imagenDead = NULL WHERE id_jugador=?", [id]);
+        url = jugador.imagenDead;
+    }
+
+    const filePath = path.resolve('src/public/img/imagenes/' + url);
+    access(filePath, constants.F_OK, async (err) => {
+        if (err) {
+            console.log("No tiene foto de perfil");
+        } else {
+            console.log('File exists. Deleting now ...');
+            await unlink(filePath);
+        }
+    });
+    req.flash("success", "Imagen borrada correctamente");
+    res.redirect('/jugador/fotosjuego');
+});
+
+router.post('/jugador/upload', funciones.isAuthenticated, uploadFoto, async (req, res) => {
+    const { tipo } = req.body;
+    console.log(tipo);
+    let url;
+    var jugador = (await db.query("select * from jugadores where id_jugador = ?", req.user.id))[0];
+    tipo=='alive'?url=jugador.imagenAlive:"";
+    tipo=='dead'?url=jugador.imagenDead:"";
+    //borramos la foto anterior del perfil
+    if (url != "") {
+        const filePath = path.resolve('src/public/img/imagenes/' + url);
+        access(filePath, constants.F_OK, async (err) => {
+            if (err) {
+                req.flash("warning", "No tiene foto de juego!");
+                console.log("No tiene foto de juego");
+            } else {
+                console.log('File exists. Deleting now ...');
+                await unlink(filePath);
+            }
+        });
+    }
+    //Ponemos la nueva
+    tipo=='alive'?jugador.imagenAlive = req.file.filename:jugador.imagenDead = req.file.filename;;
+    await db.query("UPDATE jugadores set ? WHERE id_jugador=? and id_partida=?", [jugador, jugador.id_jugador, jugador.id_partida]);
+    //funciones.insertarLog(req.user.usuario, "UPDATE fotografia juego", "");
+    req.flash("success", "Foto de perfil actualizada con exito");
+    res.redirect("/jugador/fotosjuego");
 });
 
 

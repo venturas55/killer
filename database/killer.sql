@@ -37,6 +37,8 @@ CREATE TABLE `partidas` (
 CREATE TABLE `jugadores` (
   `id_partida` int(11) NOT NULL,
   `id_jugador` int(11) DEFAULT NULL,
+  `imagenAlive` varchar(100) DEFAULT NULL,
+  `imagenDead` varchar(100) DEFAULT NULL,
   primary key (id_partida, id_jugador),
   FOREIGN KEY (id_partida) REFERENCES partidas(id),
   FOREIGN KEY (id_jugador) REFERENCES usuarios(id)

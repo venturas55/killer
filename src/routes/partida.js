@@ -197,7 +197,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     let ganador = false;
     id_jugador = req.user.id;
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
-    console.log(partida);
+    //console.log(partida);
 
     //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
     const jugadores = partida.map(function (el) {
@@ -208,7 +208,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       var textB = b.usuario.toUpperCase();
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
-    console.log(jugadores);
+    //console.log(jugadores);
 
     //==============Obtengo un listado de los OBJETOS ordenados alfabeticamente.===========
     const objetos = partida.map(function (el) {
@@ -219,7 +219,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       var textB = b.nombre.toUpperCase();
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
-    console.log(objetos);
+    //console.log(objetos);
 
     //===== OBJETIVO =================
     const jugador = partida.filter(function (el) {
@@ -257,7 +257,6 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     //======== Es el propio jugador el ganador???? =====
     //console.log(supervivientes.length + " " + supervivientes[0].id_jugador + " " + req.user.id)
     if (supervivientes.length == 1 && supervivientes[0].id_jugador == req.user.id) {
-      console.log("ganador");
       ganador = true;
     }
     //console.log(ganador);

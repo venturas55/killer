@@ -1,17 +1,24 @@
-<div class="hazard-background">
-</div>
-<div class="container p-2 text-center">
-    <div class="row ">
-        <h1 class="mb-1">FOTO DEL ASESINO/VICTIMA</h1>
+<!-- CUERPO -->
+<div class="container-fluid">
+  <div class="hazard-background">
+  </div>
+  <div class="row  justify-content-center">
+    {{#if eliminado}}
+    <h4>FOTO DE LA VICTIMA</h4>
+    {{else}}
+    <h4>FOTO DEL KILLER</h4>
+    {{/if}}
+  </div>
+  <div class="row justify-content-center">
+    <div class="card m-1" style="max-width: 80%;">
+      <p> {{jugador.full_name}} - {{jugador.usuario}} </p>
+      {{#if eliminado}}
+      <img id="imagenDead" src="/img/imagenes/{{jugador.imagenDead}}" alt="Foto eliminado">
+      {{else}}
+      <img id="imagenAlive" src="/img/imagenes/{{jugador.imagenAlive}}" alt="Foto vivo">
+      {{/if}}
     </div>
-    <div class="row ">
-        <div>
-            <p>Va la foto de {{jugador.full_name}} - {{jugador.usuario}} </p>
-            <div class="card m-4" style="max-width: 18rem;">
-                <img id="imagen" src="/img/profiles/{{jugador.pictureURL}}" alt="Una foto">
-            </div>
-        </div>
-    </div>
-</div>
-<div class="hazard-background">
+  </div>
+  <div class="hazard-background">
+  </div>
 </div>
