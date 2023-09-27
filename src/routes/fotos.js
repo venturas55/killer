@@ -95,11 +95,11 @@ router.get("/profile/borrarfoto/:id/:url", funciones.isAuthenticated, async (req
 
 //FOTOS DEL JUEGO KILLER, VIVO Y MUERTO
 router.get("/jugador/foto/:id_jugador/:eliminado", async (req, res) => {
-    let { id_jugador,eliminado } = req.params;
-    const jugador = (await db.query(queries.queryJugadores+" WHERE id_jugador=?", [id_jugador,]))[0];
-    eliminado==1?eliminado=true:eliminado=false;
+    let { id_jugador, eliminado } = req.params;
+    const jugador = (await db.query(queries.queryJugadores + " WHERE id_jugador=?", [id_jugador,]))[0];
+    eliminado == 1 ? eliminado = true : eliminado = false;
     console.log(eliminado);
-    res.render("foto", { jugador,eliminado });
+    res.render("foto", { jugador, eliminado });
 });
 
 router.get("/jugador/fotosjuego/", async (req, res) => {
@@ -144,8 +144,8 @@ router.post('/jugador/upload', funciones.isAuthenticated, uploadFoto, async (req
     console.log(tipo);
     let url;
     var jugador = (await db.query("select * from jugadores where id_jugador = ?", req.user.id))[0];
-    tipo=='alive'?url=jugador.imagenAlive:"";
-    tipo=='dead'?url=jugador.imagenDead:"";
+    tipo == 'alive' ? url = jugador.imagenAlive : "";
+    tipo == 'dead' ? url = jugador.imagenDead : "";
     //borramos la foto anterior del perfil
     if (url != "") {
         const filePath = path.resolve('src/public/img/imagenes/' + url);
@@ -160,11 +160,46 @@ router.post('/jugador/upload', funciones.isAuthenticated, uploadFoto, async (req
         });
     }
     //Ponemos la nueva
-    tipo=='alive'?jugador.imagenAlive = req.file.filename:jugador.imagenDead = req.file.filename;;
+    tipo == 'alive' ? jugador.imagenAlive = req.file.filename : jugador.imagenDead = req.file.filename;;
     await db.query("UPDATE jugadores set ? WHERE id_jugador=? and id_partida=?", [jugador, jugador.id_jugador, jugador.id_partida]);
     //funciones.insertarLog(req.user.usuario, "UPDATE fotografia juego", "");
     req.flash("success", "Foto de perfil actualizada con exito");
     res.redirect("/jugador/fotosjuego");
+});
+
+//FOTOS DEL OBJETO
+router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadFoto, async (req, res) => {
+    const { id_partida } = req.params;
+    const { nombre, descripcion } = req.body;
+    //console.log(req.body);
+    //console.log(req.file.filename);
+    try {
+        const {
+            nombre,
+            descripcion,
+        } = req.body;
+        const item_1 = {
+            nombre,
+            descripcion,
+            pictureURL: req.file.filename,
+            id_partida,
+
+        };
+        const a = await db.query("INSERT INTO objetos set ?", [item_1]);
+        req.flash("success", "Objeto insertado correctamente");
+        res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
+    } catch (error) {
+        console.error(error.code);
+        req.flash("error", "Hubo algun error");
+        res.redirect("/error");
+    }
+});
+
+router.get("/objeto/foto/:id_objeto", async (req, res) => {
+    let { id_objeto } = req.params;
+    const objeto = (await db.query(queries.queryObjetos + " WHERE id=?", [id_objeto,]))[0];
+
+    res.render("fotoobjeto", { objeto, });
 });
 
 

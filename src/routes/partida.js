@@ -95,7 +95,8 @@ router.get("/:id_partida/add_object", funciones.hasPermission, (req, res) => {
   const { id_partida } = req.params;
   res.render("partidas/add_object", { id_partida });
 });
-router.post("/:id_partida/add_object", funciones.hasPermission, async (req, res) => {
+/* SE MUEVE A fotos.js por subir tambien foto del objeto
+ router.post("/:id_partida/add_object", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   try {
     const {
@@ -118,7 +119,7 @@ router.post("/:id_partida/add_object", funciones.hasPermission, async (req, res)
     req.flash("error", "Hubo algun error");
     res.redirect("/error");
   }
-});
+}); */
 
 //READ
 //Para mostrar listado de partidas para el admin
@@ -278,7 +279,9 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
     const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
     const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_partida,]);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
-    console.log(datospartida);
+    console.log(partida);
+    console.log(objetos);
+    console.log(jugadores);
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida });
   } catch (error) {
     console.error(error.code);

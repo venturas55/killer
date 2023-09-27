@@ -93,15 +93,13 @@
                 <h2>Partida activa!</h2>
                 <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
                 {{/enJuego}}
-
-                {{#enCreacion partida.status}}
-                {{#when jugadores.length 'gte' 2 }}
+                {{#enCreacion datospartida.status}} 
+                {{#when ../jugadores.length 'gte' 2 }}
                 {{#when ../objetos.length 'gte' ../jugadores.length }}
-
                 <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> CREAR PARTIDA</a>
                 {{/when}}
                 {{/when}}
-                {{/enCreacion}}
+                 {{/enCreacion}} 
             </div>
         </div>
     </div>

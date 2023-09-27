@@ -36,9 +36,9 @@
                     <div>
                         <h3> Armas</h3>
                         {{#each objetos}}
-                        <p {{#if this.eliminado}} class="tachado" {{/if}}> <span data-bs-toggle="popover"
-                                title="{{this.descripcion}}" data-content="{{this.descripcion}}">
-                                {{this.nombre}}</span> </p>
+                        <a href="/objeto/foto/{{this.id}}">
+                            <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p>
+                        </a>
                         {{/each}}
                     </div>
                 </div>

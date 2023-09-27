@@ -1,10 +1,9 @@
-<div class="container p-4">
+<div class="container p-2">
     <div class="row4">
-      
-        <div class="col-md-5 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="card text-center">
                 <div class="card-body">
-                    <h3>Bienvenid@ <strong> {{user.usuario}} </strong> !!</h3>
+                    <h4>Bienvenid@ <strong> {{user.usuario}} </strong>!</h4>
                     {{>avatar}}
                     <form action="/profile/upload/{{user.id}}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="{{user.id}}" />
@@ -18,14 +17,14 @@
                             </div>
                         </div>
                     </form>
-                        <p>Id: {{user.id}} </p>
+                    <p>Id: {{user.id}} </p>
                     <p>Nombre: {{user.full_name}} </p>
                     <p>Usuario: {{user.usuario}} </p>
                     <p>Correo: {{user.email}} </p>
                     <p>Privilegio: {{user.privilegio}} </p>
-                    <a href="/profile/edit" class="btn btn-warning m-4"> Editar el Perfil </a>
-                    <a href="/" class="btn btn-primary m-4"> Volver a Inicio</a>
-                    <a href="/jugador/fotosjuego" class="btn btn-warning m-4">Actualizar fotos juego</a>
+                    <a href="/profile/edit" class="btn btn-warning mb-1"> Editar el Perfil </a>
+                    <a href="/" class="btn btn-primary mb-1"> Volver a Inicio</a>
+                    <a href="/jugador/fotosjuego" class="btn btn-warning mb-4">Actualizar fotos juego</a>
                 </div>
             </div>
         </div>
