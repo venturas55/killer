@@ -329,8 +329,11 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
 });
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
+  funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
+   
+
   try {
-    await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
+    //await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);

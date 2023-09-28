@@ -4,16 +4,16 @@
       {{#if partidas}}
       <table class="listado">
         <tr>
-          <th>Id Partida</th>
           <th>Titulo</th>
-          <th>Desripcion</th>
-          <th>Fecha Inicio</th>
-          <th>Fecha Fin</th>
+          <th class="d-none d-xl-table-cell">Desripcion</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Acciones</th>
         </tr>
         {{#each partidas}}
         <tr>
           <td>{{titulo}}</td>
-          <td>{{descripcion}}</td>
+          <td class="d-none d-xl-table-cell">{{descripcion}}</td>
           <td>{{formatearSp fecha_inicio}} </td>
           <td>{{formatearSp fecha_fin}}</td>
           <td>
@@ -25,15 +25,17 @@
         {{/each}}
       </table>
       {{else}}
-      <div class="col-md-4-mx-auto">
+      <div class="col-md-4 mx-auto">
         <div class="card card-body text-center">
           <tr>No hay partidas guardados <a href="/partidas/add"> Crea uno!</a></tr>
         </div>
       </div>
-    
+
       {{/if}}
-        <h1>TOTAL: {{suma partidas}}</h1>
-      <a href="/partidas/add" class="btn btn-primary"> Añadir partida</a>
+      <div class="col mx-auto">
+        <h4 class="m-3">TOTAL: {{suma partidas}}</h4>
+        <a href="/partidas/add" class="btn btn-primary"> Añadir partida</a>
+      </div>
     </div>
   </div>
 </div>

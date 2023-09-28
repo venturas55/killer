@@ -81,15 +81,10 @@
 
             {{else}}
             {{#when supervivientes.length 'gt' 1}}
-            <div class="col-md-12 mx-auto cajita mt-4">
-                <h3>MI OBJETIVO</h3>
-                <p>Tu objetivo es <strong> {{../jugador.victima_user}} {{!-- - {{../jugador.victima_name}} --}}
-                    </strong>
-                    entregandole en mano <strong>{{!-- {{../jugador.id_objeto}} - --}}{{../jugador.objeto}} </strong>
-                </p>
-                <p> <button class="btn btn-danger" id="btnkill" id_partida="{{../jugador.id_partida}}"
-                        victima="{{../this.victima}}" id_victima="{{../jugador.id_victima}}">Asesinar</button> </p>
-            </div>
+            <button type="button" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#modalObjetivo">
+               Ver Objetivo
+            </button>
+           
             {{/when}}
             {{/if}}
 
@@ -116,4 +111,32 @@
             <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
         </div>
     </div>
+</div>
+
+
+
+<!-- Modal BS - ======== modalObjetivo ===== -->
+<div class="modal " data-bs-backdrop="false" id="modalObjetivo" tabindex="-1" aria-labelledby="modalObjetivoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="emodalObjetivoLabel">Objetivo</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+         <div class="mx-auto cajita mx-0 mt-4">
+                <h3>MI OBJETIVO</h3>
+                <p>Tu objetivo es <strong> {{jugador.victima_user}} {{!-- - {{../jugador.victima_name}} --}}
+                    </strong>
+                    entregandole en mano <strong>{{!-- {{../jugador.id_objeto}} - --}}{{jugador.objeto}} </strong>
+                </p>
+                <p> <button class="btn btn-danger" id="btnkill" id_partida="{{jugador.id_partida}}"
+                        victima="{{../this.victima}}" id_victima="{{jugador.id_victima}}">Asesinar</button> </p>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnSave" type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </div>

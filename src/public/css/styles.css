@@ -14,6 +14,10 @@ body {
   color: var(--gris) !important;
 }
 
+p{
+  margin-bottom: 0px;
+}
+
 
 
 .index {

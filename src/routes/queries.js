@@ -2,7 +2,6 @@ const queries = {
     queryUsuarios: "select * from usuarios",
     queryPartidas: "select * from partidas",
     queryPartidasJugador: "select * from jugadores j left join partidas p ON j.id_partida=p.id",
-    
     queryPartidasAjenas: "select p.id,p.titulo,p.descripcion,p.fecha_inicio, p.fecha_fin,p.status,p.id_creador,pej.id_jugador,pej.id_victima,pej.id_objeto from partidas p LEFT JOIN partidasenjuego pej ON p.id=pej.id_partida",
     queryPartidasDistinc: "select p.id,p.titulo,p.descripcion,p.fecha_inicio, p.fecha_fin,p.status,p.id_creador,pej.id_jugador,pej.id_victima,pej.id_objeto from partidas p LEFT JOIN partidasenjuego pej ON p.id=pej.id_partida",
     queryObjetos: "select * from objetos",

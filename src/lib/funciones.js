@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 const db = require("../database");
+const queries = require("../routes/queries");
 const mysqldump = require('mysqldump');
 const { promisify } = require('util');
 const { stringify } = require('querystring');
@@ -135,6 +136,20 @@ helpers.dumpearSQL = () => {
         },
         dumpToFile: './src/public/dumpSQL/dumpSAN' + Date.now() + '.sql',
     });
+}
+
+helpers.verifyActiveGame = async (id_partida) => {
+    try {
+        const partida = await db.query(queries.queryPartidas+" where id= ?", [id_partida]);
+        const date = Date.now();
+        console.log(partida);
+        if(partida.fecha_fin > date && partida.fecha_inicio < date)
+            return "true";
+    } catch (e) {
+        console.log(e);
+        return res.render('/error',{error: 'Actualmente no esta en juego dicha partida'});
+    }
+    return false;
 }
 
 module.exports = helpers;

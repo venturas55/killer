@@ -1,8 +1,24 @@
-//COSAS DE BOOTSTRAP PARA QUE FUNCIONEN LOS POPOVERS
+/* //COSAS DE BOOTSTRAP PARA QUE FUNCIONEN
+// LOS POPOVERS
 var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
   return new bootstrap.Popover(popoverTriggerEl)
 })
+
+//LOS MODALES
+$('#exampleModalLongTitle').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus')
+}) */
+const container = document.getElementById("testModal");
+const modal = new bootstrap.Modal(container);
+
+document.getElementById("btnShow").addEventListener("click", function () {
+  modal.show();
+});
+document.getElementById("btnSave").addEventListener("click", function () {
+  modal.hide();
+});
+
 
 //FIN POPOVERS BOOSTRAP
 
