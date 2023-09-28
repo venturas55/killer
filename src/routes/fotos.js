@@ -14,6 +14,7 @@ const queries = require("./queries");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const { user } = req.body;
+        console.log(user);
         if (typeof user === 'undefined') {
             const dir = path.join(__dirname, '../public/img/imagenes/');
 
@@ -70,7 +71,7 @@ router.post('/profile/upload/:id', funciones.isAuthenticated, uploadFoto, async 
     //Ponemos la nueva
     usuario.pictureURL = req.file.filename;
     await db.query("UPDATE usuarios set  ? WHERE id=?", [usuario, id]);
-    funciones.insertarLog(req.user.usuario, "UPDATE fotografia perfil", "");
+    //funciones.insertarLog(req.user.usuario, "UPDATE fotografia perfil", "");
     req.flash("success", "Foto de perfil actualizada con exito");
     res.redirect("/profile");
 });
@@ -88,7 +89,7 @@ router.get("/profile/borrarfoto/:id/:url", funciones.isAuthenticated, async (req
             await unlink(filePath);
         }
     });
-    funciones.insertarLog(req.user.usuario, "DELETE fotografia perfil", "");
+    //funciones.insertarLog(req.user.usuario, "DELETE fotografia perfil", "");
     req.flash("success", "Imagen borrada correctamente");
     res.redirect('/profile');
 });

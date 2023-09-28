@@ -6,7 +6,7 @@
                     <h4>Bienvenid@ <strong> {{user.usuario}} </strong>!</h4>
                     {{>avatar}}
                     <form action="/profile/upload/{{user.id}}" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="{{user.id}}" />
+                        <input type="hidden" name="user" value="{{user.id}}" />
                         <div class="input-group mb-3">
                             <div class="custom-file">
                                 <input type="file" name="imagen" class="custom-file-input" id="inputGroupFile02">

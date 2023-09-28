@@ -18,7 +18,7 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
     titulo, descripcion, fecha_inicio, fecha_fin,
   } = req.body;
   try {
-    const item = { titulo, descripcion, fecha_inicio, fecha_fin, 'id_creador':req.user.id };
+    const item = { titulo, descripcion, fecha_inicio, fecha_fin, 'id_creador': req.user.id };
     console.log(item);
 
     await db.query("INSERT INTO partidas set ?", [item]);
@@ -62,7 +62,7 @@ router.post("/:id_partida/add_player", funciones.hasPermission, async (req, res)
   const { id_partida } = req.params;
   const item = { id_partida, id_jugador: jugador };
   console.log(item);
-  
+
   try {
     await db.query("INSERT INTO jugadores set ?", [item]);
     req.flash("success", "Jugador insertado correctamente");
@@ -81,9 +81,9 @@ router.post("/:id_partida/add_player", funciones.hasPermission, async (req, res)
       case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
         req.flash("error", "Hay un campo con valor incorrecto");
         break;
-/* 
-      default:
-        req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
+      /* 
+            default:
+              req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
     }
     req.flash("error", "Hubo algun error");
     res.redirect("/error");
@@ -126,12 +126,12 @@ router.get("/:id_partida/add_object", funciones.hasPermission, (req, res) => {
 router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
   try {
     const id_jugador = req.user.id;
-    const partidas = await db.query(queries.queryPartidasDistinc+" where p.status='encreacion'  group by p.id",[id_jugador]);
-    const aplica = await db.query(queries.queryJugadores+" where id_jugador=?",[id_jugador]);
+    const partidas = await db.query(queries.queryPartidasDistinc + " where p.status='encreacion'  group by p.id", [id_jugador]);
+    const aplica = await db.query(queries.queryJugadores + " where id_jugador=?", [id_jugador]);
     console.log(partidas);
     console.log(aplica);
     //TODO: comprobar si cada partida[i] se encuentra en alguna de las aplicadas. Meter la info en el array partidas
-    
+
 
     res.render("partidas/listarotras", { partidas });
   } catch (error) {
@@ -160,7 +160,7 @@ router.get('/listar', async (req, res) => {
   id_jugador = req.user.id;
   try {
     //const partidas = await db.query(queries.queryPartidasAjenas + " where pej.id_jugador!=?", [id_jugador]);
-    const partidas = await db.query(queries.queryPartidasJugador+" where j.id_jugador=?",[id_jugador,]);
+    const partidas = await db.query(queries.queryPartidasJugador + " where j.id_jugador=?", [id_jugador,]);
     console.log(partidas);
     res.render('partidas/listar', { partidas, });
   } catch (error) {
@@ -228,6 +228,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const jugador = partida.filter(function (el) {
       return el.id_jugador === req.user.id
     })[0];
+    console.log(jugador);
 
 
     //===== TICKET =================
@@ -329,11 +330,10 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
 });
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
-  funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
-   
-
+  /* TODO: verificar que esta en tiempo */
+  // funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
   try {
-    //await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
+    await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);

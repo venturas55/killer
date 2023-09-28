@@ -4,10 +4,9 @@
         <div class="col-md-12 mx-auto cajita">
             <p> <span> <strong>'{{ticket.jugador_name}}'</strong> ha reportado que te ha matado con <strong>
                         '{{ticket.objeto}}' </strong> . Es verdad?</span></p>
-            <button class="btn btn-warning" id="btndie" id_partida="{{ticket.id_partida}}"
-                id_victima="{{ticket.id_victima}}">Aceptar</button>
-            <a href='/partidas/{{ticket.id_partida}}/rejectkill/{{ticket.id_victima}}'> <button class="btn btn-danger"
-                    id_partida="{{ticket.id_partida}}" id_victima="{{ticket.id_victima}}">Denegar</button></a>
+            <a href="/partidas/{{ticket.id_partida}}/muerte/{{ticket.id_victima}}" class="btn btn-warning">Aceptar</a>
+            <a href="/partidas/{{ticket.id_partida}}/rejectkill/{{ticket.id_victima}}" class="btn btn-warning">
+                Denegar</a>
         </div>
     </div>
     {{/if}}
@@ -81,10 +80,12 @@
 
             {{else}}
             {{#when supervivientes.length 'gt' 1}}
-            <button type="button" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#modalObjetivo">
-               Ver Objetivo
-            </button>
-           
+            {{!-- <button type="button" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#modalObjetivo">
+                Ver Objetivo
+            </button> --}}
+
+            <a class="btn btn-warning" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Ver objetivo</a>
+
             {{/when}}
             {{/if}}
 
@@ -116,27 +117,69 @@
 
 
 <!-- Modal BS - ======== modalObjetivo ===== -->
-<div class="modal " data-bs-backdrop="false" id="modalObjetivo" tabindex="-1" aria-labelledby="modalObjetivoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="emodalObjetivoLabel">Objetivo</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-         <div class="mx-auto cajita mx-0 mt-4">
-                <h3>MI OBJETIVO</h3>
-                <p>Tu objetivo es <strong> {{jugador.victima_user}} {{!-- - {{../jugador.victima_name}} --}}
-                    </strong>
-                    entregandole en mano <strong>{{!-- {{../jugador.id_objeto}} - --}}{{jugador.objeto}} </strong>
-                </p>
-                <p> <button class="btn btn-danger" id="btnkill" id_partida="{{jugador.id_partida}}"
-                        victima="{{../this.victima}}" id_victima="{{jugador.id_victima}}">Asesinar</button> </p>
+<div class="modal " data-bs-backdrop="false" id="modalObjetivo" tabindex="-1" aria-labelledby="modalObjetivoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="emodalObjetivoLabel">Objetivo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-      </div>
-      <div class="modal-footer">
-        <button id="btnSave" type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
-      </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnSave" type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+
+{{!-- MODAL --}}
+<div class="modal fade" id="exampleModalToggle" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalToggleLabel">MI OBJETIVO</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="m-1 cajita">
+                    <p>Tu objetivo es <strong> {{jugador.victima_user}} {{!-- - {{../jugador.victima_name}} --}}
+                        </strong>
+                        entregandole en mano <strong>{{!-- {{../jugador.id_objeto}} - --}}{{jugador.objeto}} </strong>
+                    </p>
+                    {{!-- <p> <button class="btn btn-danger" id="btnkill" id_partida="{{jugador.id_partida}}"
+                            victima="{{this.victima}}" id_victima="{{jugador.id_victima}}"
+                            data-bs-dismiss="modal">Asesinar</button> </p> --}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">Asesinar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalToggle2" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal 2</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Está seguro de querer asesinarlo???</p>
+            </div>
+            <div class="modal-footer">
+                <a href="/partidas/{{jugador.id_partida}}/asesinar/{{jugador.id_victima}}"
+                    class="btn btn-danger">Asesinar</a>
+
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle"
+                    data-bs-toggle="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
 </div>
