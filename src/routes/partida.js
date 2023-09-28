@@ -142,6 +142,8 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
 });
 
 router.get("/listedit", funciones.isAuthenticated, async (req, res) => {
+  //TODO: QUE SOLO MUESTRE PARTIDAS EN EDICION
+  //TODO: HACER QUE SE PUEDA PAUSAR UNA PARTIDA Y EDITARLA.
   try {
     const partidas = await db.query(queries.queryPartidas,);
     console.log(partidas);

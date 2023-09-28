@@ -16,10 +16,11 @@
         Quedan {{tiempoHasta partida.0.fecha_fin}}
         <div class="col-12 mx-auto">
             <div class="cajita">
-                <h1> {{ partida.0.titulo }} - {{ partida.0.descripcion }}</h1>
+                <h2> {{ partida.0.titulo }} </h2>
+                <p>{{ partida.0.descripcion }}</p>
                 <div class="d-flex flex-row align-items-center justify-content-around">
                     <div>
-                        <h3> Asesinos</h3>
+                        <h5> Asesinos</h5>
                         {{#each jugadores}}
                         <a href="/jugador/foto/{{this.id}}/{{this.eliminado}}">
 
@@ -34,7 +35,7 @@
                     </div>
 
                     <div>
-                        <h3> Armas</h3>
+                        <h5> Armas</h5>
                         {{#each objetos}}
                         <a href="/objeto/foto/{{this.id}}">
                             <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p>
@@ -43,7 +44,7 @@
                     </div>
                 </div>
                 <div>
-                    <h3>Asesinos más Sanguinarios</h3>
+                    <h5>Asesinos más Sanguinarios</h5>
                     {{#if top_killers}}
                     {{#each top_killers}}
                     <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}} bajas
@@ -54,7 +55,7 @@
                     {{/if}}
                 </div>
                 <div>
-                    <h3>Última baja</h3>
+                    <h5>Última baja</h5>
                     {{#if last_kill}}
                     <p> {{last_kill.asesino_user}} ha matado a {{last_kill.victima_user}} con {{last_kill.objeto}} a
                         las
@@ -81,7 +82,7 @@
             {{else}}
             {{#when supervivientes.length 'gt' 1}}
             <div class="col-md-12 mx-auto cajita mt-4">
-                <h1>MI OBJETIVO</h1>
+                <h3>MI OBJETIVO</h3>
                 <p>Tu objetivo es <strong> {{../jugador.victima_user}} {{!-- - {{../jugador.victima_name}} --}}
                     </strong>
                     entregandole en mano <strong>{{!-- {{../jugador.id_objeto}} - --}}{{../jugador.objeto}} </strong>
@@ -96,17 +97,16 @@
             {{#when supervivientes.length 'eq' 1}}
             {{#if ../ganador}}
             <div class="col-md-12 mx-auto cajita mt-4">
-                <h1>ENHORABUENA ERES GANADOR!!</h1>
+                <h3>ENHORABUENA ERES EL GANADOR!!</h3>
                 <p> con un total de <strong> {{../supervivientes.0.asesinatos}} eliminaciones</strong></p>
-
             </div>
 
 
             {{else}}
             <div class="col-md-12 mx-auto cajita mt-4">
-                <h1>TENEMOS GANADOR!!</h1>
+                <h3>TENEMOS GANADOR!!</h3>
                 <p class="d-inline">El ganador es </p>
-                <h3 class="d-inline"> {{../supervivientes.0.jugador_name}} </h3> aka <strong>
+                <h5 class="d-inline"> {{../supervivientes.0.jugador_name}} </h5> aka <strong>
                     {{../supervivientes.0.jugador_user}} </strong> <span> con un total de <strong>
                         {{../supervivientes.0.asesinatos}} eliminaciones</strong></span>
 

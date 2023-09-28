@@ -43,11 +43,7 @@ a {
   opacity: 1;
 }
 
-.cajita h1 {
-  color: var(--amarillo);
-}
-
-.cajita h3 {
+.cajita h1,h2,h3,h4,h5 {
   color: var(--amarillo);
 }
 
