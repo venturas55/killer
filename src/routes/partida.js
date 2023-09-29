@@ -282,8 +282,8 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
     const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
     const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_partida,]);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
-    console.log(partida);
-    console.log(objetos);
+    //console.log(partida);
+    //console.log(objetos);
     console.log(jugadores);
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida });
   } catch (error) {

@@ -76,7 +76,10 @@ a {
   object-fit: cover;
   object-position: center;
 }
-
+.avatar-xs {
+  height: 32px;
+  width: 32px;
+}
 
 .avatar-s {
   height: 64px;

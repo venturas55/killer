@@ -100,14 +100,14 @@ router.get("/jugador/foto/:id_jugador/:eliminado", async (req, res) => {
     const jugador = (await db.query(queries.queryJugadores + " WHERE id_jugador=?", [id_jugador,]))[0];
     eliminado == 1 ? eliminado = true : eliminado = false;
     console.log(eliminado);
-    res.render("foto", { jugador, eliminado });
+    res.render("fotos/foto", { jugador, eliminado });
 });
 
 router.get("/jugador/fotosjuego/", async (req, res) => {
     const jugador = (await db.query("select * from jugadores j LEFT JOIN usuarios u on u.id=j.id_jugador WHERE id_jugador=?", [req.user.id,]))[0];
 
     console.log(jugador);
-    res.render("fotos", { jugador, });
+    res.render("fotos/fotos", { jugador, });
 });
 
 router.get("/jugador/foto/delete/:tipo", funciones.isAuthenticated, async (req, res) => {
@@ -172,8 +172,9 @@ router.post('/jugador/upload', funciones.isAuthenticated, uploadFoto, async (req
 router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadFoto, async (req, res) => {
     const { id_partida } = req.params;
     const { nombre, descripcion } = req.body;
-    //console.log(req.body);
-    //console.log(req.file.filename);
+    var pictureURL = "";
+    if (typeof req.file!== 'undefined')
+        pictureURL = req.file.filename;
     try {
         const {
             nombre,
@@ -182,7 +183,7 @@ router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadF
         const item_1 = {
             nombre,
             descripcion,
-            pictureURL: req.file.filename,
+            pictureURL,
             id_partida,
 
         };
@@ -200,7 +201,7 @@ router.get("/objeto/foto/:id_objeto", async (req, res) => {
     let { id_objeto } = req.params;
     const objeto = (await db.query(queries.queryObjetos + " WHERE id=?", [id_objeto,]))[0];
 
-    res.render("fotoobjeto", { objeto, });
+    res.render("fotos/fotoobjeto", { objeto, });
 });
 
 

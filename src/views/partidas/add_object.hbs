@@ -11,14 +11,29 @@
                                 placeholder="Descripcion" /> </div>
                         <div class="input-group mb-3">
                             <input type="hidden" name="tipo" value="objeto" />
-                            <input type="file" name="imagen" class="form-control" id="inputGroupFile02">
+                            <input type="file" name="imagen" class="form-control" id="inputGroupFile02"  onchange="preview1()">
                         </div>
-                    <button class="btn btn-primary btn-block">Guardar</button>
+                    <img id="frame1" class="card-img-top" alt="preview foto objeto" />
+
+                        <button class="btn btn-primary btn-block"  onclick="clearImage1()">Guardar</button>
                     </form>
-                  <div class="text-center">
-        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
-    </div>
+                    <div class="text-center">
+                        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+
+<script>
+    function preview1() {
+        frame1.src = URL.createObjectURL(event.target.files[0]);
+    }
+    function clearImage1() {
+        document.getElementById('formFile1').value = null;
+        frame1.src = "";
+    }
+
+</script>

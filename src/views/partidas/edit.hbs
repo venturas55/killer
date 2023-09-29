@@ -3,11 +3,11 @@
     Empieza {{formatearSp datospartida.fecha_inicio}}
     Acaba {{formatearSp datospartida.fecha_fin}}
     <div class="row">
-        <div class="col-md-12 mx-auto">
+        <div class="col-md-12">
             <div class="card my-4 p-1 bg-secondary">
                 <h4> JUGADORES - Nº total: {{jugadores.length}}</h4>
                 {{#if jugadores}}
-                <table class="listado">
+                <table>
                     <tr>
                         <th>Id</th>
                         <th>Username</th>
@@ -20,10 +20,16 @@
                         <td>{{this.id_jugador}}</td>
                         <td>{{this.usuario}} </td>
                         <td>{{this.full_name}}</td>
-                        <td>{{this.imageURL}}</td>
+                        {{#if this.pictureURL}}
+                        <td> <img src="/img/profiles/{{this.pictureURL}}" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{else}}
+                        <td> <img src="/img/profiles/default.jpg" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{/if}}
                         <td>
-                            <a href="/partidas/{{../datospartida.id}}/deleteplayer/{{this.id_jugador}}"
-                                class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
+                            <a href="/partidas/{{this.id_partida}}/deleteplayer/{{this.id_jugador}}"
+                                class="text-warning"><i class="fa-solid fa-trash"></i>Del</a>
                         </td>
                     </tr>
 
@@ -44,11 +50,11 @@
                 </div>
             </div>
 
-            <div class="card  p-1 bg-secondary">
+            <div class="card p-1 bg-secondary">
                 <div>
                     <h4> OBJETOS - Nº total: {{objetos.length}}</h4>
                     {{#if objetos}}
-                    <table class="listado">
+                    <table>
                         <tr>
                             <th>Id</th>
                             <th>Nombre</th>
@@ -60,12 +66,18 @@
                 <div>
                     {{#each objetos}}
                     <tr>
-                        <td><a href="/objetos/plantilla/{{id}}">{{id}}</a></td>
+                        <td>{{id}}</td>
                         <td>{{this.nombre}}</td>
                         <td>{{this.descripcion}} </td>
-                        <td>{{this.imageURL}}</td>
+                        {{#if this.pictureURL}}
+                        <td> <img src="/img/imagenes/{{this.pictureURL}}" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{else}}
+                        <td> <img src="/img/objeto.png" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{/if}}
                         <td>
-                            <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}" class="text-primary"><i
+                            <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}" class="text-warning"><i
                                     class="fa-solid fa-trash"></i>Del</a>
                         </td>
                     </tr>
@@ -82,9 +94,7 @@
                     {{/if}}
                     <div class="text-center m-2">
                         <a href="/partidas/{{datospartida.id}}/add_object" class="btn btn-warning"> Añadir objeto</a>
-
                     </div>
-
                 </div>
             </div>
             <div class="col-md-12 mx-auto">

@@ -7,25 +7,22 @@
                     {{>avatar}}
                     <form action="/profile/upload/{{user.id}}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="user" value="{{user.id}}" />
-                        <div class="input-group mb-3">
+                        <div class=" mx-auto">
                             <div class="custom-file">
                                 <input type="file" name="imagen" class="custom-file-input" id="inputGroupFile02">
-                                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-                            </div>
-                            <div class="input-group-append">
-                                <button type="submit" class="input-group-text">Upload</button>
+                                <button type="submit" class="btn btn-warning">Upload</button>
                             </div>
                         </div>
                     </form>
-                    <p>Id: {{user.id}} </p>
-                    <p>Nombre: {{user.full_name}} </p>
-                    <p>Usuario: {{user.usuario}} </p>
-                    <p>Correo: {{user.email}} </p>
-                    <p>Privilegio: {{user.privilegio}} </p>
+                    <p> <strong> Id:</strong> {{user.id}} </p>
+                    <p><strong> Nombre: </strong>{{user.full_name}} </p>
+                    <p><strong> Usuario:</strong> {{user.usuario}} </p>
+                    <p><strong> Correo:</strong> {{user.email}} </p>
+                    <p><strong> Privilegio: </strong>{{user.privilegio}} </p>
                     <div class="m-2">
-                    <a href="/profile/edit" class="btn btn-warning mb-1"> Editar el Perfil </a>
-                    <a href="/" class="btn btn-primary mb-1"> Volver a Inicio</a>
-                    <a href="/jugador/fotosjuego" class="btn btn-warning mb-1">Actualizar fotos juego</a>
+                        <a href="/profile/edit" class="btn btn-warning mb-1"> Editar el Perfil </a>
+                        <a href="/" class="btn btn-primary mb-1"> Volver a Inicio</a>
+                        <a href="/jugador/fotosjuego" class="btn btn-warning mb-1">Actualizar fotos juego</a>
                     </div>
                 </div>
             </div>
