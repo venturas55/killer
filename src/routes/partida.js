@@ -292,6 +292,54 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
     res.redirect("/error");
   }
 });
+router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) => {
+  const { id_partida } = req.params;
+  try {
+    let partida = (await db.query(queries.queryPartidas + " WHERE id=?", [id_partida,]))[0];
+    console.log(partida.fecha_fin);
+    var date = partida.fecha_inicio;
+    partida.fecha_inicio = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate() + "T" + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+    date = partida.fecha_fin;
+    partida.fecha_fin = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate() + "T" + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+    console.log(partida.fecha_fin);
+    res.render("partidas/edit_game", { partida, });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+});
+router.post("/editgame/:id_game", funciones.hasPermission, async (req, res) => {
+  const {
+    titulo, descripcion, fecha_inicio, fecha_fin,status
+  } = req.body;
+  const id = req.params.id_game;
+  try {
+    const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, status};
+    console.log(item);
+
+    await db.query("UPDATE partidas set ? where id=?", [item, item.id]);
+    req.flash("success", "Partida editada correctamenta");
+    res.redirect("/partidas/listar"); //te redirige una vez insertado el item
+  } catch (error) {
+    console.error(error.code);
+    switch (error.code) {
+      case "ER_BAD_NULL_ERROR":
+        req.flash("error", "El campo  es obligatorio");
+        break;
+      case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
+        req.flash("error", "Hay un campo con valor incorrecto");
+        break;
+
+      default:
+        req.flash("error", "Hubo algun error al intentar añadir el jugador");
+    }
+    req.flash("error", "Hubo algun error");
+
+    res.redirect("/partidas/listar");
+  }
+
+});
 router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   try {

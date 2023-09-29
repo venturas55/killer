@@ -1,0 +1,32 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h2>EDITAR PARTIDA {{partida.titulo}}</h2>
+                    <form action="/partidas/editgame/{{partida.id}}" method="POST">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="titulo" placeholder="Titulo"
+                                value="{{partida.titulo}}" autofocus />
+                            <input class="form-control" type="text" name="descripcion" placeholder="Descripcion"
+                                value="{{partida.descripcion}}" />
+                            <input class="form-control" type="datetime-local" name="fecha_inicio" placeholder=""
+                                value="{{partida.fecha_inicio}}" required />
+                            <input class="form-control" type="datetime-local" name="fecha_fin" placeholder=""
+                                value="{{partida.fecha_fin}}" required />
+                                <select name="status" >
+                                    <option value="enedicion" selected>En edicion</option>
+                                    <option value="encrecion">En creacion</option>
+                                    <option value="enpausa">En pausa</option>
+                                    <option value="enjuego">En juego</option>
+                                    <option value="enedicion">En edicion</option>
+                                </select>
+                        </div>
+                        <button class="btn btn-primary btn-block m-2">GUARDAR</button>
+                    </form>
+                    <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
