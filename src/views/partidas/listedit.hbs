@@ -5,7 +5,7 @@
       <table class="listado">
         <tr>
           <th>Titulo</th>
-          <th class="d-none d-xl-table-cell">Desripcion</th>
+          <th class="d-none d-xl-table-cell">Descripcion</th>
           <th class="d-none d-xl-table-cell">Inicio</th>
           <th class="d-none d-xl-table-cell">Fin</th>
           <th>Acciones</th>
@@ -35,8 +35,34 @@
       <div class="col mx-auto">
         <h4 class="m-3">TOTAL: {{suma partidas}}</h4>
         <a href="/partidas/add" class="btn btn-primary"> Añadir partida</a>
-             <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Modal BS - ======== modalObjetivo =====
+{{!-- MODAL --}}
+<div class="modal fade" id="exampleModalToggle" data-bs-backdrop="false" aria-hidden="true"
+  aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content w-100">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">MI OBJETIVO</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="m-1 cajita">
+          <p>Tu objetivo es <strong> {{jugador.victima_user}}
+            </strong>
+            entregandole en mano <strong> {{jugador.objeto}} </strong>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+          data-bs-dismiss="modal">Asesinar</button>
+      </div>
+    </div>
+  </div>
+</div> -->

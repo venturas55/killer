@@ -4,12 +4,12 @@
     Acaba {{formatearSp datospartida.fecha_fin}}
     <div class="row">
         <div class="col-md-12">
-            <div class="card my-4 p-1 bg-secondary">
+            <div class="card p-1 bg-secondary">
                 <h4> JUGADORES - Nº total: {{jugadores.length}}</h4>
                 {{#if jugadores}}
                 <table>
                     <tr>
-                        <th>Id</th>
+                        <th  class="d-none d-xl-table-cell">Id</th>
                         <th>Username</th>
                         <th>Nombre</th>
                         <th>Imagen</th>
@@ -17,7 +17,7 @@
                     </tr>
                     {{#each jugadores}}
                     <tr>
-                        <td>{{this.id_jugador}}</td>
+                        <td  class="d-none d-xl-table-cell">{{this.id_jugador}}</td>
                         <td>{{this.usuario}} </td>
                         <td>{{this.full_name}}</td>
                         {{#if this.pictureURL}}
@@ -36,7 +36,7 @@
                     {{/each}}
                 </table>
                 {{else}}
-                <div class="col-md-4-mx-auto">
+                <div class="col-md-12 mx-auto">
                     <div class="card card-body text-center p-1">
                         <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea
                                 uno!</a></tr>
@@ -46,7 +46,6 @@
 
                 <div class="text-center m-2">
                     <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-warning"> Añadir jugador</a>
-
                 </div>
             </div>
 
@@ -56,7 +55,7 @@
                     {{#if objetos}}
                     <table>
                         <tr>
-                            <th>Id</th>
+                            <th  class="d-none d-xl-table-cell">Id</th>
                             <th>Nombre</th>
                             <th>Descripcion</th>
                             <th>Imagen</th>
@@ -66,7 +65,7 @@
                 <div>
                     {{#each objetos}}
                     <tr>
-                        <td>{{id}}</td>
+                        <td  class="d-none d-xl-table-cell">{{id}}</td>
                         <td>{{this.nombre}}</td>
                         <td>{{this.descripcion}} </td>
                         {{#if this.pictureURL}}
@@ -85,7 +84,7 @@
                     {{/each}}
                     </table>
                     {{else}}
-                    <div class="col-md-4-mx-auto">
+                    <div class="col-md-12 mx-auto">
                         <div class="card card-body text-center  p-1">
                             <tr>No hay objetos guardados <a href="/partidas/{{datospartida.id}}/add_object"> Crea
                                     uno!</a></tr>

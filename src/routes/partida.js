@@ -200,7 +200,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     let ganador = false;
     id_jugador = req.user.id;
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
-    //console.log(partida);
+    console.log(partida);
 
     //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
     const jugadores = partida.map(function (el) {
@@ -228,7 +228,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const jugador = partida.filter(function (el) {
       return el.id_jugador === req.user.id
     })[0];
-    console.log(jugador);
+    //console.log(jugador);
 
 
     //===== TICKET =================
@@ -332,8 +332,11 @@ router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async
   const { id_victima, id_partida } = req.params;
   /* TODO: verificar que esta en tiempo */
   // funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
+  console.log("aviso enviado");
+
   try {
     await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
+    req.flash("success", "Aviso de asesinato enviado");
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);

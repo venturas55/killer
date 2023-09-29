@@ -38,19 +38,21 @@ helpers.formatearEn = (fecha) => {
 }
 
 helpers.tiempoHasta = (fecha) => {
-  var limite = new Date(fecha);
-  var ahora = new Date();
-  var diff = limite - ahora;
-  let date = new Date(diff);
-  let dias,horas,segundos;
-  date.getDay()>0?dias=date.getDay():dias="";
-  date.getHours()>0?horas=date.getHours():horas="";
-  date.getMinutes()>0?segundos=date.getMinutes():segundos="";
-
+  let dias, horas, min, sec;
+  var diff = fecha - new Date();
+  dias = (diff / 60000 / 60 / 24);
+  horas = (dias - Math.trunc(dias))*24;
+  min = (horas-Math.trunc(horas))*60;
+  sec = (min - Math.trunc(min))*60;
+  console.log(dias + " "+ horas + " " + min + " " + sec);
+  dias > 0 ? dias = Math.trunc(dias)+"d "  : dias = "";
+  horas > 0 ? horas = Math.trunc(horas)+"h "  : horas = "";
+  min > 0 ? min = Math.trunc(min)+"min " : min = "";
+  sec > 0 ? sec = Math.trunc(sec)+"s" : sec = "";
 
 
   if (diff > 0)
-    return dias+"d " + horas+"h " + segundos+"s";
+    return dias+ horas+ min + sec;
   else
     return "finalizado";
 }
