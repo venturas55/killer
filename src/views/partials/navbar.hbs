@@ -4,20 +4,26 @@
   {{/if}}
   <a class="navbar-brand" href="/">KILLER</a>
   {{#if user}}
-  <p class="navbar-brand">Hola, {{user.usuario}}</p>
+  <p class="navbar-brand">Hola {{user.usuario}}</p>
   {{/if}}
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         {{#if user}}
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0)" tabindex="-1" aria-disabled="true" onclick="history.back();">VOLVER</a>
+        </li>
         <li class="nav-item">
           <a href="/profile" class="nav-link" tabindex="-1" aria-disabled="true">PERFIL</a>
         </li>
         <li class="nav-item">
-          <a href="/partidas/listedit" class="nav-link" tabindex="-1" aria-disabled="true">CREACION DE PARTIDAS</a>
+          <a href="/partidas/listedit" class="nav-link" tabindex="-1" aria-disabled="true">CREAR PARTIDAS</a>
+        </li>
+            <li class="nav-item">
+          <a href="/partidas/listar" class="nav-link" tabindex="-1" aria-disabled="true">PARTIDAS</a>
         </li>
 
         <li class="nav-item">

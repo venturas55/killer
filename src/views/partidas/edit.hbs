@@ -1,54 +1,52 @@
-<h1>Cambios en la partida {{datospartida.titulo}} {{datospartida.id}}</h1>
+<h1 class="text-center">Cambios en la partida {{datospartida.titulo}} {{datospartida.id}}</h1>
 <div class="container p-4">
     Empieza {{formatearSp datospartida.fecha_inicio}}
     Acaba {{formatearSp datospartida.fecha_fin}}
     <div class="row">
         <div class="col-md-12 mx-auto">
-            <div class="card">
-                <div>
-                    <h1> JUGADORES - Nº total: {{jugadores.length}}</h1>
-                    {{#if jugadores}}
-                    <table class="listado">
-                        <tr>
-                            <th>Id</th>
-                            <th>Username</th>
-                            <th>Nombre</th>
-                            <th>Imagen</th>
-                            <th>Options</th>
-                        </tr>
-                        {{#each jugadores}}
-                        <tr>
-                            <td>{{this.id_jugador}}</td>
-                            <td>{{this.usuario}} </td>
-                            <td>{{this.full_name}}</td>
-                            <td>{{this.imageURL}}</td>
-                            <td>
-                                <a href="/partidas/{{../datospartida.id}}/deleteplayer/{{this.id_jugador}}"
-                                    class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
-                            </td>
-                        </tr>
+            <div class="card my-4 p-1 bg-secondary">
+                <h4> JUGADORES - Nº total: {{jugadores.length}}</h4>
+                {{#if jugadores}}
+                <table class="listado">
+                    <tr>
+                        <th>Id</th>
+                        <th>Username</th>
+                        <th>Nombre</th>
+                        <th>Imagen</th>
+                        <th>Options</th>
+                    </tr>
+                    {{#each jugadores}}
+                    <tr>
+                        <td>{{this.id_jugador}}</td>
+                        <td>{{this.usuario}} </td>
+                        <td>{{this.full_name}}</td>
+                        <td>{{this.imageURL}}</td>
+                        <td>
+                            <a href="/partidas/{{../datospartida.id}}/deleteplayer/{{this.id_jugador}}"
+                                class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
+                        </td>
+                    </tr>
 
-                        {{/each}}
-                    </table>
-                    {{else}}
-                    <div class="col-md-4-mx-auto">
-                        <div class="card card-body text-center">
-                            <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea
-                                    uno!</a></tr>
-                        </div>
-                    </div>
-                    {{/if}}
-
-                    <div>
-                        <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-primary"> Añadir jugador</a>
-
+                    {{/each}}
+                </table>
+                {{else}}
+                <div class="col-md-4-mx-auto">
+                    <div class="card card-body text-center p-1">
+                        <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea
+                                uno!</a></tr>
                     </div>
                 </div>
-            </div>
-            <div class="card">
+                {{/if}}
 
+                <div class="text-center m-2">
+                    <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-warning"> Añadir jugador</a>
+
+                </div>
+            </div>
+
+            <div class="card  p-1 bg-secondary">
                 <div>
-                    <h1> OBJETOS - Nº total: {{objetos.length}}</h1>
+                    <h4> OBJETOS - Nº total: {{objetos.length}}</h4>
                     {{#if objetos}}
                     <table class="listado">
                         <tr>
@@ -58,49 +56,55 @@
                             <th>Imagen</th>
                             <th>Options</th>
                         </tr>
-                        {{#each objetos}}
-                        <tr>
-                            <td><a href="/objetos/plantilla/{{id}}">{{id}}</a></td>
-                            <td>{{this.nombre}}</td>
-                            <td>{{this.descripcion}} </td>
-                            <td>{{this.imageURL}}</td>
-                            <td>
-                                <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}"
-                                    class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
-                            </td>
-                        </tr>
+                </div>
+                <div>
+                    {{#each objetos}}
+                    <tr>
+                        <td><a href="/objetos/plantilla/{{id}}">{{id}}</a></td>
+                        <td>{{this.nombre}}</td>
+                        <td>{{this.descripcion}} </td>
+                        <td>{{this.imageURL}}</td>
+                        <td>
+                            <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}" class="text-primary"><i
+                                    class="fa-solid fa-trash"></i>Del</a>
+                        </td>
+                    </tr>
 
-                        {{/each}}
+                    {{/each}}
                     </table>
                     {{else}}
                     <div class="col-md-4-mx-auto">
-                        <div class="card card-body text-center">
+                        <div class="card card-body text-center  p-1">
                             <tr>No hay objetos guardados <a href="/partidas/{{datospartida.id}}/add_object"> Crea
                                     uno!</a></tr>
                         </div>
                     </div>
                     {{/if}}
-                    <div>
-                        <a href="/partidas/{{datospartida.id}}/add_object" class="btn btn-primary"> Añadir objeto</a>
+                    <div class="text-center m-2">
+                        <a href="/partidas/{{datospartida.id}}/add_object" class="btn btn-warning"> Añadir objeto</a>
 
                     </div>
+
+                </div>
+            </div>
+            <div class="col-md-12 mx-auto">
+                <div class="card">
+                    {{#enJuego partida.status}}
+                    <h2>Partida activa!</h2>
+                    <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
+                    {{/enJuego}}
+                    {{#enCreacion datospartida.status}}
+                    {{#when ../jugadores.length 'gte' 2 }}
+                    {{#when ../objetos.length 'gte' ../jugadores.length }}
+                    <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> CREAR PARTIDA</a>
+                    {{/when}}
+                    {{/when}}
+                    {{/enCreacion}}
                 </div>
             </div>
         </div>
-        <div class="col-md-12 mx-auto">
-            <div class="card">
-                {{#enJuego partida.status}}
-                <h2>Partida activa!</h2>
-                <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
-                {{/enJuego}}
-                {{#enCreacion datospartida.status}} 
-                {{#when ../jugadores.length 'gte' 2 }}
-                {{#when ../objetos.length 'gte' ../jugadores.length }}
-                <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> CREAR PARTIDA</a>
-                {{/when}}
-                {{/when}}
-                 {{/enCreacion}} 
-            </div>
-        </div>
+    </div>
+    <div class="text-center">
+        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
     </div>
 </div>

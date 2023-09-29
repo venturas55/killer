@@ -6,19 +6,19 @@
         <tr>
           <th>Titulo</th>
           <th class="d-none d-xl-table-cell">Desripcion</th>
-          <th>Inicio</th>
-          <th>Fin</th>
+          <th class="d-none d-xl-table-cell">Inicio</th>
+          <th class="d-none d-xl-table-cell">Fin</th>
           <th>Acciones</th>
         </tr>
         {{#each partidas}}
         <tr>
           <td>{{titulo}}</td>
           <td class="d-none d-xl-table-cell">{{descripcion}}</td>
-          <td>{{formatearSp fecha_inicio}} </td>
-          <td>{{formatearSp fecha_fin}}</td>
+          <td class="d-none d-xl-table-cell">{{formatearSp fecha_inicio}} </td>
+          <td class="d-none d-xl-table-cell">{{formatearSp fecha_fin}}</td>
           <td>
-            <a href="/partidas/edit/{{this.id}}" class="text-primary"><i class="fa-solid fa-pen"></i>Edit</a>
-            <a href="/partidas/delete/{{this.id}}" class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
+            <a href="/partidas/edit/{{this.id}}" class="text-warning"><i class="fa-solid fa-pen"></i>Edit</a>
+            <a href="/partidas/delete/{{this.id}}" class="text-warning"><i class="fa-solid fa-trash"></i>Del</a>
           </td>
         </tr>
 
@@ -35,6 +35,7 @@
       <div class="col mx-auto">
         <h4 class="m-3">TOTAL: {{suma partidas}}</h4>
         <a href="/partidas/add" class="btn btn-primary"> Añadir partida</a>
+             <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
       </div>
     </div>
   </div>

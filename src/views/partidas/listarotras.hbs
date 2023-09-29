@@ -26,10 +26,16 @@
             </a>
         </div>
         {{/each}}
+        {{else}}
+        <div class="col-md-5 mx-auto mb-3">
+                    <h4>No hay partidas que mostrar</h4>
+
+        </div>
         {{/if}}
     </div>
 
-    <div class="container text-center mb-4"> <a href="/"> <button class="btn btn-warning">INICIO</button> </a></div>
+    <div class="container text-center mb-4"><a class="btn btn-warning m-4" href="javascript:void(0)"
+            onclick="history.back();">Volver</a></div>
 
 
     {{else}}

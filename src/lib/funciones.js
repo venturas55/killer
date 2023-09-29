@@ -80,7 +80,8 @@ helpers.isAdmin = (req, res, next) => {
     if (req.user && req.user.privilegio == "admin") {
         return next();
     }
-    return res.render('noPermission');
+    var error="No tienes permisos. Solo el admin puede realizar esta gestión";
+    return res.render('error',{error});
 }
 
 helpers.hasPermission = async (req, res, next) => {
@@ -95,14 +96,16 @@ helpers.hasPermission = async (req, res, next) => {
     //si opera sobre el mismo.
     if(req.params.id_jugador && req.params.id_jugador == req.user.id)
         return next();
-    return res.render('noPermission');
+    var error="No tienes permisos";
+    return res.render('error',{error});
 }
 
 helpers.isNotAdmin = (req, res, next) => {
     if (!req.user.privilegio == "admin") {
         return next();
     }
-    return res.render('noPermission');
+    var error="No tienes permisos. Solo puedes realizar esta operación si no eres admin.";
+    return res.render('error',{error});
 }
 
 helpers.insertarLog = async (usuario, accion, observacion) => {

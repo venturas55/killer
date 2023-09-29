@@ -45,4 +45,10 @@ router.post('/profile/edit/', funciones.isAuthenticated, async (req, res) => {
     res.render('profile');
 });
 
+router.get('/prueba', async (req, res) => {
+
+    res.render('prueba');
+});
+
+
 module.exports = router;

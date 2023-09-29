@@ -5,15 +5,17 @@
                 <div class="card-body">
                     <h2>CREAR PARTIDA </h2>
                     <form action="/partidas/add" method="POST">
-                         <div class="form-group"><input class="form-control" type="text" name="titulo" placeholder="Titulo" autofocus /> </div>
-                        <div class="form-group"><input class="form-control" type="text" name="descripcion" placeholder="Descripcion"  /> </div>
-                        <div class="form-group"><input class="form-control" type="datetime-local" name="fecha_inicio" placeholder="" required /> </div>
-                        <div class="form-group"><input class="form-control" type="datetime-local" name="fecha_fin" placeholder="" required /> </div>
-                        <button class="btn btn-success btn-block">AÑADIR</button>
+                        <div class="form-group"><input class="form-control" type="text" name="titulo"
+                                placeholder="Titulo" autofocus />
+                            <input class="form-control" type="text" name="descripcion" placeholder="Descripcion" />
+                            <input class="form-control" type="datetime-local" name="fecha_inicio" placeholder=""
+                                required />
+                            <input class="form-control" type="datetime-local" name="fecha_fin" placeholder=""
+                                required />
+                        </div>
+                        <button class="btn btn-primary btn-block m-2">AÑADIR</button>
                     </form>
-                    <form action="/" method="GET">
-                        <button class="btn btn-danger btn-block">Cancelar</button>
-                    </form>
+                    <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
                 </div>
             </div>
         </div>
