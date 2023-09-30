@@ -3,7 +3,7 @@ const router = express.Router();
 const { unlink } = require('fs-extra');
 const path = require('path');
 const queries = require("./queries");
-
+//const { nanoid } = require("nanoid");
 const funciones = require("../lib/funciones");
 
 const db = require("../database"); //db hace referencia a la BBDD
@@ -19,9 +19,9 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
   } = req.body;
   try {
     const item = { titulo, descripcion, fecha_inicio, fecha_fin, 'id_creador': req.user.id };
-    console.log(item);
-
-    await db.query("INSERT INTO partidas set ?", [item]);
+    //console.log(item);
+    //console.log(nanoid(6));
+    //await db.query("INSERT INTO partidas set ?", [item]);
     req.flash("success", "Partida insertado correctamente");
     res.redirect("/partidas/listar"); //te redirige una vez insertado el item
   } catch (error) {
@@ -311,11 +311,11 @@ router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) =>
 });
 router.post("/editgame/:id_game", funciones.hasPermission, async (req, res) => {
   const {
-    titulo, descripcion, fecha_inicio, fecha_fin,status
+    titulo, descripcion, fecha_inicio, fecha_fin, status
   } = req.body;
   const id = req.params.id_game;
   try {
-    const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, status};
+    const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, status };
     console.log(item);
 
     await db.query("UPDATE partidas set ? where id=?", [item, item.id]);
