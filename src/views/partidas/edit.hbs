@@ -1,15 +1,18 @@
-<h1 class="text-center">Cambios en la partida {{datospartida.titulo}} {{datospartida.id}}</h1>
-<div class="container p-4">
-    Empieza {{formatearSp datospartida.fecha_inicio}}
-    Acaba {{formatearSp datospartida.fecha_fin}}
-    <div class="row">
+<h1 class="text-center">Edición de la partida {{datospartida.id}} {{datospartida.titulo}} </h1>
+<div class="container mb-4">
+    <p class="text-center">
+        Abierta entre el {{formatearSpHora datospartida.fecha_inicio}}
+        y el {{formatearSpHora datospartida.fecha_fin}}
+    </p>
+
+    <div class="row"> {{!-- //JUGADORES --}}
         <div class="col-md-12">
-            <div class="card p-1 bg-secondary">
+            <div class="card p-1 bg-secondary text-center">
                 <h4> JUGADORES - Nº total: {{jugadores.length}}</h4>
                 {{#if jugadores}}
                 <table>
                     <tr>
-                        <th  class="d-none d-xl-table-cell">Id</th>
+                        <th class="d-none d-xl-table-cell">Id</th>
                         <th>Username</th>
                         <th>Nombre</th>
                         <th>Imagen</th>
@@ -17,7 +20,7 @@
                     </tr>
                     {{#each jugadores}}
                     <tr>
-                        <td  class="d-none d-xl-table-cell">{{this.id_jugador}}</td>
+                        <td class="d-none d-xl-table-cell">{{this.id_jugador}}</td>
                         <td>{{this.usuario}} </td>
                         <td>{{this.full_name}}</td>
                         {{#if this.pictureURL}}
@@ -48,14 +51,18 @@
                     <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-warning"> Añadir jugador</a>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="card p-1 bg-secondary">
+    <div class="row my-4"> {{!-- //OBJETOS --}}
+        <div class="col-md-12">
+            <div class="card p-1 bg-secondary text-center">
                 <div>
                     <h4> OBJETOS - Nº total: {{objetos.length}}</h4>
                     {{#if objetos}}
                     <table>
                         <tr>
-                            <th  class="d-none d-xl-table-cell">Id</th>
+                            <th class="d-none d-xl-table-cell">Id</th>
                             <th>Nombre</th>
                             <th>Descripcion</th>
                             <th>Imagen</th>
@@ -65,7 +72,7 @@
                 <div>
                     {{#each objetos}}
                     <tr>
-                        <td  class="d-none d-xl-table-cell">{{id}}</td>
+                        <td class="d-none d-xl-table-cell">{{id}}</td>
                         <td>{{this.nombre}}</td>
                         <td>{{this.descripcion}} </td>
                         {{#if this.pictureURL}}
@@ -96,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 mx-auto">
+            {{!-- <div class="col-md-12 mx-auto">
                 <div class="card">
                     {{#enJuego partida.status}}
                     <h2>Partida activa!</h2>
@@ -105,16 +112,22 @@
                     {{#enCreacion datospartida.status}}
                     {{#when ../jugadores.length 'gte' 2 }}
                     {{#when ../objetos.length 'gte' ../jugadores.length }}
-                    <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> CREAR PARTIDA</a>
+                    <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> REANUDAR PARTIDA</a>
                     {{/when}}
                     {{/when}}
                     {{/enCreacion}}
                 </div>
-            </div>
-               <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-primary"> Editar datos partida</a>
+            </div> --}}
+
         </div>
+
     </div>
-    <div class="text-center">
-        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+
+    <div class="row my-4"> {{!-- //BOTONES --}}
+        <div class="col-md-12">
+            <div class="d-flex  justify-content-around">
+                <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-primary"> Editar datos partida</a>
+            </div>
+        </div>
     </div>
 </div>

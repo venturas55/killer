@@ -1,10 +1,14 @@
 <div class="container p-4 pb-2 mb-5">
   <div class="row">
     <div class="col-md-12">
+      <div class="text-center mb-4">
+        <img src="/img/imagenes/calavera.png" alt="">
+      </div>
       {{#if partidas}}
-      <table class="listado">
+      <table class="table table-dark table-striped">
         <tr>
           <th>Titulo</th>
+          <th>Codigo</th>
           <th class="d-none d-xl-table-cell">Descripcion</th>
           <th class="d-none d-xl-table-cell">Inicio</th>
           <th class="d-none d-xl-table-cell">Fin</th>
@@ -13,6 +17,7 @@
         {{#each partidas}}
         <tr>
           <td>{{titulo}}</td>
+          <td>{{id}}</td>
           <td class="d-none d-xl-table-cell">{{descripcion}}</td>
           <td class="d-none d-xl-table-cell">{{formatearSp fecha_inicio}} </td>
           <td class="d-none d-xl-table-cell">{{formatearSp fecha_fin}}</td>
@@ -32,37 +37,53 @@
       </div>
 
       {{/if}}
-      <div class="col mx-auto">
-        <h4 class="m-3">TOTAL: {{suma partidas}}</h4>
-        <a href="/partidas/add" class="btn btn-primary"> Añadir partida</a>
-        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+      <div class="row">
+        <div class="col-md-12">
+          {{!-- <h4 class="m-3">TOTAL: {{suma partidas}}</h4> --}}
+          <div class="d-flex justify-content-around m-4">
+            <a href="#exampleModalToggle" data-bs-toggle="modal" role="button" class="btn btn-style w-100"><img
+                src="/img/imagenes/icon.png" alt="">
+              <div>
+                <p>UNIRSE A PARTIDA </p>
+                <p>a través de una contraseña</p>
+              </div> <img src="/img/imagenes/icon.png" alt="">
+            </a>
+          </div>
+          <div class="d-flex justify-content-around m-4">
+            <a href="/partidas/add" class="btn btn-style"> <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              <p>CREAR NUEVA PARTIDA</p>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal BS - ======== modalObjetivo =====
+<!-- Modal BS - ======== modalObjetivo =====-->
 {{!-- MODAL --}}
 <div class="modal fade" id="exampleModalToggle" data-bs-backdrop="false" aria-hidden="true"
   aria-labelledby="exampleModalToggleLabel" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content w-100">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">MI OBJETIVO</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="m-1 cajita">
-          <p>Tu objetivo es <strong> {{jugador.victima_user}}
-            </strong>
-            entregandole en mano <strong> {{jugador.objeto}} </strong>
-          </p>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      {{!-- <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">INTRODUZCA CODIGO DE PARTIDA</h1>
+
+      </div> --}}
+      <form action="/partidas/join" method="POST">
+        <div class="modal-body">
+          <div class="m-1 cajita">
+            <div class="inputBox">
+              <input class="w-100" type="text" placeholder="Introduzca codigo de partida" name="id_partida" autofocus
+                required>
+              {{!-- <span>Codigo</span> --}}
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
-          data-bs-dismiss="modal">Asesinar</button>
-      </div>
+        <button class="btn btn-warning w-50" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+          data-bs-dismiss="modal">Unirse</button>
     </div>
+    </form>
   </div>
-</div> -->
+</div>

@@ -1,3 +1,6 @@
+drop database killer2;
+create database killer2;
+use killer2;
 DROP TABLE IF EXISTS sessions;
 
 DROP TABLE IF EXISTS partidajugadores;
@@ -23,7 +26,7 @@ CREATE TABLE `usuarios` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de usuarios';
 
 CREATE TABLE `partidas` (
-  `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  `id` varchar(5) PRIMARY KEY,
   `titulo` varchar(50) DEFAULT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
   `fecha_inicio` TIMESTAMP,
@@ -35,7 +38,7 @@ CREATE TABLE `partidas` (
 
 /* / / onpause onplay oncreation  */
 CREATE TABLE `jugadores` (
-  `id_partida` int(11) NOT NULL,
+  `id_partida` varchar(5) NOT NULL,
   `id_jugador` int(11) DEFAULT NULL,
   `imagenAlive` varchar(100) DEFAULT NULL,
   `imagenDead` varchar(100) DEFAULT NULL,
@@ -49,13 +52,13 @@ CREATE TABLE `objetos` (
   `nombre` varchar(50) NOT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
   `pictureURL` varchar(100) DEFAULT NULL,
-  `id_partida` int(11) NOT NULL,
+  `id_partida` varchar(5),
   FOREIGN KEY (id_partida) REFERENCES partidas(id)
-) ENGINE = InnoDB DEFAULT CHARSET = latin1 COMMENT = 'tabla de objetos';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de objetos';
 
 CREATE TABLE `partidasenjuego` (
   `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  `id_partida` int(11) NOT NULL,
+  `id_partida` varchar(5) NOT NULL,
   `id_jugador` int(11) NOT NULL,
   `id_victima` int(11) NOT NULL,
   `id_objeto` int(11) NOT NULL,
@@ -71,7 +74,7 @@ CREATE TABLE `partidasenjuego` (
 
 CREATE TABLE eliminaciones (
   id_eliminacion int(11) AUTO_INCREMENT PRIMARY KEY,
-  id_partida int(11) NOT NULL,
+  id_partida varchar(5) NOT NULL,
   id_asesino int(11),
   id_victima int(11),
   id_objeto int(11),
@@ -83,7 +86,7 @@ CREATE TABLE eliminaciones (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de eliminaciones en juego';
 
 CREATE TABLE solicitudes (
-  id_partida int(11) NOT NULL,
+  id_partida varchar(5) NOT NULL,
   id_jugador int(11) NOT NULL,
   FOREIGN KEY (id_partida) REFERENCES partidas(id),
   FOREIGN KEY (id_jugador) REFERENCES usuarios(id)

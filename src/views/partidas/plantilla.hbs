@@ -37,29 +37,36 @@
                 </div>
                 <div>
                     <h5>Asesinos más Sanguinarios</h5>
-                    {{#if top_killers}}
-                    {{#each top_killers}}
-                    <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}} bajas
-                    </p>
-                    {{/each}}
-                    {{else}}
-                    <p>Todavia no han habido bajas!</p>
-                    {{/if}}
+                    <img src="/img/imagenes/asesin.png" alt="asesin" class="float-end">
+                    <div class="clearfix">
+                        {{#if top_killers}}
+                        {{#each top_killers}}
+                        <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}} bajas
+                        </p>
+                        {{/each}}
+                        {{else}}
+                        <p>Todavia no han habido bajas!</p>
+                        {{/if}}
+                    </div>
                 </div>
                 <div>
                     <h5>Última baja</h5>
-                    {{#if last_kill}}
-                    <p> {{last_kill.asesino_user}} ha matado a {{last_kill.victima_user}} con {{last_kill.objeto}} a
-                        las
-                        {{formatearSpHora last_kill.fecha_eliminacion}} </p>
-                    {{else}}
-                    <p>Todavia no ha habido bajas!</p>
-                    {{/if}}
+                    <img src="/img/imagenes/punal.png" alt="asesin" class="float-end">
+                    <div class="clearfix">
+                        {{#if last_kill}}
+                        <p> {{last_kill.asesino_user}} ha matado a {{last_kill.victima_user}} con {{last_kill.objeto}} a
+                            las
+                            {{formatearSpHora last_kill.fecha_eliminacion}} </p>
+                        {{else}}
+                        <p>Todavia no ha habido bajas!</p>
+                        {{/if}}
+                    </div>
                 </div>
             </div>
 
             {{#if dididie}}
             <div class="col-md-12 mx-auto cajita mt-4">
+
                 <p>Estas mortimer</p>
                 {{#if dididie.fecha_eliminacion}}
                 <p> Te mató <strong> {{dididie.asesino_name}} </strong> con
@@ -93,7 +100,6 @@
             </div>
             {{/if}}
             {{/when}}
-            <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
         </div>
     </div>
 </div>
@@ -105,7 +111,7 @@
 <div class="modal fade" id="exampleModalToggle" data-bs-backdrop="false" aria-hidden="true"
     aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content w-100 cajita" >
+        <div class="modal-content w-100 cajita">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalToggleLabel">MI OBJETIVO</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -125,7 +131,7 @@
                     data-bs-toggle="modal">Cancelar</button>
                 <button class="btn btn-warning" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
                     data-bs-dismiss="modal">Eliminar</button>
-              </div>
+            </div>
         </div>
     </div>
 </div>

@@ -17,13 +17,16 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
   const {
     titulo, descripcion, fecha_inicio, fecha_fin,
   } = req.body;
+  let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var id= characters.charAt(Math.floor(Math.random() * characters.length)) + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1).toUpperCase();
+  console.log(id);
   try {
-    const item = { titulo, descripcion, fecha_inicio, fecha_fin, 'id_creador': req.user.id };
-    //console.log(item);
+    const item = { id,titulo, descripcion, fecha_inicio, fecha_fin, 'id_creador': req.user.id };
+    console.log(item);
     //console.log(nanoid(6));
-    //await db.query("INSERT INTO partidas set ?", [item]);
-    req.flash("success", "Partida insertado correctamente");
-    res.redirect("/partidas/listar"); //te redirige una vez insertado el item
+    await db.query("INSERT INTO partidas set ?", [item]);
+    req.flash("success", "Partida insertado correctamente comparte el codigo: "+ item.id);
+    res.redirect("/partidas/listedit"); //te redirige una vez insertado el item
   } catch (error) {
     console.error(error.code);
     switch (error.code) {
@@ -141,9 +144,9 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
   }
 });
 
+//Para mostrar listado de partidas en las que esta incluido el jugador
 router.get("/listedit", funciones.isAuthenticated, async (req, res) => {
   //TODO: QUE SOLO MUESTRE PARTIDAS EN EDICION
-  //TODO: HACER QUE SE PUEDA PAUSAR UNA PARTIDA Y EDITARLA.
   try {
     const partidas = await db.query(queries.queryPartidas,);
     console.log(partidas);
@@ -177,7 +180,7 @@ router.get('/inicio', async (req, res) => {
   try {
     const partidas = await db.query(queries.queryPartidasActivas + " where pej.id_jugador=?", [id_jugador]);
     console.log(partidas);
-    res.render('inicio', { partidas, });
+    res.render('partidas/listar', { partidas, });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
@@ -270,6 +273,50 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     req.flash("error", "Hubo algun error");
     res.redirect("/error");
   }
+});
+
+//JOIN PARA unirse a una partida
+router.get("/join", funciones.isAuthenticated, async (req, res) => {
+  res.render("partidas/join");
+});
+
+router.post("/join", funciones.isAuthenticated, async (req, res) => {
+  const { id_partida } = req.body;
+  console.log(id_partida + " " + req.user.id);
+  const item = { id_partida, id_jugador: req.user.id };
+
+
+  try {
+    await db.query("INSERT INTO jugadores set ?", [item]);
+    req.flash("success", "Se ha unido a la partida satisfactoriamente");
+    res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
+    //res.redirect("/partidas/listar");
+
+  } catch (error) {
+    console.error(error.code);
+    switch (error.code) {
+      case "ER_DUP_ENTRY":
+        console.log("Error ya estas agregado");
+        req.flash("error", "El jugador ya esta agregado.");
+        break;
+      case "ER_BAD_NULL_ERROR":
+        req.flash("error", "Hay un campo que es obligatorio");
+        break;
+      case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
+        req.flash("error", "Hay un campo con valor incorrecto");
+        break;
+      /* 
+            default:
+              req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
+    }
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+
+
+
+  
+ 
 });
 
 

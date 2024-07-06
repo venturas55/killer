@@ -1,6 +1,7 @@
 :root {
-  --amarillo: rgb(222, 222, 22);
+  --amarillo: #F8C925;
   --gris: rgb(131, 131, 131);
+  --blanco: #fafafa;
 }
 
 
@@ -14,8 +15,9 @@ body {
   color: var(--gris) !important;
 }
 
-p{
+p {
   margin-bottom: 0px;
+  color: var(--blanco);
 }
 
 
@@ -46,9 +48,9 @@ a {
   opacity: 1;
 }
 
-.cajita h1,h2,h3,h4,h5 {
+/* .cajita h1,h2,h3,h4,h5 {
   color: var(--amarillo);
-}
+} */
 
 .cajita_disabled h3 {
   color: var(--gris);
@@ -75,6 +77,7 @@ a {
   object-fit: cover;
   object-position: center;
 }
+
 .avatar-xs {
   height: 32px;
   width: 32px;
@@ -181,8 +184,8 @@ a {
   background-image: repeating-linear-gradient(-55deg,
       #000,
       #000 20px,
-      #ffb101 20px,
-      #ffb101 40px);
+      var(--amarillo) 20px,
+      var(--amarillo) 40px);
 }
 
 .hazard-border {
@@ -190,9 +193,59 @@ a {
   border-image: repeating-linear-gradient(-55deg,
       #000,
       #000 20px,
-      #ffb101 20px,
-      #ffb101 40px) 10;
+      var(--amarillo) 20px,
+      var(--amarillo) 40px) 10;
 }
 
+.btn-style {
+  display:flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  font-size: small;
+  color: #e8e8e8;
+  background-color: #252525;
+  border: 1px solid #e8e8e8;
+  font-weight: 800;
+}
+
+.btn-style>div>:nth-child(2) {
+  font-size: xx-small;
+  font-weight: 100;
+}
+
+.btn-style>:first-child{
+  transform: scaleX(-1);
+}
 
 @media (min-width: 992px) {}
+
+/* //INPUTS */
+.inputBox {
+  position: relative;
+}
+
+.inputBox input {
+  padding: 10px 15px;
+  outline: none;
+  background: transparent;
+  border-radius: 5px;
+  color: #e8e8e8;
+  border: 1px solid var(--amarillo);
+  font-size: 1em;
+}
+
+.inputBox span {
+  position: absolute;
+  left: 0;
+
+  transform: translateX(14px) translateY(-17.5px);
+  padding: 0 6px 1px 5px;
+  border-radius: 2px;
+  background: #212121;
+  letter-spacing: 1px;
+  border: 1px solid var(--amarillo);
+  color: #e8e8e8;
+}
+
+/* // FIN INPUTS */

@@ -24,6 +24,20 @@ helpers.formatearSpHora = (fecha) => {
       hours = ("0" + timestamp.getHours()).slice(-2),
       minutes = ("0" + timestamp.getMinutes()).slice(-2),
       seconds = ("0" + timestamp.getSeconds()).slice(-2);
+    return  [day, mnth, timestamp.getFullYear()].join("/")+ " a las " + hours + ":" + minutes  ;
+  } else {
+    return '';
+  }
+}
+
+helpers.formatearHoraSp = (fecha) => {
+  if (fecha != null) {
+    var timestamp = new Date(fecha);
+    mnth = ("0" + (timestamp.getMonth() + 1)).slice(-2),
+      day = ("0" + timestamp.getDate()).slice(-2),
+      hours = ("0" + timestamp.getHours()).slice(-2),
+      minutes = ("0" + timestamp.getMinutes()).slice(-2),
+      seconds = ("0" + timestamp.getSeconds()).slice(-2);
     return hours + ":" + minutes + ":" + seconds + " del " + [day, mnth, timestamp.getFullYear()].join("/");
   } else {
     return '';
