@@ -327,9 +327,10 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
 
     console.log(datospartida.id_creador + " " + req.user.id);
+    console.log(datospartida.id_partida == req.user.id);
     if (datospartida.id_partida == req.user.id)
       esCreador = true;
-    //console.log(objetos);
+    console.log(esCreador);
     //console.log(jugadores);
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida,esCreador });
   } catch (error) {
