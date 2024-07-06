@@ -219,11 +219,4 @@ router.post("/partidas/:id_partida/edit_object/:id_object", funciones.hasPermiss
     }
 });
 
-router.get("/objeto/foto/:id_objeto", async (req, res) => {
-    let { id_objeto } = req.params;
-    const objeto = (await db.query(queries.queryObjetos + " WHERE id=?", [id_objeto,]))[0];
-
-    res.render("fotos/fotoobjeto", { objeto, });
-});
-
 module.exports = router;
