@@ -1,29 +1,89 @@
 <div class="container text-center">
-    <h1 class="mb-1">KILLER</h1>
-</div>
-{{!-- <div class="hazard-background">
-</div>
-<div class="container text-center">
-    <a href="/partidas/list" class="btn btn-warning"> VER PARTIDAS</a>
-</div> --}}
-<div class="hazard-background">
-</div>
-{{#if user}}
-<div class="container text-center mb-4"> <a href="/partidas/inicio"> <button
-            class="btn btn-warning">PARTIDAS</button></a></div>
-{{!-- <div class="container text-center"> <a href="/logout">
-        <button class="btn btn-warning">LOGOUT</button></a></div> --}}
-{{else}}
-<div class="container text-center mb-5">
-    <a href="/signin"> <button class="btn btn-warning">INICIAR SESION</button></a>
-</div>
+    <div class="hazard-background">
+    </div>
+    <img src="/img/imagenes/calavera.png" alt="">
+    <div class="text-white">
 
-<div class="container text-center mb-5">
-    <a href="/signup">
-        <button class="btn btn-warning">REGISTRARSE</button>
-    </a>
-</div>
-{{/if}}
+        <p>El juego terminará cuando sólo quede una persona en pie. </p>
+        <p>
+            Queda terminantemente prohibido realizar un asesinato fuera de la fecha y del horario asignado.</p>
+        <p>
+            Cada asesino tendrá en todo momento un objetivo a quien matar y un arma con el que hacerlo.</p>
+        <p>
+            Para que el asesinato surja efecto el arma deberá ser entregada EN MANO, y con la presencia de UN TESTIGO
+            (arma lanzada o dejada en cualquier superficie no mata).</p>
+        <p>
+            Un beso en la mejilla (sea a traición o no) SIN TESTIGOS, también en mortal.</p>
+        <p>
+            El listado de armas y de jugadores es público.</p>
+        <p>
+            En cada partida habrá un listado actualizado con el número total de bajas y asesinos en pie.</p>
+        <p>
+            Queda terminantemente prohibido enseñar el objetivo o arma a cualquier jugador.</p>
+        <p>
+            Es posible aliarse, pero tendrás que convencer del objetivo y arma que tienes. No te fies de nadie, podrian
+            estar mintiendote.</p>
+        <p>
+            Se presume la buena fe de todos los jugadores</p>
+        <p>
+            No vale enfadarse. </p>
 
-<div class="hazard-background">
+        {{!-- <p> ¡Bienvenido a nuestra emocionante comunidad!</p>
+        <p> Estamos encantados de tenerte aquí, listo para sumergirte en el apasionante mundo de nuestro gestor
+            de
+            juego
+            KILLER.</p>
+        <p> En nuestra app, encontrarás un lugar donde la diversión y la estrategia se unen para crear
+            experiencias de juego inolvidables.</p>
+        <p> ¿Listo para un desafío? ¡Regístrate ahora y desbloquea un mundo de posibilidades!</p>
+        <p>Al unirte a nosotros, podrás:</p>
+        <ul class="text-justify">
+            <li>
+                🎲 Crear tus propias partidas y establecer tus reglas.
+            </li>
+            <li>
+                🤝 Conectar con jugadores de todo el mundo y hacer nuevos amigos.
+            </li>
+            <li>
+                🏆 Competir en emocionantes torneos y demostrar tu habilidad.
+            </li>
+            <li>
+                💡 Descubrir una amplia variedad de juegos de mesa para todos los gustos.
+            </li>
+        </ul>
+        <p> No importa si eres un experto estratega o un principiante entusiasta; aquí encontrarás partidas para
+            todos
+            los niveles de habilidad. ¡La diversión está garantizada!</p>
+        <p> Así que, ¿qué estás esperando? Regístrate, crea tu perfil y empieza a explorar. El próximo desafío
+            está
+            a
+            solo un clic de distancia.</p>
+        <p> ¡Únete a la diversión, desafía a tus amigos o conoce a nuevos jugadores para disfrutar de partidas
+            llenas de
+            emoción y estrategia! ¡Nos vemos en la vida real!</p> --}}
+        <p> ¡Regístrate ahora y comienza tu aventura en nuestros juegos KILLER!</p>
+        </p>
+
+    </div>
+
+
+    {{#if user}}
+    <div class="container text-center mb-4"> <a href="/partidas/listar">
+            <button class="btn btn-warning">PARTIDAS</button>
+        </a></div>
+    {{!-- <div class="container text-center"> <a href="/logout">
+            <button class="btn btn-warning">LOGOUT</button></a></div> --}}
+    {{else}}
+    <div class="container text-center mb-3">
+        <a href="/signup">
+            <button class="btn btn-warning">CREAR CUENTA</button>
+        </a>
+    </div>
+
+    <div class="container text-center mb-3">
+        <a href="/signin"> <button class="btn btn-warning">INICIAR SESION</button></a>
+    </div>
+    {{/if}}
+    <div class="hazard-background mb-4">
+    </div>
 </div>

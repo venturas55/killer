@@ -1,105 +1,132 @@
-<h1>Cambios en la partida {{datospartida.titulo}} {{datospartida.id}}</h1>
-<div class="container p-4">
-    Empieza {{formatearSp datospartida.fecha_inicio}}
-    Acaba {{formatearSp datospartida.fecha_fin}}
-    <div class="row">
-        <div class="col-md-12 mx-auto">
-            <div class="card">
-                <div>
-                    <h1> JUGADORES - Nº total: {{jugadores.length}}</h1>
-                    {{#if jugadores}}
-                    <table class="listado">
-                        <tr>
-                            <th>Id</th>
-                            <th>Username</th>
-                            <th>Nombre</th>
-                            <th>Imagen</th>
-                            <th>Options</th>
-                        </tr>
-                        {{#each jugadores}}
-                        <tr>
-                            <td>{{this.id_jugador}}</td>
-                            <td>{{this.usuario}} </td>
-                            <td>{{this.full_name}}</td>
-                            <td>{{this.imageURL}}</td>
-                            <td>
-                                <a href="/partidas/{{../datospartida.id}}/deleteplayer/{{this.id_jugador}}"
-                                    class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
-                            </td>
-                        </tr>
+<h1 class="text-center">Edición de la partida {{datospartida.id}} {{datospartida.titulo}} </h1>
+<div class="container mb-4">
+    <p class="text-center">
+        Abierta entre el {{formatearSpHora datospartida.fecha_inicio}}
+        y el {{formatearSpHora datospartida.fecha_fin}}
+    </p>
 
-                        {{/each}}
-                    </table>
-                    {{else}}
-                    <div class="col-md-4-mx-auto">
-                        <div class="card card-body text-center">
-                            <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea
-                                    uno!</a></tr>
-                        </div>
-                    </div>
-                    {{/if}}
+    <div class="row"> {{!-- //JUGADORES --}}
+        <div class="col-md-12">
+            <div class="card p-1 bg-secondary text-center">
+                <h4> JUGADORES - Nº total: {{jugadores.length}}</h4>
+                {{#if jugadores}}
+                <table>
+                    <tr>
+                        <th class="d-none d-xl-table-cell">Id</th>
+                        <th>Username</th>
+                        <th>Nombre</th>
+                        <th>Imagen</th>
+                        <th>Options</th>
+                    </tr>
+                    {{#each jugadores}}
+                    <tr>
+                        <td class="d-none d-xl-table-cell">{{this.id_jugador}}</td>
+                        <td>{{this.usuario}} </td>
+                        <td>{{this.full_name}}</td>
+                        {{#if this.pictureURL}}
+                        <td> <img src="/img/profiles/{{this.pictureURL}}" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{else}}
+                        <td> <img src="/img/profiles/default.jpg" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{/if}}
+                        <td>
+                            <a href="/partidas/{{this.id_partida}}/deleteplayer/{{this.id_jugador}}"
+                                class="text-warning"><i class="fa-solid fa-trash"></i>Del</a>
+                        </td>
+                    </tr>
 
-                    <div>
-                        <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-primary"> Añadir jugador</a>
-
+                    {{/each}}
+                </table>
+                {{else}}
+                <div class="col-md-12 mx-auto">
+                    <div class="card card-body text-center p-1">
+                        <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea
+                                uno!</a></tr>
                     </div>
                 </div>
-            </div>
-            <div class="card">
+                {{/if}}
 
+                <div class="text-center m-2">
+                    <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-warning"> Añadir jugador</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-4"> {{!-- //OBJETOS --}}
+        <div class="col-md-12">
+            <div class="card p-1 bg-secondary text-center">
                 <div>
-                    <h1> OBJETOS - Nº total: {{objetos.length}}</h1>
+                    <h4> OBJETOS - Nº total: {{objetos.length}}</h4>
                     {{#if objetos}}
-                    <table class="listado">
+                    <table>
                         <tr>
-                            <th>Id</th>
+                            <th class="d-none d-xl-table-cell">Id</th>
                             <th>Nombre</th>
                             <th>Descripcion</th>
                             <th>Imagen</th>
                             <th>Options</th>
                         </tr>
-                        {{#each objetos}}
-                        <tr>
-                            <td><a href="/objetos/plantilla/{{id}}">{{id}}</a></td>
-                            <td>{{this.nombre}}</td>
-                            <td>{{this.descripcion}} </td>
-                            <td>{{this.imageURL}}</td>
-                            <td>
-                                <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id_objeto}}"
-                                    class="text-primary"><i class="fa-solid fa-trash"></i>Del</a>
-                            </td>
-                        </tr>
+                </div>
+                <div>
+                    {{#each objetos}}
+                    <tr>
+                        <td class="d-none d-xl-table-cell">{{id}}</td>
+                        <td>{{this.nombre}}</td>
+                        <td>{{this.descripcion}} </td>
+                        {{#if this.pictureURL}}
+                        <td> <img src="/img/imagenes/{{this.pictureURL}}" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{else}}
+                        <td> <img src="/img/objeto.png" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></td>
+                        {{/if}}
+                        <td>
+                            <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}" class="text-warning"><i
+                                    class="fa-solid fa-trash"></i>Del</a>
+                        </td>
+                    </tr>
 
-                        {{/each}}
+                    {{/each}}
                     </table>
                     {{else}}
-                    <div class="col-md-4-mx-auto">
-                        <div class="card card-body text-center">
+                    <div class="col-md-12 mx-auto">
+                        <div class="card card-body text-center  p-1">
                             <tr>No hay objetos guardados <a href="/partidas/{{datospartida.id}}/add_object"> Crea
                                     uno!</a></tr>
                         </div>
                     </div>
                     {{/if}}
-                    <div>
-                        <a href="/partidas/{{datospartida.id}}/add_object" class="btn btn-primary"> Añadir objeto</a>
-
+                    <div class="text-center m-2">
+                        <a href="/partidas/{{datospartida.id}}/add_object" class="btn btn-warning"> Añadir objeto</a>
                     </div>
                 </div>
             </div>
+            {{!-- <div class="col-md-12 mx-auto">
+                <div class="card">
+                    {{#enJuego partida.status}}
+                    <h2>Partida activa!</h2>
+                    <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
+                    {{/enJuego}}
+                    {{#enCreacion datospartida.status}}
+                    {{#when ../jugadores.length 'gte' 2 }}
+                    {{#when ../objetos.length 'gte' ../jugadores.length }}
+                    <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> REANUDAR PARTIDA</a>
+                    {{/when}}
+                    {{/when}}
+                    {{/enCreacion}}
+                </div>
+            </div> --}}
+
         </div>
-        <div class="col-md-12 mx-auto">
-            <div class="card">
-                {{#if datospartida.activa}}
-                <h2>Partida activa!</h2>
-                <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
-                {{else}}
-                {{#when objetos.length 'gte' jugadores.length }}
-                {{#when ../jugadores.length 'gte' 2 }}
-                <h2>Partida Pausada</h2>
-                <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> EMPEZAR PARTIDA</a>
-                {{/when}}
-                {{/when}}
-                {{/if}}
+
+    </div>
+
+    <div class="row my-4"> {{!-- //BOTONES --}}
+        <div class="col-md-12">
+            <div class="d-flex  justify-content-around">
+                <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-primary"> Editar datos partida</a>
             </div>
         </div>
     </div>

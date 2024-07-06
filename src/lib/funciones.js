@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 const db = require("../database");
+const queries = require("../routes/queries");
 const mysqldump = require('mysqldump');
 const { promisify } = require('util');
 const { stringify } = require('querystring');
@@ -47,13 +48,13 @@ helpers.listadoBackups = (req, res, next) => {
     return documentos;
 }
 
-helpers.encryptPass = async(password) => {
+helpers.encryptPass = async (password) => {
     const sal = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, sal);
     return password;
 };
 
-helpers.verifyPassword = async(password, hashedPassword) => {
+helpers.verifyPassword = async (password, hashedPassword) => {
     try {
         return await bcrypt.compare(password, hashedPassword);
     } catch (e) {
@@ -76,20 +77,38 @@ helpers.isNotAuthenticated = (req, res, next) => {
 }
 
 helpers.isAdmin = (req, res, next) => {
-    if(req.user && req.user.privilegio == "admin") {
+    if (req.user && req.user.privilegio == "admin") {
         return next();
     }
-    return res.render('noPermission');
+    var error = "No tienes permisos. Solo el admin puede realizar esta gestión";
+    return res.render('error', { error });
+}
+
+helpers.hasPermission = async (req, res, next) => {
+    const partida = (await db.query("select * from partidas where id = ?", [req.params.id_partida]))[0];
+    //si es admin
+    if (req.user && req.user.privilegio == "admin") {
+        return next();
+    }
+    //Si es el creador de la partida
+    if (partida.id_creador == req.user.id)
+        return next();
+    //si opera sobre el mismo.
+    if (req.params.id_jugador && req.params.id_jugador == req.user.id)
+        return next();
+    var error = "No tienes permisos";
+    return res.render('error', { error });
 }
 
 helpers.isNotAdmin = (req, res, next) => {
     if (!req.user.privilegio == "admin") {
         return next();
     }
-    return res.render('noPermission');
+    var error = "No tienes permisos. Solo puedes realizar esta operación si no eres admin.";
+    return res.render('error', { error });
 }
 
-helpers.insertarLog = async(usuario, accion, observacion) => {
+helpers.insertarLog = async (usuario, accion, observacion) => {
     const log = {
         usuario,
         accion,
@@ -120,6 +139,29 @@ helpers.dumpearSQL = () => {
         },
         dumpToFile: './src/public/dumpSQL/dumpSAN' + Date.now() + '.sql',
     });
+}
+
+helpers.verifyActiveGame = async (id_partida) => {
+    try {
+        const partida = await db.query(queries.queryPartidas + " where id= ?", [id_partida]);
+        const date = Date.now();
+        console.log(partida);
+        if (partida.fecha_fin > date && partida.fecha_inicio < date)
+            return "true";
+    } catch (e) {
+        console.log(e);
+        return res.render('/error', { error: 'Actualmente no esta en juego dicha partida' });
+    }
+    return false;
+}
+
+helpers.S5 = async () => {
+    //e ha tenido que añadir la condicion de que empiece por una letra para guardar objetos que llevan el id.
+    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return characters.charAt(Math.floor(Math.random() * characters.length)) + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+//const guid = () => (S5()).toUpperCase();
+
+
 }
 
 module.exports = helpers;

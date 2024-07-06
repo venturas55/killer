@@ -3,18 +3,37 @@
         <div class="col-md-4 mx-auto">
             <div class="card">
                 <div class="card-body">
-                          <h2>INTRODUCIR OBJETO</h2>  
-                    <form action="/partidas/{{id_partida}}/add_object" method="POST">
-                        <div class="form-group"><input class="form-control" type="text" name="nombre" placeholder="Nombre" autofocus /> </div>
-                        <div class="form-group"><input class="form-control" type="text" name="descripcion" placeholder="Descripcion"  /> </div>
-                        <div class="form-group"><input class="form-control" type="text" name="imagen" placeholder="Foto"  /> </div>
-                        <button class="btn btn-success btn-block">Guardar</button>
-                 </form>
-                           <form action="/partidas/edit/{{id_partida}}" method="GET">
-                        <button class="btn btn-danger btn-block">Cancelar</button>
+                    <h2>INTRODUCIR OBJETO</h2>
+                    <form action="/partidas/{{id_partida}}/add_object" method="POST" enctype="multipart/form-data">
+                        <div class="form-group"><input class="form-control" type="text" name="nombre"
+                                placeholder="Nombre" autofocus /> </div>
+                        <div class="form-group"><input class="form-control" type="text" name="descripcion"
+                                placeholder="Descripcion" /> </div>
+                        <div class="input-group mb-3">
+                            <input type="hidden" name="tipo" value="objeto" />
+                            <input type="file" name="imagen" class="form-control" id="inputGroupFile02"  onchange="preview1()">
+                        </div>
+                    <img id="frame1" class="card-img-top" alt="preview foto objeto" />
+
+                        <button class="btn btn-primary btn-block"  onclick="clearImage1()">Guardar</button>
                     </form>
+                    <div class="text-center">
+                        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
+<script>
+    function preview1() {
+        frame1.src = URL.createObjectURL(event.target.files[0]);
+    }
+    function clearImage1() {
+        document.getElementById('formFile1').value = null;
+        frame1.src = "";
+    }
+
+</script>

@@ -1,0 +1,27 @@
+<!-- CUERPO -->
+<div class="container-fluid mb-4">
+  <div class="hazard-background">
+  </div>
+  <div class="row  justify-content-center">
+    {{#if eliminado}}
+    <h4>FOTO DE LA VICTIMA</h4>
+    {{else}}
+    <h4>FOTO DEL KILLER</h4>
+    {{/if}}
+  </div>
+  <div class="row justify-content-center">
+    <div class="card m-1" style="max-width: 80%;">
+      <p> {{jugador.full_name}} - {{jugador.usuario}} </p>
+      {{#if eliminado}}
+      <img id="imagenDead" src="/img/imagenes/{{jugador.imagenDead}}" alt="Foto eliminado">
+      {{else}}
+      <img id="imagenAlive" src="/img/imagenes/{{jugador.imagenAlive}}" alt="Foto vivo">
+      {{/if}}
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <a class="btn btn-warning" href="javascript:void(0)" onclick="history.back();">Volver</a>
+  </div>
+  <div class="hazard-background">
+  </div>
+</div>

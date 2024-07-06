@@ -2,79 +2,158 @@
     {{#if ticket}}
     <div class="row">
         <div class="col-md-12 mx-auto cajita">
-            <p> <span> <strong>'{{ticket.jugador_name}}'</strong> ha reportado que te ha matado con <strong> '{{ticket.objeto}}' </strong> . Es verdad?</span></p>
-            <button class="btn btn-warning" id="btndie" id_partida="{{ticket.id_partida}}" id_victima="{{ticket.id_victima}}">Aceptar</button>
-            <a href='/partidas/{{ticket.id_partida}}/rejectkill/{{ticket.id_victima}}' > <button class="btn btn-danger" id_partida="{{ticket.id_partida}}" id_victima="{{ticket.id_victima}}">Denegar</button></a>
+            <p> <span> <strong>'{{ticket.jugador_name}}'</strong> ha reportado que te ha matado con <strong>
+                        '{{ticket.objeto}}' </strong> . Es verdad?</span></p>
+            <a href="/partidas/{{ticket.id_partida}}/muerte/{{ticket.id_victima}}" class="btn btn-warning">Aceptar</a>
+            <a href="/partidas/{{ticket.id_partida}}/rejectkill/{{ticket.id_victima}}" class="btn btn-warning">
+                Denegar</a>
         </div>
     </div>
     {{/if}}
 
     <div class="row">
+        <p> Queda {{tiempoHasta partida.0.fecha_fin}}</p>
         <div class="col-12 mx-auto">
             <div class="cajita">
-                <h1> {{ partida.0.titulo }} - {{ partida.0.descripcion }}</h1>
+                <h2> {{ partida.0.titulo }} </h2>
+                <p>{{ partida.0.descripcion }}</p>
                 <div class="d-flex flex-row align-items-center justify-content-around">
                     <div>
-                        <h3> Asesinos</h3>
-                        {{#each partida}}
-                        <p {{#if this.victima_killed}} class="tachado" {{/if}}> <span data-bs-toggle="popover"
-                                title="{{this.victima_name}}" data-content="{{this.victima_name}}"
-                                class="text-decoration-line-through">
-                                {{this.victima_user}} </span> </p>
+                        <h5>Asesinos</h5>
+                        {{#each jugadores}}
+                        <a href="/jugador/foto/{{this.id}}/{{this.eliminado}}">
+                            <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.usuario}} </p>
+                        </a>
                         {{/each}}
                     </div>
-
                     <div>
-                        <h3> Armas</h3>
-                        {{#each partida}}
-                        <p {{#if this.victima_killed}} class="tachado" {{/if}}> <span data-bs-toggle="popover"
-                                title="{{this.descripcion_objeto}}">
-                                {{this.objeto}}</span> </p>
+                        <h5>Armas</h5>
+                        {{#each objetos}}
+                        <a href="/objeto/foto/{{this.id}}">
+                            <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p>
+                        </a>
                         {{/each}}
                     </div>
                 </div>
                 <div>
-                    <h3>Asesinos más Sanguinarios</h3>
-                    {{#each top_killers}}
-                    <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}} bajas
-                    </p>
-                    {{/each}}
+                    <h5>Asesinos más Sanguinarios</h5>
+                    <img src="/img/imagenes/asesin.png" alt="asesin" class="float-end">
+                    <div class="clearfix">
+                        {{#if top_killers}}
+                        {{#each top_killers}}
+                        <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}} bajas
+                        </p>
+                        {{/each}}
+                        {{else}}
+                        <p>Todavia no han habido bajas!</p>
+                        {{/if}}
+                    </div>
                 </div>
                 <div>
-                    {{#if last_kill}}
-                    <h3>Última baja</h3>
-                   
-                    <p> {{last_kill.jugador_user}} ha matado a {{last_kill.victima_user}} con {{last_kill.objeto}} a
-                        las
-                        {{formatearSpHora last_kill.fecha_asesinato}} </p>
+                    <h5>Última baja</h5>
+                    <img src="/img/imagenes/punal.png" alt="asesin" class="float-end">
+                    <div class="clearfix">
+                        {{#if last_kill}}
+                        <p> {{last_kill.asesino_user}} ha matado a {{last_kill.victima_user}} con {{last_kill.objeto}} a
+                            las
+                            {{formatearSpHora last_kill.fecha_eliminacion}} </p>
                         {{else}}
-                        <h3>Todavia no ha habido bajas!</h3>
-                    {{/if}}
+                        <p>Todavia no ha habido bajas!</p>
+                        {{/if}}
+                    </div>
                 </div>
             </div>
-            {{#if alive}}
+
+            {{#if dididie}}
             <div class="col-md-12 mx-auto cajita mt-4">
 
-                <h1>MI OBJETIVO</h1>
-                <p>Tu objetivo es <strong> {{objetivo.victima_user}} {{!-- - {{objetivo.victima_name}} --}} </strong> con
-                    <strong>
-                        {{!-- {{objetivo.id_objeto}} - --}}{{objetivo.objeto}} </strong>
-                </p>
-                <p> <button class="btn btn-warning" id="btnkill" id_partida="{{objetivo.id_partida}}"
-                        victima="{{this.victima}}" id_victima="{{objetivo.id_victima}}">Asesinar</button> </p>
-            </div>
-            {{else}}
-            <div class="col-md-12 mx-auto cajita mt-4">
                 <p>Estas mortimer</p>
-                {{#if victimaenpartida.0.fecha_asesinato}}
-                <p> Te mató <strong> {{victimaenpartida.0.jugador_name}} </strong> con
-                    <strong>{{victimaenpartida.0.objeto}} </strong> a las  <strong> {{formatearSpHora
-                        victimaenpartida.0.fecha_asesinato}} </strong>
+                {{#if dididie.fecha_eliminacion}}
+                <p> Te mató <strong> {{dididie.asesino_name}} </strong> con
+                    <strong>{{dididie.objeto}} </strong> a las <strong> {{formatearSpHora
+                        dididie.fecha_eliminacion}} </strong>
                 </p>
                 {{/if}}
             </div>
+            {{else}}
+            {{#when supervivientes.length 'gt' 1}}
+            <a class="btn btn-warning" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Ver objetivo</a>
+
+            {{/when}}
             {{/if}}
-            <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+
+
+            {{#when supervivientes.length 'eq' 1}}
+            {{#if ../ganador}}
+            <div class="col-md-12 mx-auto cajita mt-4">
+                <h3>ENHORABUENA ERES EL GANADOR!!</h3>
+                <p> con un total de <strong> {{../supervivientes.0.asesinatos}} eliminaciones</strong></p>
+            </div>
+
+            {{else}}
+            <div class="col-md-12 mx-auto cajita mt-4">
+                <h3>TENEMOS GANADOR!!</h3>
+                <p class="d-inline">El ganador es </p>
+                <h5 class="d-inline"> {{../supervivientes.0.jugador_name}} </h5> aka <strong>
+                    {{../supervivientes.0.jugador_user}} </strong> <span> con un total de <strong>
+                        {{../supervivientes.0.asesinatos}} eliminaciones</strong></span>
+            </div>
+            {{/if}}
+            {{/when}}
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal BS - ======== modalObjetivo ===== -->
+{{!-- MODAL --}}
+<div class="modal fade" id="exampleModalToggle" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalToggleLabel">MI OBJETIVO</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ">
+                <div class="m-1 ">
+                    <p>Tu objetivo es <strong> {{jugador.victima_user}}
+                        </strong>
+                        entregandole en mano <strong>{{jugador.objeto}} </strong>
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-warning" data-bs-target="#exampleModalToggle"
+                    data-bs-toggle="modal">Cancelar</button>
+                <button class="btn btn-warning" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalToggle2" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Confirmación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seguro que has logrado eliminarlo???</p>
+                <p>Le llegará un aviso a la victima, que tendrá que confirmar</p>
+            </div>
+            <div class="modal-footer">
+                <a href="/partidas/{{jugador.id_partida}}/asesinar/{{jugador.id_victima}}"
+                    class="btn btn-danger">Eliminar</a>
+
+                <button class="btn btn-warning" data-bs-target="#exampleModalToggle"
+                    data-bs-toggle="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>

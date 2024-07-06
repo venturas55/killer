@@ -1,0 +1,72 @@
+<div class="fondo">
+
+    {{#if user}}
+    <div class="hazard-background">
+    </div>
+    <div class="container text-center">
+        <div class="container text-center">
+            <h4> LISTADO PARTIDAS</h4>
+        </div>
+        {{!-- <div class="col-md-5 mx-auto mb-3">
+            <a type="button" class="btn btn-danger" href="/partidas/listarotras"> Unirme a otra Partida </a>
+
+        </div> --}}
+
+        {{#if partidas}}
+        {{!-- <div class="col-md-5 mx-auto mb-3">
+            <a type="button" class="btn btn-danger">
+                Tienes <span class="badge text-bg-secondary">{{partidas.length}}</span> partidas activas
+            </a>
+        </div> --}}
+        {{#each partidas}}
+
+        <div class="col-md-5 mx-auto mb-3">
+            {{#enCreacion this.status}}
+            <a href="/partidas/edit/{{../this.id_partida}}">
+                <div class="cajita cajita_disabled">
+                    {{else}}
+                    <a href="/partidas/plantilla/{{../this.id_partida}}">
+                        <div class="cajita">
+                            {{/enCreacion}}
+                            <h4>{{this.id_partida}}-{{this.titulo}}</h4>
+                            <p>{{this.descripcion}}</p>
+                            <p>Activa entre {{formatearSp this.fecha_inicio}} - {{formatearSp this.fecha_fin}}</p>
+
+                            {{#enCreacion this.status}}
+                            <form action="/partidas/{{../this.id_partida}}/add_object" method="get">
+                                <button class="btn btn-warning"> Añadir Objeto </button>
+                            </form>
+                            <p>Status: Partida en creacion.</p>
+                            {{/enCreacion}}
+                            {{#enJuego this.status}}
+                            <p>Status: Partida en curso</p>
+                            {{/enJuego}}
+                            {{#esFinalizada this.status}}
+                            <p>Status: Partida finalizada</p>
+                            {{/esFinalizada}}
+                            {{#enPausa this.status}}
+                            <p>Status: Partida inactiva</p>
+                            {{/enPausa}}
+                        </div>
+                    </a>
+                </div>
+                {{/each}}
+                {{/if}}
+        </div>
+
+        <div class="container text-center"> <a href="/"> 
+               <a href="/partidas/join">
+                    <div class="container text-center"> <button class="btn btn-warning">UNIRSE A UNA PARTIDA</button>
+                </a>
+                {{else}}
+                <div class="container text-center mb-5">
+                    <a href="/signin"> <button class="btn btn-warning">INICIAR SESION</button></a>
+                </div>
+                <a href="/signup">
+                    <div class="container text-center"> <button class="btn btn-warning">REGISTRARSE</button>
+                </a>
+                {{/if}}
+        </div>
+        <div class="hazard-background"></div>
+    </div>
+</div>

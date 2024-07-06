@@ -1,30 +1,29 @@
-<div class="container p-4">
+<div class="container p-2">
     <div class="row4">
-      
-        <div class="col-md-5 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="card text-center">
                 <div class="card-body">
-                    <h3>Bienvenid@ <strong> {{user.usuario}} </strong> !!</h3>
+                    <h4>Bienvenid@ <strong> {{user.usuario}} </strong>!</h4>
                     {{>avatar}}
                     <form action="/profile/upload/{{user.id}}" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="{{user.id}}" />
-                        <div class="input-group mb-3">
+                        <input type="hidden" name="user" value="{{user.id}}" />
+                        <div class=" mx-auto">
                             <div class="custom-file">
                                 <input type="file" name="imagen" class="custom-file-input" id="inputGroupFile02">
-                                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-                            </div>
-                            <div class="input-group-append">
-                                <button type="submit" class="input-group-text">Upload</button>
+                                <button type="submit" class="btn btn-warning">Upload</button>
                             </div>
                         </div>
                     </form>
-                        <p>Id: {{user.id}} </p>
-                    <p>Nombre: {{user.full_name}} </p>
-                    <p>Usuario: {{user.usuario}} </p>
-                    <p>Correo: {{user.email}} </p>
-                    <p>Privilegio: {{user.privilegio}} </p>
-                    <a href="/profile/edit" class="btn btn-warning m-4"> Editar el Perfil </a>
-                    <a href="/" class="btn btn-primary m-4"> Volver a Inicio</a>
+                    <p> <strong> Id:</strong> {{user.id}} </p>
+                    <p><strong> Nombre: </strong>{{user.full_name}} </p>
+                    <p><strong> Usuario:</strong> {{user.usuario}} </p>
+                    <p><strong> Correo:</strong> {{user.email}} </p>
+                    <p><strong> Privilegio: </strong>{{user.privilegio}} </p>
+                    <div class="d-flex flex-column">
+                        <a href="/profile/edit" class="btn btn-warning mb-1"> Editar el Perfil </a>
+                        <a href="/jugador/fotosjuego" class="btn btn-warning mb-1">Actualizar fotos juego</a>
+                         <a href="/logout " class="btn btn-warning mb-1">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,37 +1,44 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <div class="mx-4 navbar-brand">
+    <a target="_blank" href="https://www.escoladestiu.upv.es/">
+      <img class=" avatar-s" src="/img/imagenes/poli.svg" alt="svg"></a>
+  </div>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      {{#if user}}
+      <li class="nav-item">
+        <a href="/partidas/listedit" class="nav-link" tabindex="-1" aria-disabled="true">CREAR PARTIDAS</a>
+      </li>
+      <li class="nav-item">
+        <a href="/partidas/listar" class="nav-link" tabindex="-1" aria-disabled="true">PARTIDAS</a>
+      </li>
+
+{{!--       <li class="nav-item">
+        <a class="nav-link" href="/logout " tabindex="-1" aria-disabled="true">Logout</a>
+      </li> --}}
+
+      {{else}}
+
+      <li class="nav-item">
+        <a class="nav-link" href="/signin" tabindex="-1" aria-disabled="true">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/signup" tabindex="-1" aria-disabled="true">Sign up</a>
+      </li>
+      {{/if}}
+    </ul>
+
+  </div>
+  <div class="mx-4 navbar-brand">
   {{#if user}}
   {{>avatar}}
   {{/if}}
-  <a class="navbar-brand" href="/">KILLER</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        {{#if user}}
-        <li class="nav-item">
-          <a href="/profile" class="nav-link" tabindex="-1" aria-disabled="true">PERFIL</a>
-        </li>
-        <li class="nav-item">
-          <a href="/partidas/list" class="nav-link" tabindex="-1" aria-disabled="true">PARTIDAS</a>
-        </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/logout " tabindex="-1" aria-disabled="true">Logout</a>
-        </li>
-
-        {{else}}
-
-        <li class="nav-item">
-          <a class="nav-link" href="/signin" tabindex="-1" aria-disabled="true">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/signup" tabindex="-1" aria-disabled="true">Sign up</a>
-        </li>
-        {{/if}}
-      </ul>
-
-    </div>
+  </div>
 
 </nav>

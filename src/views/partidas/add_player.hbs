@@ -4,9 +4,9 @@
             <div class="card">
                 <div class="card-body">
                     <h2>AÑADIR JUGADOR</h2>
-                    <form action="/partidas/{{id}}/add_player" method="POST">
-                        <select class="custom-select form-select form-select-sm" name="jugador"
-                            id="jugador" aria-label=".form-select-sm example">
+                    <form action="/partidas/{{id_partida}}/add_player" method="POST">
+                        <select class="custom-select form-select form-select-sm" name="jugador" id="jugador"
+                            aria-label=".form-select-sm example">
                             <option value=""> Selecciona</option>
                             {{#each usuarios}}
                             <option value="{{this.id}}" {{#when this.id 'eq' ../ticket.assigned_to_id }} selected
@@ -14,11 +14,11 @@
                                 {{this.usuario}} </option>
                             {{/each}}
                         </select>
-                        <button class="btn btn-success btn-block">AÑADIR</button>
+                        <button class="btn btn-primary btn-block">AÑADIR</button>
                     </form>
-                    <form action="/partidas/list" method="GET">
-                        <button class="btn btn-danger btn-block">Cancelar</button>
-                    </form>
+                    <div class="text-center">
+                        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+                    </div>
                 </div>
             </div>
         </div>
