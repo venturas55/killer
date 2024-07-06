@@ -88,7 +88,6 @@ helpers.hasPermission = async (req, res, next) => {
     //console.log(req.params);
     const partida = (await db.query("select * from partidas where id = ?", [req.params.id_partida]))[0];
     //console.log(partida);
-    console.log("por aqui");
     //si es admin
     if (req.user && req.user.privilegio == "admin") {
         return next();

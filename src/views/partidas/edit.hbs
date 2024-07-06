@@ -17,7 +17,7 @@
                         <th>Usuario</th>
                         <th class="d-none d-xl-table-cell">Nombre</th>
                         <th>Imagen</th>
-                        <th>Options</th>
+                        {{#if esCreador}}  <th>Options</th> {{/if}}
                     </tr>
                     {{#each jugadores}}
                     <tr>
@@ -31,10 +31,10 @@
                         <td> <img src="/img/profiles/default.jpg" class="avatar avatar-xs m-2"
                                 alt="avatar {{this.pictureURL}}'" /></td>
                         {{/if}}
-                        <td>
+                     {{#if ../esCreador}}     <td>
                             <a href="/partidas/{{this.id_partida}}/deleteplayer/{{this.id_jugador}}"
                                 class="text-warning"><i class="fa-solid fa-trash"></i>Del</a>
-                        </td>
+                        </td> {{/if}}
                     </tr>
 
                     {{/each}}
@@ -67,7 +67,7 @@
                             <th>Nombre</th>
                             <th class="d-none d-xl-table-cell">Descripcion</th>
                             <th>Imagen</th>
-                            <th>Options</th>
+                            {{#if esCreador}}  <th>Options</th> {{/if}}
                         </tr>
                 </div>
                 <div>
@@ -83,10 +83,12 @@
                         <td> <img src="/img/objeto.png" class="avatar avatar-xs m-2"
                                 alt="avatar {{this.pictureURL}}'" /></td>
                         {{/if}}
-                        <td>
+                       {{#if ../esCreador}}    <td>
+                          <a href="/partidas/{{this.id_partida}}/edit_object/{{this.id}}" class="text-warning"><i
+                                    class="fa-solid fa-pencil"></i>Edit</a>
                             <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}" class="text-warning"><i
                                     class="fa-solid fa-trash"></i>Del</a>
-                        </td>
+                        </td> {{/if}}
                     </tr>
 
                     {{/each}}

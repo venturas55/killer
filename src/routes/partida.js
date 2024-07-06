@@ -98,6 +98,11 @@ router.get("/:id_partida/add_object", funciones.hasPermission, (req, res) => {
   const { id_partida } = req.params;
   res.render("partidas/add_object", { id_partida });
 });
+router.get("/:id_partida/edit_object/:id_object", funciones.hasPermission, async (req, res) => {
+  const { id_partida,id_object } = req.params;
+  const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object,id_partida]))[0];
+  res.render("partidas/edit_object", { objeto,id_partida });
+});
 /* SE MUEVE A fotos.js por subir tambien foto del objeto
  router.post("/:id_partida/add_object", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
