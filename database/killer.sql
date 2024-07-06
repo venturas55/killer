@@ -1,6 +1,7 @@
 drop database killer2;
-create database killer2;
-use killer2;
+drop database killer;
+create database killer;
+use killer;
 DROP TABLE IF EXISTS sessions;
 
 DROP TABLE IF EXISTS partidajugadores;

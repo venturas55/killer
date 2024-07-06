@@ -3,61 +3,89 @@
     {{#if user}}
     <div class="hazard-background">
     </div>
+    <div class="text-center mb-4">
+        <img src="/img/imagenes/calavera.png" alt="">
+    </div>
     <div class="container text-center">
-        <div class="container text-center">
-            <h4> LISTADO PARTIDAS</h4>
-        </div>
-        {{!-- <div class="col-md-5 mx-auto mb-3">
-            <a type="button" class="btn btn-danger" href="/partidas/listarotras"> Unirme a otra Partida </a>
-
-        </div> --}}
-
         {{#if partidas}}
         {{!-- <div class="col-md-5 mx-auto mb-3">
             <a type="button" class="btn btn-danger">
                 Tienes <span class="badge text-bg-secondary">{{partidas.length}}</span> partidas activas
             </a>
         </div> --}}
-        {{#each partidas}}
+        {{!-- <div class="cajita cajita_disabled"> --}}
+            {{#each partidas}}
+           {{#enJuego this.status}}
+            <div class="col-md-5 mx-auto mb-3">
+                <a href="/partidas/plantilla/{{../this.id_partida}}">
+                    <div class="cajita">
+                        <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                        <p>{{../this.descripcion}}</p>
+                        <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
 
-        <div class="col-md-5 mx-auto mb-3">
+
+               
+                        <p>Status: en curso</p>
+                       {{!-- {{/enJuego}}
+                        {{#esFinalizada this.status}}
+                        <p>Status: finalizada</p>
+                        {{/esFinalizada}}
+                        {{#enPausa this.status}}
+                        <p>Status: inactiva</p>
+                        {{/enPausa}} --}}
+                    </div>
+                </a>
+            </div>
+            {{/enJuego}}
+
             {{#enCreacion this.status}}
-            <a href="/partidas/edit/{{../this.id_partida}}">
-                <div class="cajita cajita_disabled">
-                    {{else}}
-                    <a href="/partidas/plantilla/{{../this.id_partida}}">
-                        <div class="cajita">
-                            {{/enCreacion}}
-                            <h4>{{this.id_partida}}-{{this.titulo}}</h4>
-                            <p>{{this.descripcion}}</p>
-                            <p>Activa entre {{formatearSp this.fecha_inicio}} - {{formatearSp this.fecha_fin}}</p>
+            <div class="col-md-5 mx-auto mb-3">
+                <a href="/partidas/edit/{{../this.id_partida}}">
+                    <div class="cajita">
+                        <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                        <p>{{../this.descripcion}}</p>
+                        <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
 
-                            {{#enCreacion this.status}}
-                            <form action="/partidas/{{../this.id_partida}}/add_object" method="get">
-                                <button class="btn btn-warning"> Añadir Objeto </button>
-                            </form>
-                            <p>Status: Partida en creacion.</p>
-                            {{/enCreacion}}
-                            {{#enJuego this.status}}
-                            <p>Status: Partida en curso</p>
-                            {{/enJuego}}
-                            {{#esFinalizada this.status}}
-                            <p>Status: Partida finalizada</p>
-                            {{/esFinalizada}}
-                            {{#enPausa this.status}}
-                            <p>Status: Partida inactiva</p>
-                            {{/enPausa}}
-                        </div>
-                    </a>
-                </div>
-                {{/each}}
-                {{/if}}
+
+                        <p>Status: en creacion</p>
+
+                        {{!-- {{#enJuego this.status}}
+                        <p>Status: en curso</p>
+                        {{/enJuego}}
+                        {{#esFinalizada this.status}}
+                        <p>Status: finalizada</p>
+                        {{/esFinalizada}}
+                        {{#enPausa this.status}}
+                        <p>Status: inactiva</p>
+                        {{/enPausa}} --}}
+                    </div>
+                </a>
+            </div>
+            {{/enCreacion}}
+
+
+
+
+            {{/each}}
+            {{/if}}
         </div>
 
-        <div class="container text-center"> <a href="/"> 
-               <a href="/partidas/join">
-                    <div class="container text-center"> <button class="btn btn-warning">UNIRSE A UNA PARTIDA</button>
-                </a>
+        <div class="container text-center"> <a href="/">
+                {{!-- <h4 class="m-3">TOTAL: {{suma partidas}}</h4> --}}
+                <div class="d-flex justify-content-around m-4">
+                    <a href="#exampleModalToggle" data-bs-toggle="modal" role="button" class="btn btn-style w-100"><img
+                            src="/img/imagenes/icon.png" alt="">
+                        <div>
+                            <p>UNIRSE A PARTIDA </p>
+                            <p>a través de una contraseña</p>
+                        </div> <img src="/img/imagenes/icon.png" alt="">
+                    </a>
+                </div>
+                <div class="d-flex justify-content-around m-4">
+                    <a href="/partidas/add" class="btn btn-style"> <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        <p>CREAR NUEVA PARTIDA</p>
+                    </a>
+                </div>
                 {{else}}
                 <div class="container text-center mb-5">
                     <a href="/signin"> <button class="btn btn-warning">INICIAR SESION</button></a>
@@ -70,3 +98,4 @@
         <div class="hazard-background"></div>
     </div>
 </div>
+{{>joinModal}}

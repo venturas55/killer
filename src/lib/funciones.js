@@ -85,7 +85,9 @@ helpers.isAdmin = (req, res, next) => {
 }
 
 helpers.hasPermission = async (req, res, next) => {
+    //console.log(req.params);
     const partida = (await db.query("select * from partidas where id = ?", [req.params.id_partida]))[0];
+    //console.log(partida);
     //si es admin
     if (req.user && req.user.privilegio == "admin") {
         return next();
@@ -96,6 +98,7 @@ helpers.hasPermission = async (req, res, next) => {
     //si opera sobre el mismo.
     if (req.params.id_jugador && req.params.id_jugador == req.user.id)
         return next();
+
     var error = "No tienes permisos";
     return res.render('error', { error });
 }

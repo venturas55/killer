@@ -4,33 +4,28 @@
             <div class="text-center">
                 <img src="/img/imagenes/calavera.png" alt="">
             </div>
-            <div class="text-center">
+            <div class="d-flex justify-content-around">
                 <h2 class="my-4">CREAR NUEVA PARTIDA </h2>
             </div>
 
             <form class="mt-5" action="/partidas/add" method="POST">
-                <div class="mb-3">
-                    <div class="inputBox">
-                        <input required="" type="text" placeholder="Introduzca un titulo" name="titulo" autofocus
-                            required>
+                <div class="mb-3 w-100">
+                    <div class="inputBox ">
+                        <input class="" type="text" placeholder="Introduzca un titulo" name="titulo" autofocus required>
                         <span>Titulo</span>
                     </div>
                     <div class="inputBox my-4">
-                        <input required="" type="text" placeholder="Introduzca una descripcion" name="descripcion">
+                        <input class="w-100" type="text" placeholder="Introduzca una descripcion" name="descripcion">
                         <span>Descripcion</span>
                     </div>
                     <div class="inputBox my-4">
-                        <input required="" type="datetime-local" name="fecha_inicio" required>
+                        <input type="datetime-local" name="fecha_inicio" required>
                         <span>Fecha Inicio</span>
                     </div>
                     <div class="inputBox my-4">
-                        <input required="" type="datetime-local" name="fecha_fin" required>
+                        <input type="datetime-local" name="fecha_fin" required>
                         <span>Fecha fin</span>
                     </div>
-
-
-
-
                     {{!-- <div class="form-group"><input class="form-control" type="text" name="titulo"
                             placeholder="Titulo" autofocus />
                     </div>
@@ -38,9 +33,11 @@
                     <input class="form-control" type="datetime-local" name="fecha_inicio" placeholder="" required />
                     <input class="form-control" type="datetime-local" name="fecha_fin" placeholder="" required /> --}}
                 </div>
-                <button class="btn btn-primary btn-block m-2">AÑADIR</button>
+                <div class="d-flex justify-content-around">
+                    <button class="btn btn-style btn-block m-2"> CREAR NUEVA PARTIDA</button>
+                </div>
             </form>
-            <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
+            {{!-- <a class="btn btn-style m-4" href="javascript:void(0)" onclick="history.back();">Cancelar</a> --}}
         </div>
     </div>
 </div>

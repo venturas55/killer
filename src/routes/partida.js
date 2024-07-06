@@ -18,14 +18,14 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
     titulo, descripcion, fecha_inicio, fecha_fin,
   } = req.body;
   let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var id= characters.charAt(Math.floor(Math.random() * characters.length)) + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1).toUpperCase();
+  var id = characters.charAt(Math.floor(Math.random() * characters.length)) + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1).toUpperCase();
   console.log(id);
   try {
-    const item = { id,titulo, descripcion, fecha_inicio, fecha_fin, 'id_creador': req.user.id };
+    const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, 'status': 'encreacion', 'id_creador': req.user.id };
     console.log(item);
     //console.log(nanoid(6));
     await db.query("INSERT INTO partidas set ?", [item]);
-    req.flash("success", "Partida insertado correctamente comparte el codigo: "+ item.id);
+    req.flash("success", "Partida insertado correctamente comparte el codigo: " + item.id);
     res.redirect("/partidas/listedit"); //te redirige una vez insertado el item
   } catch (error) {
     console.error(error.code);
@@ -145,7 +145,7 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
 });
 
 //Para mostrar listado de partidas en las que esta incluido el jugador
-router.get("/listedit", funciones.isAuthenticated, async (req, res) => {
+router.get("/listedit", funciones.isAdmin, async (req, res) => {
   //TODO: QUE SOLO MUESTRE PARTIDAS EN EDICION
   try {
     const partidas = await db.query(queries.queryPartidas,);
@@ -162,7 +162,6 @@ router.get("/listedit", funciones.isAuthenticated, async (req, res) => {
 router.get('/listar', async (req, res) => {
   id_jugador = req.user.id;
   try {
-    //const partidas = await db.query(queries.queryPartidasAjenas + " where pej.id_jugador!=?", [id_jugador]);
     const partidas = await db.query(queries.queryPartidasJugador + " where j.id_jugador=?", [id_jugador,]);
     console.log(partidas);
     res.render('partidas/listar', { partidas, });
@@ -315,23 +314,23 @@ router.post("/join", funciones.isAuthenticated, async (req, res) => {
 
 
 
-  
- 
+
+
 });
 
 
 //UPDATE
 router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
-  //console.log(id);
+  console.log(id_partida);
   try {
     const datospartida = (await db.query("select * from partidas WHERE id=?", [id_partida,]))[0];
     const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
     const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_partida,]);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
-    //console.log(partida);
+    console.log(datospartida);
     //console.log(objetos);
-    console.log(jugadores);
+    //console.log(jugadores);
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida });
   } catch (error) {
     console.error(error.code);
@@ -341,8 +340,10 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
 });
 router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
+  console.log(req.params);
+  console.log(req.body);
   try {
-    let partida = (await db.query(queries.queryPartidas + " WHERE id=?", [id_partida,]))[0];
+    let partida = (await db.query(queries.queryPartidas + " WHERE id=?", [id_partida]))[0];
     console.log(partida.fecha_fin);
     var date = partida.fecha_inicio;
     partida.fecha_inicio = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate() + "T" + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
@@ -356,11 +357,12 @@ router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) =>
     res.redirect("/error");
   }
 });
-router.post("/editgame/:id_game", funciones.hasPermission, async (req, res) => {
+router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) => {
   const {
     titulo, descripcion, fecha_inicio, fecha_fin, status
   } = req.body;
-  const id = req.params.id_game;
+  const id = req.params.id_partida;
+  console.log("id" + id);
   try {
     const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, status };
     console.log(item);
@@ -390,16 +392,22 @@ router.post("/editgame/:id_game", funciones.hasPermission, async (req, res) => {
 router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   try {
+
+    //reordeno/barajo objetos
     let objetos = await db.query(queries.queryObjetos + " WHERE id_partida=?", [id_partida,]);
     objetos = objetos.sort((a, b) => 0.5 - Math.random());
+    //reordeno/barajo jugadores
     let jugadores = await db.query(queries.queryJugadores + " WHERE j.id_partida=?", [id_partida,]);
     jugadores = jugadores.sort((a, b) => 0.5 - Math.random());
+    //console.log(objetos);
+    //console.log(jugadores);
+
     let items = [];
     for (var i = 0; i < jugadores.length; i++) {
-      if (i + 1 == jugadores.length)
-        items.push([parseInt(id_partida), jugadores[i].id_jugador, jugadores[0].id_jugador, objetos[i].id]);
-      else
-        items.push([parseInt(id_partida), jugadores[i].id_jugador, jugadores[i + 1].id_jugador, objetos[i].id]);
+      if (i + 1 == jugadores.length)//el ultimo jugador le asignas de victima el primero
+        items.push([id_partida, jugadores[i].id_jugador, jugadores[0].id_jugador, objetos[i].id]);
+      else  // a los demas le asignas de victima el siguiente jugador en el array
+        items.push([id_partida, jugadores[i].id_jugador, jugadores[i + 1].id_jugador, objetos[i].id]);
     }
     console.log(items);
     await db.query("insert into partidasenjuego (id_partida,id_jugador,id_victima,id_objeto) values ?", [items])

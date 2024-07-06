@@ -103,31 +103,35 @@
                     </div>
                 </div>
             </div>
-            {{!-- <div class="col-md-12 mx-auto">
-                <div class="card">
-                    {{#enJuego partida.status}}
-                    <h2>Partida activa!</h2>
-                    <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a>
-                    {{/enJuego}}
-                    {{#enCreacion datospartida.status}}
-                    {{#when ../jugadores.length 'gte' 2 }}
-                    {{#when ../objetos.length 'gte' ../jugadores.length }}
-                    <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-danger"> REANUDAR PARTIDA</a>
-                    {{/when}}
-                    {{/when}}
-                    {{/enCreacion}}
-                </div>
-            </div> --}}
-
         </div>
 
+    </div>
+    <div class="row my-4"> {{!-- //BOTONES --}}
+        <div class="col-md-12 mx-auto">
+             <div class="d-flex flex-column justify-content-around align-items-center">
+                {{#enJuego datospartida.status}}
+                <h2>Partida ya empezada!</h2>
+                <p>No se pueden modificar jugadores ni objetos</p>
+                {{!-- <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a> --}}
+                {{/enJuego}}
+
+                {{#enCreacion datospartida.status}}
+                {{#when ../jugadores.length 'gte' 2 }}
+                {{#when ../objetos.length 'gte' ../jugadores.length }}
+                <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-warning"> COMENZAR PARTIDA</a>
+                {{/when}}
+                {{/when}}
+                {{/enCreacion}}
+                </div>
+        </div>
     </div>
 
     <div class="row my-4"> {{!-- //BOTONES --}}
         <div class="col-md-12">
             <div class="d-flex  justify-content-around">
-                <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-primary"> Editar datos partida</a>
+                <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-style"> Editar datos partida</a>
             </div>
         </div>
     </div>
 </div>
+ <div class="hazard-background"></div>
