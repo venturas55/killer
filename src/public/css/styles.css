@@ -41,8 +41,13 @@ a {
 }
 
 .cajita_disabled {
+  color: whitesmoke;
   border: 2px #656152 solid;
-  /* //background-color: #000000; */
+  background: linear-gradient(rgba(190, 194, 198, 0.99), rgba(140, 142, 145, 0.7)); 
+}
+
+.cajita_disabled h3{
+  color: whitesmoke;
 }
 
 .cajita:hover {

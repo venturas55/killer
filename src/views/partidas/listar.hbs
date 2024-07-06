@@ -6,11 +6,13 @@
     <div class="container text-center">
         {{#if partidas}}
         {{#each partidas}}
-
         {{#enJuego this.status}}
         <div class="col-md-8 mx-auto mb-3">
             <a href="/partidas/plantilla/{{../this.id_partida}}">
                 <div class="cajita">
+                    <div class="float-start">
+                     <i class="fa-solid fa-star"></i>
+                     </div>
                     <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
                     <p>{{../this.descripcion}}</p>
                     <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
@@ -19,7 +21,55 @@
             </a>
         </div>
         {{/enJuego}}
+        {{#enCreacion this.status}}
+        <div class="col-md-8 mx-auto mb-3">
+            <a href="/partidas/edit/{{../this.id_partida}}">
+                <div class="cajita">
+                      <div class="float-start">
+                     <i class="fa-solid fa-star"></i>
+                     </div>
+                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                    <p>{{../this.descripcion}}</p>
+                    <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                    <p>Status: en creacion</p>
+                </div>
+            </a>
+        </div>
+        {{/enCreacion}}
+        {{#finalizada this.status}}
+        <div class="col-md-8 mx-auto mb-3">
+            <a href="/partidas/plantilla/{{../this.id_partida}}">
+                <div class="cajita cajita_disabled">
+                    <div class="float-start">
+                     <i class="fa-solid fa-star"></i>
+                     </div>
+                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                    <p>{{../this.descripcion}}</p>
+                    <p>Estuvo activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                    <p>Status: finalizada!</p>
+                </div>
+            </a>
+        </div>
+        {{/finalizada}}
+        {{/each}}
+        {{/if}}
+    </div>
 
+    <div class="container text-center">
+        {{#if partidasDondeParticipo}}
+        {{#each partidasDondeParticipo}}
+        {{#enJuego this.status}}
+        <div class="col-md-8 mx-auto mb-3">
+            <a href="/partidas/plantilla/{{../this.id_partida}}">
+                <div class="cajita">
+                                       <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                    <p>{{../this.descripcion}}</p>
+                    <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                    <p>Status: en curso</p>
+                </div>
+            </a>
+        </div>
+        {{/enJuego}}
         {{#enCreacion this.status}}
         <div class="col-md-8 mx-auto mb-3">
             <a href="/partidas/edit/{{../this.id_partida}}">
@@ -32,10 +82,9 @@
             </a>
         </div>
         {{/enCreacion}}
-
         {{#finalizada this.status}}
         <div class="col-md-8 mx-auto mb-3">
-            <a href="/partidas/edit/{{../this.id_partida}}">
+            <a href="/partidas/plantilla/{{../this.id_partida}}">
                 <div class="cajita cajita_disabled">
                     <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
                     <p>{{../this.descripcion}}</p>
@@ -45,14 +94,8 @@
             </a>
         </div>
         {{/finalizada}}
-
-
         {{/each}}
         {{/if}}
-
-
-
-
     </div>
 
     <div class="container text-center"> <a href="/">
@@ -73,4 +116,5 @@
             </div>
     </div>
 </div>
+
 {{>modal_Join}}

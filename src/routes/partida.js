@@ -160,9 +160,10 @@ router.get("/listedit", funciones.isAdmin, async (req, res) => {
 router.get('/listar', async (req, res) => {
   id_jugador = req.user.id;
   try {
-    const partidas = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status", [id_jugador,]);
+    const partidasDondeParticipo = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status", [id_jugador,]);
+    const partidas = await db.query(queries.queryPartidasPropias + " where p.id_creador=? order by status", [id_jugador,]);
     console.log(partidas);
-    res.render('partidas/listar', { partidas, });
+    res.render('partidas/listar', { partidas, partidasDondeParticipo });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
@@ -184,7 +185,7 @@ router.get('/inicio', async (req, res) => {
     res.redirect("/error");
   }
 });
- //EN DESUSO TODO:
+//EN DESUSO TODO:
 router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
   id_jugador = req.user.id;
@@ -196,14 +197,15 @@ router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async 
 //CARGA LA PANTALLA PRINCIPAL DE UNA PARTIDA
 router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
+  
   try {
     let ganador = false;
     id_jugador = req.user.id;
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
-    for (let i = 0; i < partida.length; i++){
-      console.log(partida[i].id_jugador);
-
-    }
+    /*   for (let i = 0; i < partida.length; i++){
+       console.log(partida[i].id_jugador);
+ 
+     } */
 
     //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
     const jugadores = partida.map(function (el) {
@@ -228,11 +230,11 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     //console.log(objetos);
 
     //===== OBJETIVO =================
-    const jugador = partida.filter(function (el) {
+    const objetivo = partida.filter(function (el) {
       return el.id_jugador === req.user.id
     })[0];
-    //console.log(jugador);
-
+    //console.log(objetivo);
+   
 
     //===== TICKET =================
     const ticket = partida.filter(function (el) {
@@ -249,12 +251,14 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       var uno = b.asesinatos;
       return (uno < dos) ? -1 : (uno > dos) ? 1 : 0;
     });
-
     //===== LAST KILL =================
     const last_kill = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
 
     //============= DIE ========
-    const dididie = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima = ? order by e.fecha_eliminacion desc limit 1", [id_partida, jugador.id_jugador]))[0];
+    var dididie ;
+    if(objetivo){
+      dididie = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima = ? order by e.fecha_eliminacion desc limit 1", [id_partida, objetivo.id_jugador]))[0];
+    }
 
     //================ SUPERVIVIENTES ===============
     const supervivientes = partida.filter(function (el) {
@@ -262,8 +266,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     });
 
 
-    if (supervivientes.length == 1){
-      await db.query("update partida set status='finalizada' where id_partida=?", [id_partida]);
+    if (supervivientes.length == 1) {
+      await db.query("update partidas set status='finalizada' where id=?", [id_partida]);
     }
 
     //======== Es el propio jugador el ganador???? =====
@@ -272,9 +276,9 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       ganador = true;
     }
     //console.log(ganador);
-    res.render("partidas/plantilla", { partida, jugadores, objetos, ticket, jugador, top_killers, last_kill, dididie, supervivientes, ganador });
+    res.render("partidas/plantilla", { partida, jugadores, objetos, ticket, objetivo, top_killers, last_kill, dididie, supervivientes, ganador });
   } catch (error) {
-    console.error(error.code);
+    console.error(error);
     req.flash("error", "Hubo algun error");
     res.redirect("/error");
   }

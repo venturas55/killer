@@ -15,7 +15,8 @@
         <p> Queda {{tiempoHasta partida.0.fecha_fin}}</p>
         <div class="col-12 mx-auto">
             <div class="cajita my-4"> {{!-- //ASESINOS Y ARMAS--}}
-                <h1 class="d-inline"> {{ partida.0.titulo}} </h2> - <h4 class="d-inline"> {{ partida.0.id_partida}}                    </h4>
+                <h1 class="d-inline"> {{ partida.0.titulo}} </h2> - <h4 class="d-inline"> {{ partida.0.id_partida}}
+                    </h4>
                     <p>{{ partida.0.descripcion }}</p>
                     <div class="d-flex flex-row align-items-center justify-content-around"> {{!-- //ASESINOS Y
                         OBJETOS--}}
@@ -79,10 +80,17 @@
             </div>
             {{else}}
             {{#when supervivientes.length 'gt' 1}}
-            <div class="col-md-12 mx-auto mt-4">
-                <a class="btn btn-warning" data-bs-toggle="modal" href="#killModalToggle" role="button"> <i class="fa-solid fa-eye"></i> VER MI OBJETIVO</a>
-            </div>
 
+            {{#if objetivo}}
+            <div class="col-md-12 mx-auto mt-4">
+                <a class="btn btn-warning" data-bs-toggle="modal" href="#killModalToggle" role="button"> <i
+                        class="fa-solid fa-eye"></i> VER MI OBJETIVO</a>
+            </div>
+            {{else}}
+               <div class="col-md-12 mx-auto mt-4">
+                <p> Eres administrador de la partida, pero no participas en ella</p>
+               </div>
+            {{/if}}
             {{/when}}
             {{/if}}
 
