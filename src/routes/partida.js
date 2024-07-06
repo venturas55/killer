@@ -26,7 +26,7 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
     //console.log(nanoid(6));
     await db.query("INSERT INTO partidas set ?", [item]);
     req.flash("success", "Partida insertado correctamente comparte el codigo: " + item.id);
-    res.redirect("/partidas/listedit"); //te redirige una vez insertado el item
+    res.redirect("/partidas/listar"); //te redirige una vez insertado el item
   } catch (error) {
     console.error(error.code);
     switch (error.code) {

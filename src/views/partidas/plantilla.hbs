@@ -12,12 +12,19 @@
     {{/if}}
 
     <div class="row">
-        <p> Queda {{tiempoHasta partida.0.fecha_fin}}</p>
+        {{#when supervivientes.length 'gt' 1}}
+        <p> Queda {{tiempoHasta ../partida.0.fecha_fin}}</p>
+        {{/when}}
+        {{#when supervivientes.length 'lte' 1}}
+        <p> Acabó el {{formatearSpHora ../last_kill.fecha_eliminacion}} previsto el {{formatearSpHora ../partida.0.fecha_fin}}  </p>
+        {{/when}}
+
         <div class="col-12 mx-auto">
             <div class="cajita my-4"> {{!-- //ASESINOS Y ARMAS--}}
                 <h1 class="d-inline"> {{ partida.0.titulo}} </h2> - <h4 class="d-inline"> {{ partida.0.id_partida}}
                     </h4>
                     <p>{{ partida.0.descripcion }}</p>
+                    <hr>
                     <div class="d-flex flex-row align-items-center justify-content-around"> {{!-- //ASESINOS Y
                         OBJETOS--}}
                         <div>
@@ -37,6 +44,7 @@
                             {{/each}}
                         </div>
                     </div>
+                    <hr>
                     <div class="my-4"> {{!-- //SANGUINARIOS--}}
                         <h5>Asesinos más Sanguinarios</h5>
                         <img src="/img/imagenes/asesin.png" alt="asesin" class="float-end">
@@ -52,6 +60,7 @@
                             {{/if}}
                         </div>
                     </div>
+                    <hr>
                     <div class="my-4"> {{!-- //ULTIMA BAJA--}}
                         <h5>Última baja</h5>
                         <img src="/img/imagenes/punal.png" alt="asesin" class="float-end">
@@ -87,9 +96,9 @@
                         class="fa-solid fa-eye"></i> VER MI OBJETIVO</a>
             </div>
             {{else}}
-               <div class="col-md-12 mx-auto mt-4">
+            <div class="col-md-12 mx-auto mt-4">
                 <p> Eres administrador de la partida, pero no participas en ella</p>
-               </div>
+            </div>
             {{/if}}
             {{/when}}
             {{/if}}
