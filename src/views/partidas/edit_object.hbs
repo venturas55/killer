@@ -6,9 +6,9 @@
                     <h2>EDITAR OBJETO - {{objeto.id}} .</h2>
                     <form action="/partidas/{{id_partida}}/edit_object/{{objeto.id}}" method="POST"
                         enctype="multipart/form-data">
-                        <div class="form-group"><input class="form-control" type="text" name="nombre"
+                        <div class="form-group my-3"><input class="form-control" type="text" name="nombre"
                                 value="{{objeto.nombre}}" autofocus /> </div>
-                        <div class="form-group"><input class="form-control" type="text" name="descripcion"
+                        <div class="form-group my-3"><input class="form-control" type="text" name="descripcion"
                                 value="{{objeto.descripcion}}" /> </div>
 
                         <div class="input-group mb-3">
@@ -16,13 +16,14 @@
                             <input type="file" name="imagen" class="form-control" id="inputGroupFile02"
                                 onchange="preview1()">
                         </div>
-                        <img id="frame1" class="card-img-top" alt="preview foto objeto" />
-
-                        <button class="btn btn-primary btn-block" onclick="clearImage1()">Guardar</button>
+                        <div class="text-center">
+                            <img id="frame1" class="card-img-top" alt="preview foto objeto" />
+                        </div>
+                        <div class="d-flex justify-content-around my-4">
+                            <button class="btn btn-warning btn-block" onclick="clearImage1()">Guardar</button>
+                        </div>
                     </form>
-                    <div class="text-center">
-                        <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
-                    </div>
+
                 </div>
             </div>
         </div>
