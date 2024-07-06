@@ -99,15 +99,15 @@ router.get("/:id_partida/add_object", funciones.hasPermission, (req, res) => {
   res.render("objetos/add_object", { id_partida });
 });
 router.get("/:id_partida/edit_object/:id_object", funciones.hasPermission, async (req, res) => {
-  const { id_partida,id_object } = req.params;
-  const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object,id_partida]))[0];
-  res.render("objetos/edit_object", { objeto,id_partida });
+  const { id_partida, id_object } = req.params;
+  const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object, id_partida]))[0];
+  res.render("objetos/edit_object", { objeto, id_partida });
 });
 // para ver un OBJETO
 router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, async (req, res) => {
-  const { id_partida,id_object } = req.params;
-  const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object,id_partida]))[0];
-  res.render("objetos/ver_object", { objeto,id_partida });
+  const { id_partida, id_object } = req.params;
+  const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object, id_partida]))[0];
+  res.render("objetos/ver_object", { objeto, id_partida });
 });
 
 //READ
@@ -132,7 +132,7 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
 
 //Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
 router.get('/listar', async (req, res) => {
-  id_jugador = req.user.id;
+  var id_jugador = req.user.id;
   try {
     const partidasDondeParticipo = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status", [id_jugador,]);
     const partidas = await db.query(queries.queryPartidasPropias + " where p.id_creador=? order by status", [id_jugador,]);
@@ -233,7 +233,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     if (objetivo) {
       dididie = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima = ? order by e.fecha_eliminacion desc limit 1", [id_partida, objetivo.id_jugador]))[0];
     }
-
+    console.log("dididie");
+    console.log(dididie);
     //================ SUPERVIVIENTES ===============
     const supervivientes = partida.filter(function (el) {
       return el.eliminado == 0
@@ -318,7 +319,7 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
       esCreador = true;
     console.log(esCreador);
     //console.log(jugadores);
-    res.render("partidas/edit", { datospartida, objetos, jugadores, partida,esCreador });
+    res.render("partidas/edit", { datospartida, objetos, jugadores, partida, esCreador });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
