@@ -104,7 +104,7 @@ router.get("/:id_partida/edit_object/:id_object", funciones.hasPermission, async
   res.render("objetos/edit_object", { objeto,id_partida });
 });
 // para ver un OBJETO
-router.get("/:id_partida/ver_object/:id_object", funciones.hasPermission, async (req, res) => {
+router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, async (req, res) => {
   const { id_partida,id_object } = req.params;
   const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object,id_partida]))[0];
   res.render("objetos/ver_object", { objeto,id_partida });
