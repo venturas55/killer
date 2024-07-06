@@ -14,59 +14,62 @@
     <div class="row">
         <p> Queda {{tiempoHasta partida.0.fecha_fin}}</p>
         <div class="col-12 mx-auto">
-            <div class="cajita">
-                <h2> {{ partida.0.titulo }} </h2>
-                <p>{{ partida.0.descripcion }}</p>
-                <div class="d-flex flex-row align-items-center justify-content-around">
-                    <div>
-                        <h5>Asesinos</h5>
-                        {{#each jugadores}}
-                        <a href="/jugador/foto/{{this.id}}/{{this.eliminado}}">
-                            <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.usuario}} </p>
-                        </a>
-                        {{/each}}
+            <div class="cajita my-4"> {{!-- //ASESINOS Y ARMAS--}}
+                <h1 class="d-inline"> {{ partida.0.titulo}} </h2> - <h4 class="d-inline"> {{ partida.0.id_partida}}                    </h4>
+                    <p>{{ partida.0.descripcion }}</p>
+                    <div class="d-flex flex-row align-items-center justify-content-around"> {{!-- //ASESINOS Y
+                        OBJETOS--}}
+                        <div>
+                            <h5>Asesinos</h5>
+                            {{#each jugadores}}
+                            <a href="/jugador/foto/{{this.id}}/{{this.eliminado}}">
+                                <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.usuario}} </p>
+                            </a>
+                            {{/each}}
+                        </div>
+                        <div>
+                            <h5>Armas</h5>
+                            {{#each objetos}}
+                            <a href="/objeto/foto/{{this.id}}">
+                                <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p>
+                            </a>
+                            {{/each}}
+                        </div>
                     </div>
-                    <div>
-                        <h5>Armas</h5>
-                        {{#each objetos}}
-                        <a href="/objeto/foto/{{this.id}}">
-                            <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p>
-                        </a>
-                        {{/each}}
+                    <div class="my-4"> {{!-- //SANGUINARIOS--}}
+                        <h5>Asesinos más Sanguinarios</h5>
+                        <img src="/img/imagenes/asesin.png" alt="asesin" class="float-end">
+                        <div class="clearfix">
+                            {{#if top_killers}}
+                            {{#each top_killers}}
+                            <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}}
+                                bajas
+                            </p>
+                            {{/each}}
+                            {{else}}
+                            <p>Todavia no han habido bajas!</p>
+                            {{/if}}
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <h5>Asesinos más Sanguinarios</h5>
-                    <img src="/img/imagenes/asesin.png" alt="asesin" class="float-end">
-                    <div class="clearfix">
-                        {{#if top_killers}}
-                        {{#each top_killers}}
-                        <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}} bajas
-                        </p>
-                        {{/each}}
-                        {{else}}
-                        <p>Todavia no han habido bajas!</p>
-                        {{/if}}
+                    <div class="my-4"> {{!-- //ULTIMA BAJA--}}
+                        <h5>Última baja</h5>
+                        <img src="/img/imagenes/punal.png" alt="asesin" class="float-end">
+                        <div class="clearfix">
+                            {{#if last_kill}}
+                            <p> {{last_kill.asesino_user}} ha matado a {{last_kill.victima_user}} con
+                                {{last_kill.objeto}} a
+                                las
+                                {{formatearSpHora last_kill.fecha_eliminacion}} </p>
+                            {{else}}
+                            <p>Todavia no ha habido bajas!</p>
+                            {{/if}}
+                            h3,h4,h5 {
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <h5>Última baja</h5>
-                    <img src="/img/imagenes/punal.png" alt="asesin" class="float-end">
-                    <div class="clearfix">
-                        {{#if last_kill}}
-                        <p> {{last_kill.asesino_user}} ha matado a {{last_kill.victima_user}} con {{last_kill.objeto}} a
-                            las
-                            {{formatearSpHora last_kill.fecha_eliminacion}} </p>
-                        {{else}}
-                        <p>Todavia no ha habido bajas!</p>
-                        {{/if}}
-                    </div>
-                </div>
             </div>
 
             {{#if dididie}}
             <div class="col-md-12 mx-auto cajita mt-4">
-
                 <p>Estas mortimer</p>
                 {{#if dididie.fecha_eliminacion}}
                 <p> Te mató <strong> {{dididie.asesino_name}} </strong> con
@@ -77,7 +80,9 @@
             </div>
             {{else}}
             {{#when supervivientes.length 'gt' 1}}
-            <a class="btn btn-warning" data-bs-toggle="modal" href="#killModalToggle" role="button">Ver objetivo</a>
+            <div class="col-md-12 mx-auto mt-4">
+                <a class="btn btn-warning" data-bs-toggle="modal" href="#killModalToggle" role="button"> <i class="fa-solid fa-eye"></i> VER MI OBJETIVO</a>
+            </div>
 
             {{/when}}
             {{/if}}

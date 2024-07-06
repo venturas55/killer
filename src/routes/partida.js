@@ -162,7 +162,7 @@ router.get("/listedit", funciones.isAdmin, async (req, res) => {
 router.get('/listar', async (req, res) => {
   id_jugador = req.user.id;
   try {
-    const partidas = await db.query(queries.queryPartidasJugador + " where j.id_jugador=?", [id_jugador,]);
+    const partidas = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status desc", [id_jugador,]);
     console.log(partidas);
     res.render('partidas/listar', { partidas, });
   } catch (error) {
@@ -202,7 +202,10 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     let ganador = false;
     id_jugador = req.user.id;
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
-    console.log(partida);
+    for (let i = 0; i < partida.length; i++){
+      console.log(partida[i].id_jugador);
+
+    }
 
     //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
     const jugadores = partida.map(function (el) {

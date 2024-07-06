@@ -20,19 +20,19 @@
 
             <div class="modal-footer">
                 <button class="btn btn-warning" data-bs-target="#killModalToggle"
-                    data-bs-toggle="modal">Cancelar</button>
-                <button class="btn btn-warning" data-bs-target="#killModalToggle" data-bs-toggle="modal"
-                    data-bs-dismiss="modal">Eliminar</button>
+                    data-bs-toggle="modal">CANCELAR</button>
+                <button class="btn btn-warning" data-bs-target="#killModalToggle2" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">MATARLO</button>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="killModalToggle" data-bs-backdrop="false" aria-hidden="true"
-    aria-labelledby="killModalToggleLabel" tabindex="-1">
+<div class="modal fade" id="killModalToggle2" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="killModalToggleLabel2" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content w-100 cajita">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="killModalToggleLabel">Confirmación</h1>
+                <h1 class="modal-title fs-5" id="killModalToggleLabel2">Confirmación</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -43,7 +43,7 @@
                 <a href="/partidas/{{jugador.id_partida}}/asesinar/{{jugador.id_victima}}"
                     class="btn btn-danger">Eliminar</a>
 
-                <button class="btn btn-warning" data-bs-target="#killModalToggle"
+                <button class="btn btn-warning" data-bs-target="#killModalToggle2"
                     data-bs-toggle="modal">Cancelar</button>
             </div>
         </div>

@@ -60,6 +60,10 @@ a {
   color: whitesmoke;
 }
 
+.cajita h1,h2,h3{
+  color: var(--amarillo);
+}
+
 .fondo {
   color: rgb(163, 166, 185);
   width: 100%;
