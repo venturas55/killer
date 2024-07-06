@@ -1,0 +1,51 @@
+<!-- Modal ASESINAR - ======== modalObjetivo ===== -->
+{{!-- MODAL --}}
+<div class="modal fade" id="killModalToggle" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="killModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="killModalToggleLabel">MI OBJETIVO</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ">
+                <div class="m-1 ">
+                    <p>Tu objetivo es <strong> {{jugador.victima_user}}
+                        </strong>
+                        entregandole en mano <strong>{{jugador.objeto}} </strong>
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-warning" data-bs-target="#killModalToggle"
+                    data-bs-toggle="modal">Cancelar</button>
+                <button class="btn btn-warning" data-bs-target="#killModalToggle" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="killModalToggle" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="killModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="killModalToggleLabel">Confirmación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seguro que has logrado eliminarlo???</p>
+                <p>Le llegará un aviso a la victima, que tendrá que confirmar</p>
+            </div>
+            <div class="modal-footer">
+                <a href="/partidas/{{jugador.id_partida}}/asesinar/{{jugador.id_victima}}"
+                    class="btn btn-danger">Eliminar</a>
+
+                <button class="btn btn-warning" data-bs-target="#killModalToggle"
+                    data-bs-toggle="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
