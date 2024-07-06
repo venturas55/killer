@@ -143,7 +143,6 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
     res.redirect("/error");
   }
 });
-
 //Para mostrar listado de partidas en las que esta incluido el jugador
 router.get("/listedit", funciones.isAdmin, async (req, res) => {
   //TODO: QUE SOLO MUESTRE PARTIDAS EN EDICION
@@ -157,12 +156,11 @@ router.get("/listedit", funciones.isAdmin, async (req, res) => {
     res.redirect("/error");
   }
 });
-
 //Para mostrar listado de partidas en las que esta incluido el jugador
 router.get('/listar', async (req, res) => {
   id_jugador = req.user.id;
   try {
-    const partidas = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status desc", [id_jugador,]);
+    const partidas = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status", [id_jugador,]);
     console.log(partidas);
     res.render('partidas/listar', { partidas, });
   } catch (error) {
@@ -186,7 +184,7 @@ router.get('/inicio', async (req, res) => {
     res.redirect("/error");
   }
 });
-
+ //EN DESUSO TODO:
 router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
   id_jugador = req.user.id;
@@ -195,7 +193,7 @@ router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async 
   //console.log(partida[0]);
   res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
 });
-
+//CARGA LA PANTALLA PRINCIPAL DE UNA PARTIDA
 router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
   try {
@@ -263,6 +261,11 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       return el.eliminado == 0
     });
 
+
+    if (supervivientes.length == 1){
+      await db.query("update partida set status='finalizada' where id_partida=?", [id_partida]);
+    }
+
     //======== Es el propio jugador el ganador???? =====
     //console.log(supervivientes.length + " " + supervivientes[0].id_jugador + " " + req.user.id)
     if (supervivientes.length == 1 && supervivientes[0].id_jugador == req.user.id) {
@@ -276,12 +279,10 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     res.redirect("/error");
   }
 });
-
 //JOIN PARA unirse a una partida
 router.get("/join", funciones.isAuthenticated, async (req, res) => {
   res.render("partidas/join");
 });
-
 router.post("/join", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.body;
   console.log(id_partida + " " + req.user.id);
@@ -434,6 +435,8 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
     res.redirect("/error");
   }
 });
+
+//Ruta para NOTIFICAR la solicitud e un asesinato.
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
   /* TODO: verificar que esta en tiempo */
@@ -450,6 +453,7 @@ router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async
     res.redirect("/error");
   }
 });
+//Ruta para CONFIRMAR la solicitud de un asesinato. ES UNA MUERTE
 router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
   try {
@@ -505,6 +509,7 @@ router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (
     res.redirect("/error");
   }
 });
+//Ruta para RECHAZAR la solicitud de un asesinato.
 router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
   try {

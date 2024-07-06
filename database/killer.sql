@@ -33,7 +33,7 @@ CREATE TABLE `partidas` (
   `fecha_inicio` TIMESTAMP,
   `fecha_fin` TIMESTAMP,
   `id_creador` int(11),
-  `status` enum ('encreacion', 'enpausa', 'enjuego','enedicion') default 'encreacion',
+  `status` enum ('encreacion', 'enpausa', 'enjuego','finalizada') default 'encreacion',
   FOREIGN KEY (id_creador) REFERENCES usuarios(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de info de partidas';
 

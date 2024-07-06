@@ -138,4 +138,11 @@ helpers.enCreacion = (value, options) => {
   return options.inverse(this);
 };
 
+helpers.finalizada = (value, options) => {
+  if (value == "finalizada") {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+};
+
 module.exports = helpers;

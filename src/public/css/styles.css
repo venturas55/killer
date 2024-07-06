@@ -33,6 +33,7 @@ a {
 
 .cajita {
   border: 3px var(--amarillo) solid;
+  color: var(--amarillo);
   padding: 1em;
   border-radius: 10px;
   background: linear-gradient(rgba(56, 65, 73, 0.99), rgba(32, 34, 38, 0.7));
@@ -40,8 +41,8 @@ a {
 }
 
 .cajita_disabled {
-  border: 2px var(--gris) solid;
-  background-color: #000000;
+  border: 2px #656152 solid;
+  /* //background-color: #000000; */
 }
 
 .cajita:hover {

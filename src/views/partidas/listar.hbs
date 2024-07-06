@@ -6,6 +6,7 @@
     <div class="container text-center">
         {{#if partidas}}
         {{#each partidas}}
+
         {{#enJuego this.status}}
         <div class="col-md-8 mx-auto mb-3">
             <a href="/partidas/plantilla/{{../this.id_partida}}">
@@ -31,6 +32,21 @@
             </a>
         </div>
         {{/enCreacion}}
+
+        {{#finalizada this.status}}
+        <div class="col-md-8 mx-auto mb-3">
+            <a href="/partidas/edit/{{../this.id_partida}}">
+                <div class="cajita cajita_disabled">
+                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                    <p>{{../this.descripcion}}</p>
+                    <p>Estuvo activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                    <p>Status: finalizada!</p>
+                </div>
+            </a>
+        </div>
+        {{/finalizada}}
+
+
         {{/each}}
         {{/if}}
 
