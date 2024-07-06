@@ -107,32 +107,32 @@
         </div>
 
     </div>
+
+    {{#if esAdmin}}
     <div class="row my-4"> {{!-- //BOTONES --}}
         <div class="col-md-12 mx-auto">
-             <div class="d-flex flex-column justify-content-around align-items-center">
-                {{#enJuego datospartida.status}}
-                <h2>Partida ya empezada!</h2>
-                <p>No se pueden modificar jugadores ni objetos</p>
-                {{!-- <a href="/partidas/pause/{{datospartida.id}}" class="btn btn-warning"> PAUSAR PARTIDA</a> --}}
-                {{/enJuego}}
-
+            <div class="d-flex flex-column justify-content-around align-items-center">
                 {{#enCreacion datospartida.status}}
                 {{#when ../jugadores.length 'gte' 2 }}
                 {{#when ../objetos.length 'gte' ../jugadores.length }}
-                <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-warning"> <i class="fa-solid fa-play"></i> COMENZAR PARTIDA</a>
+                <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-warning"> <i
+                        class="fa-solid fa-play"></i> COMENZAR PARTIDA</a>
                 {{/when}}
                 {{/when}}
                 {{/enCreacion}}
-                </div>
+            </div>
         </div>
     </div>
 
     <div class="row my-4"> {{!-- //BOTONES --}}
         <div class="col-md-12">
             <div class="d-flex  justify-content-around">
-                <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-style"> <i class="fa-solid fa-pen"></i>Editar datos partida</a>
-                   <a href="/partidas/delete/{{datospartida.id}}" class="btn btn-style"><i class="fa-solid fa-trash"></i>Eliminar partida</a>
+                <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-style"> <i
+                        class="fa-solid fa-pen"></i>Editar datos partida</a>
+                <a href="/partidas/delete/{{datospartida.id}}" class="btn btn-style"><i
+                        class="fa-solid fa-trash"></i>Eliminar partida</a>
             </div>
         </div>
     </div>
+    {{/if}}
 </div>

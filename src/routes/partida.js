@@ -185,7 +185,7 @@ router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async 
 //CARGA LA PANTALLA PRINCIPAL DE UNA PARTIDA
 router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
-  
+
   try {
     let ganador = false;
     id_jugador = req.user.id;
@@ -222,7 +222,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       return el.id_jugador === req.user.id
     })[0];
     //console.log(objetivo);
-   
+
 
     //===== TICKET =================
     const ticket = partida.filter(function (el) {
@@ -243,8 +243,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const last_kill = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
 
     //============= DIE ========
-    var dididie ;
-    if(objetivo){
+    var dididie;
+    if (objetivo) {
       dididie = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima = ? order by e.fecha_eliminacion desc limit 1", [id_partida, objetivo.id_jugador]))[0];
     }
 
@@ -319,15 +319,19 @@ router.post("/join", funciones.isAuthenticated, async (req, res) => {
 router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
   console.log(id_partida);
+  var esCreador = false;
   try {
     const datospartida = (await db.query("select * from partidas WHERE id=?", [id_partida,]))[0];
     const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
     const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_partida,]);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
-    console.log(datospartida);
+
+    console.log(datospartida.id_creador + " " + req.user.id);
+    if (datospartida.id_partida == req.user.id)
+      esCreador = true;
     //console.log(objetos);
     //console.log(jugadores);
-    res.render("partidas/edit", { datospartida, objetos, jugadores, partida });
+    res.render("partidas/edit", { datospartida, objetos, jugadores, partida,esCreador });
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
