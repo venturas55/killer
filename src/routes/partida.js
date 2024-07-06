@@ -96,38 +96,19 @@ router.post("/:id_partida/add_player", funciones.hasPermission, async (req, res)
 
 router.get("/:id_partida/add_object", funciones.hasPermission, (req, res) => {
   const { id_partida } = req.params;
-  res.render("partidas/add_object", { id_partida });
+  res.render("objetos/add_object", { id_partida });
 });
 router.get("/:id_partida/edit_object/:id_object", funciones.hasPermission, async (req, res) => {
   const { id_partida,id_object } = req.params;
   const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object,id_partida]))[0];
-  res.render("partidas/edit_object", { objeto,id_partida });
+  res.render("objetos/edit_object", { objeto,id_partida });
 });
-/* SE MUEVE A fotos.js por subir tambien foto del objeto
- router.post("/:id_partida/add_object", funciones.hasPermission, async (req, res) => {
-  const { id_partida } = req.params;
-  try {
-    const {
-      nombre,
-      descripcion,
-      imagen,
-    } = req.body;
-    const item_1 = {
-      nombre,
-      descripcion,
-      pictureURL: imagen,
-      id_partida,
-
-    };
-    const a = await db.query("INSERT INTO objetos set ?", [item_1]);
-    req.flash("success", "Objeto insertado correctamente");
-    res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
-  } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/error");
-  }
-}); */
+// para ver un OBJETO
+router.get("/:id_partida/ver_object/:id_object", funciones.hasPermission, async (req, res) => {
+  const { id_partida,id_object } = req.params;
+  const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object,id_partida]))[0];
+  res.render("objetos/ver_object", { objeto,id_partida });
+});
 
 //READ
 //Para mostrar listado de partidas para el admin

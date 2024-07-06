@@ -1,0 +1,21 @@
+{{>logo}}
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="card-body">
+                <h2>DETALLES DEL OBJETO - {{objeto.id}}</h2>
+                <div class="d-flex flex-column justify-content-around align-items-center">
+                    <h2> {{objeto.nombre}}</h2>
+                    <hr>
+                    {{#if this.pictureURL}}
+                    <img src="/img/imagenes/{{objeto.pictureURL}}" class="w-100 m-2" alt="No carga foto" />
+                    {{else}}
+                    <img src="/img/objeto.png" class="w-100 m-2" alt="No hay foto" />
+                    {{/if}}
+                    <hr>
+                    <p>{{objeto.descripcion}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

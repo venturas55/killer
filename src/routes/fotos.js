@@ -185,7 +185,6 @@ router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadF
             descripcion,
             pictureURL,
             id_partida,
-
         };
         const a = await db.query("INSERT INTO objetos set ?", [item_1]);
         req.flash("success", "Objeto insertado correctamente");
@@ -210,19 +209,13 @@ router.post("/partidas/:id_partida/edit_object/:id_object", funciones.hasPermiss
             descripcion,
             pictureURL,
             id_partida,
-
         };
         const a = await db.query("UPDATE objetos set ? where id=?", [item_1,id_object]);
-
-
         res.redirect("/partidas/edit/"+id_partida);
-
-        //res.render("partidas/edit_object", {objeto,id_partida}); //te redirige una vez insertado el item */
     } catch (error) {
         console.error(error.code);
         req.flash("error", "Hubo algun error");
         res.redirect("/error");
-
     }
 });
 
@@ -232,8 +225,5 @@ router.get("/objeto/foto/:id_objeto", async (req, res) => {
 
     res.render("fotos/fotoobjeto", { objeto, });
 });
-
-
-
 
 module.exports = router;

@@ -74,15 +74,16 @@
                 <div>
                     {{#each objetos}}
                     <tr>
-                        <td class="d-none d-xl-table-cell">{{id}}</td>
+                        <td class="d-none d-xl-table-cell">{{this.id}}</td>
                         <td>{{this.nombre}}</td>
                         <td class="d-none d-xl-table-cell">{{this.descripcion}} </td>
                         {{#if this.pictureURL}}
-                        <td> <img src="/img/imagenes/{{this.pictureURL}}" class="avatar avatar-xs m-2"
-                                alt="avatar {{this.pictureURL}}'" /></td>
+                        <td> <a href="/partidas/{{../datospartida.id}}/ver_object/{{this.id}}"><img src="/img/imagenes/{{this.pictureURL}}" class="avatar avatar-xs m-2"
+                                alt="avatar {{this.pictureURL}}'" /></a> </td>
                         {{else}}
-                        <td> <img src="/img/objeto.png" class="avatar avatar-xs m-2"
-                                alt="avatar {{this.pictureURL}}'" /></td>
+                        <td> <a href="/partidas/{{../datospartida.id}}/ver_object/{{this.id}}"> <img
+                                    src="/img/objeto.png" class="avatar avatar-xs m-2"
+                                    alt="avatar {{this.pictureURL}}'" /></a></td>
                         {{/if}}
                         {{#if ../esCreador}} <td>
                             <a href="/partidas/{{this.id_partida}}/edit_object/{{this.id}}" class="text-warning"><i
