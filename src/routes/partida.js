@@ -143,20 +143,8 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
     res.redirect("/error");
   }
 });
-//Para mostrar listado de partidas en las que esta incluido el jugador
-router.get("/listedit", funciones.isAdmin, async (req, res) => {
-  //TODO: QUE SOLO MUESTRE PARTIDAS EN EDICION
-  try {
-    const partidas = await db.query(queries.queryPartidas,);
-    console.log(partidas);
-    res.render("partidas/listedit", { partidas });
-  } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/error");
-  }
-});
-//Para mostrar listado de partidas en las que esta incluido el jugador
+
+//Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
 router.get('/listar', async (req, res) => {
   id_jugador = req.user.id;
   try {
