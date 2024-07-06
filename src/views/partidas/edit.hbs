@@ -17,7 +17,7 @@
                         <th>Usuario</th>
                         <th class="d-none d-xl-table-cell">Nombre</th>
                         <th>Imagen</th>
-                        {{#if esCreador}}  <th>Options</th> {{/if}}
+                        {{#if esCreador}} <th>Options</th> {{/if}}
                     </tr>
                     {{#each jugadores}}
                     <tr>
@@ -31,7 +31,7 @@
                         <td> <img src="/img/profiles/default.jpg" class="avatar avatar-xs m-2"
                                 alt="avatar {{this.pictureURL}}'" /></td>
                         {{/if}}
-                     {{#if ../esCreador}}     <td>
+                        {{#if ../esCreador}} <td>
                             <a href="/partidas/{{this.id_partida}}/deleteplayer/{{this.id_jugador}}"
                                 class="text-warning"><i class="fa-solid fa-trash"></i>Del</a>
                         </td> {{/if}}
@@ -47,10 +47,11 @@
                     </div>
                 </div>
                 {{/if}}
-
+                {{#if esCreador}}
                 <div class="text-center m-2">
                     <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-warning"> Añadir jugador</a>
                 </div>
+                {{/if}}
             </div>
         </div>
     </div>
@@ -67,7 +68,7 @@
                             <th>Nombre</th>
                             <th class="d-none d-xl-table-cell">Descripcion</th>
                             <th>Imagen</th>
-                            {{#if esCreador}}  <th>Options</th> {{/if}}
+                            {{#if esCreador}} <th>Options</th> {{/if}}
                         </tr>
                 </div>
                 <div>
@@ -83,8 +84,8 @@
                         <td> <img src="/img/objeto.png" class="avatar avatar-xs m-2"
                                 alt="avatar {{this.pictureURL}}'" /></td>
                         {{/if}}
-                       {{#if ../esCreador}}    <td>
-                          <a href="/partidas/{{this.id_partida}}/edit_object/{{this.id}}" class="text-warning"><i
+                        {{#if ../esCreador}} <td>
+                            <a href="/partidas/{{this.id_partida}}/edit_object/{{this.id}}" class="text-warning"><i
                                     class="fa-solid fa-pencil"></i>Edit</a>
                             <a href="/partidas/{{this.id_partida}}/deleteobject/{{this.id}}" class="text-warning"><i
                                     class="fa-solid fa-trash"></i>Del</a>
@@ -101,9 +102,11 @@
                         </div>
                     </div>
                     {{/if}}
+                    {{#if esCreador}}
                     <div class="text-center m-2">
                         <a href="/partidas/{{datospartida.id}}/add_object" class="btn btn-warning"> Añadir objeto</a>
                     </div>
+                    {{/if}}
                 </div>
             </div>
         </div>
