@@ -27,7 +27,8 @@ document.addEventListener('input', e => {
 
 
 /* PARA QUE FUNCIONE EL BOTON DE DONACIONES */
-document.getElementById('donate-button').addEventListener('click', async () => {
+//PARA IR AL PAGO 
+/* document.getElementById('donate-button').addEventListener('click', async () => {
   console.log("click");
   const response = await fetch('/payment/create-checkout-session', {
       method: 'POST',
@@ -37,5 +38,16 @@ document.getElementById('donate-button').addEventListener('click', async () => {
   });
   const data = await response.json();
   window.location.href = data.url;
-});
+}); */
+
+
+document.getElementById('input_amount_other').addEventListener('click', async () => {
+  var importe = document.getElementById('input_amount_other_box').value;
+  document.getElementById('input_amount_other').value=importe;
+}); 
+document.getElementById('input_amount_other_box').addEventListener('click', async () => {
+  var importe = document.getElementById('input_amount_other_box').value;
+  document.getElementById('input_amount_other').value=importe;
+}); 
+
 /* FIN PARA QUE FUNCIONE EL BOTON DE DONACIONES */
