@@ -12,14 +12,14 @@ const stripe = new Stripe(process.env.STRIPE_PRIV || 'PRIVATE KEY');
 
 
 router.post('/payment/create-checkout-session', async (req, res) => {
-    console.log("Voy a pagaaaar");
+    console.log(req.user);
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [{
             price_data: {
                 currency: 'eur',
                 product_data: {
-                    name: 'Donativo de ' + req.user.full_name,
+                    name: 'Donatativo por usar Killer',
                 },
                 unit_amount: 100, // Cantidad en céntimos (1€ = 100 céntimos)
             },

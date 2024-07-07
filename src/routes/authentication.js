@@ -1,6 +1,7 @@
 const express = require('express');
 const { Passport } = require('passport');
 const router = express.Router();
+const nodemailer = require('nodemailer');
 const passport = require('passport');
 const db = require("../database"); //db hace referencia a la BBDD
 const funciones = require('../lib/funciones');
@@ -48,10 +49,8 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
     if (rows.length > 0) {
         var user = rows[0];
         const user_id = user.id;
-
-
-        var token = helpers.getCode();
-        const hash = await helpers.encryptPass(token);
+        var token = funciones.getCode();
+        const hash = await funciones.encryptPass(token);
         //console.log(hash);
         var hasAnyToken = await db.query("SELECT * FROM tokens WHERE user_id=?", [user_id]);
         if (hasAnyToken.length > 0) {
@@ -60,9 +59,7 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
             rows = await db.query("INSERT INTO tokens (user_id,hashedtoken, expires) VALUES (?,?, NOW()+ interval 5 minute)", [user_id, hash]);
         }
 
-        //var exito = await helpers.sendRecoveryMail(email,token); NOFUNCIONA 
-        //console.log(email + " " + token);
-        //console.log(process.env.EMAIL_ACCOUNT + " " + process.env.EMAIL_PASS);
+     
         const transporter = nodemailer.createTransport({
             service: 'ovh',
             host: "smtp.mail.ovh.net",
@@ -76,10 +73,10 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
         });
 
         var mailOptions = {
-            from: "BBDD SAN",
+            from: "KILLER admin",
             to: email,
-            subject: 'Restablecer contraseña BBDD SAN',
-            text: 'Has olvidado tu contraseña. Haz click en el siguiente vinculo http://localhost:5001/profile/email/verifypass/' + user_id + '/' + token + " para reestablecer una nueva contraseña.",
+            subject: 'Restablecer contraseña KILLER',
+            text: 'Has olvidado tu contraseña. Haz click en el siguiente vinculo http://killer.adriandeharo.es/profile/email/verifypass/' + user_id + '/' + token + " para reestablecer una nueva contraseña.",
         };
         //console.log(mailOptions);
 
@@ -107,11 +104,10 @@ router.get('/profile/email/verifypass/:user_id/:code', async (req, res) => {
     await db.query("DELETE FROM tokens WHERE expires < NOW()");
     var [token] = await db.query("SELECT * FROM tokens WHERE user_id=? ", [user_id]);
     console.log(token);
-    //  localhost:5001/profile/email/verifypass/1/1ZEFGJ      hashedtoken
-    //console.log(code + " == " + token.hashedtoken);
+   
     if (token) {
 
-        const validToken = await helpers.verifyPassword(code, token.hashedtoken)
+        const validToken = await funciones.verifyPassword(code, token.hashedtoken)
         console.log(validToken);
         if (validToken) {
             req.flash("success", "Token proporcionado correcto");
@@ -133,7 +129,7 @@ router.get('/profile/recoverysetpass/:id', async (req, res) => {
 router.post('/profile/recoverysetpass', async (req, res) => {
     const { password, id } = req.body;
     //console.log(password + " "+ id);
-    var encryptedPass = await helpers.encryptPass(password);
+    var encryptedPass = await funciones.encryptPass(password);
     const result = await db.query("UPDATE usuarios set contrasena=? where id=?", [encryptedPass, id]);
     req.flash("success", "Contraseña actualizada correctamente");
     res.redirect("/");
