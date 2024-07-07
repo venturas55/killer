@@ -10,25 +10,26 @@
             <a href="/img/imagenes/{{jugador.imagenAlive}}" target="_blank">
                 <img src="/img/imagenes/{{jugador.imagenAlive}}" id="frame1" class="card-img-top"
                     alt="avatar foto vivo" />
-                {{else}}
-                <a href="img/profiles/default.jpg" target="_blank">
-                    <img src="/img/profiles/default.jpg" id="frame1" class="card-img-top" alt="default avatar" />
-                    {{/if}}
-                </a>
-                <div class="card-body text-center">
-                    <form class="mt-2 mb-4" action="/jugador/upload" method="POST" enctype="multipart/form-data">
-                        <div class="input-group mb-3">
-                            <input type="hidden" name="tipo" value="alive" />
-                            <input type="file" name="imagen" class="form-control" id="inputGroupFile02"
-                                onchange="preview1()">
-                        </div>
-                        <button type="submit" class="input-group-text btn btn-warning"
-                            onclick="clearImage1()">Guardar</button>
-                    </form>
-                    <div>
-                        <a href="/jugador/foto/delete/alive" class="btn btn-danger btn-block"> BORRAR</a>
+            </a>
+            {{else}}
+            <a href="img/profiles/default.jpg" target="_blank">
+                <img src="/img/profiles/default.jpg" id="frame1" class="card-img-top" alt="default avatar" />
+                {{/if}}
+            </a>
+            <div class="card-body text-center">
+                <form class="mt-2 mb-4" action="/jugador/upload" method="POST" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                        <input type="hidden" name="tipo" value="alive" />
+                        <input type="file" name="imagen" class="form-control" id="inputGroupFile02"
+                            onchange="preview1()">
                     </div>
+                    <button type="submit" class="input-group-text btn btn-warning"
+                        onclick="clearImage1()">Guardar</button>
+                </form>
+                <div>
+                    <a href="/jugador/foto/delete/alive" class="btn btn-danger btn-block"> BORRAR</a>
                 </div>
+            </div>
         </div>
 
         {{!-- FOTO MUERTO --}}
@@ -38,27 +39,28 @@
             <a href="/img/imagenes/{{jugador.imagenDead}}" target="_blank">
                 <img id="frame2" src="/img/imagenes/{{jugador.imagenDead}}" class="card-img-top"
                     alt="avatar foto vivo" />
-                {{else}}
-                <a href="/img/imagenes/{default.jpg" target="_blank">
-                    <img id="frame2" src="/img/profiles/default.jpg" class="card-img-top" alt="default avatar" />
-                    {{/if}}
-                </a>
-                <div class="card-body text-center">
-                    <form class="mt-2 mb-4" action="/jugador/upload" method="POST" enctype="multipart/form-data">
-                        <div class="input-group mb-3">
-                            <input type="hidden" name="tipo" value="dead" />
-                            <input type="file" name="imagen" class="form-control" id="inputGroupFile02"
-                                onchange="preview2()">
-                        </div>
-                        <button type="submit" class="input-group-text btn btn-warning"
-                            onclick="clearImage2()">Guardar</button>
-                    </form>
-                    <div>
-                        <a href="/jugador/foto/delete/dead" class="btn btn-danger btn-block"> BORRAR</a>
-
+            </a>
+            {{else}}
+            <a href="/img/imagenes/default.jpg" target="_blank">
+                <img id="frame2" src="/img/profiles/default.jpg" class="card-img-top" alt="default avatar" />
+                {{/if}}
+            </a>
+            <div class="card-body text-center">
+                <form class="mt-2 mb-4" action="/jugador/upload" method="POST" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                        <input type="hidden" name="tipo" value="dead" />
+                        <input type="file" name="imagen" class="form-control" id="inputGroupFile02"
+                            onchange="preview2()">
                     </div>
+                    <button type="submit" class="input-group-text btn btn-warning"
+                        onclick="clearImage2()">Guardar</button>
+                </form>
+                <div>
+                    <a href="/jugador/foto/delete/dead" class="btn btn-danger btn-block"> BORRAR</a>
 
                 </div>
+
+            </div>
         </div>
         <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
     </div>
