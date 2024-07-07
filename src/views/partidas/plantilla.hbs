@@ -16,7 +16,8 @@
         <p> Queda {{tiempoHasta ../partida.0.fecha_fin}}</p>
         {{/when}}
         {{#when supervivientes.length 'lte' 1}}
-        <p> Acabó el {{formatearSpHora ../last_kill.fecha_eliminacion}} previsto el {{formatearSpHora ../partida.0.fecha_fin}}  </p>
+        <p> Acabó el {{formatearSpHora ../last_kill.fecha_eliminacion}} previsto el {{formatearSpHora
+            ../partida.0.fecha_fin}} </p>
         {{/when}}
 
         <div class="col-12 mx-auto">
@@ -90,12 +91,12 @@
             {{else}}
             {{#when supervivientes.length 'gt' 1}}
 
-          {{!--   {{#if objetivo}} --}}
+            {{!-- {{#if objetivo}} --}}
             <div class="col-md-12 mx-auto mt-4">
                 <a class="btn btn-warning" data-bs-toggle="modal" href="#killModalToggle" role="button"> <i
                         class="fa-solid fa-eye"></i> VER MI OBJETIVO</a>
             </div>
-   {{!--          {{else}}
+            {{!-- {{else}}
             <div class="col-md-12 mx-auto mt-4">
                 <p> Eres administrador de la partida, pero no participas en ella</p>
             </div>
@@ -123,6 +124,9 @@
             {{/when}}
         </div>
     </div>
+{{!--     <a href="/partidas/plantillaindividual/{{ partida.0.id_partida}}">
+        <button class="btn btn-style">VER ASESINOS</button>
+    </a> --}}
 </div>
 
 

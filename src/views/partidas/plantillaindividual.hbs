@@ -4,7 +4,7 @@
             <h1>Datos de la partida {{ partidita.titulo }} - {{ partidita.descripcion }}</h1>
             <div class="card">
                 <div>
-                    <h2> Jugadores</h2>
+                    <h2 class="text-center"> Listado de Jugadores</h2>
                     {{#if partida}}
                     <table class="listado">
                         <tr>
@@ -19,29 +19,17 @@
                         </tr>
                         {{#each partida}}
                         <tr>
-                            <td>{{this.id_jugador}} - {{this.jugador_user}} - {{this.jugador_name}}</td>
-                            <td>{{this.id_victima}} - {{this.victima_user}} - {{this.victima_name}}</td>
+                            <td>{{this.id_jugador}} - {{this.jugador_user}} </td>
+                            <td>{{this.id_victima}} - {{this.victima_user}} </td>
                             <td>{{this.objeto}} - {{this.descripcion_objeto}}</td>
                             <td>{{this.ticket}}</td>
                             <td>{{this.victima_killed}}</td>
-                            <td>{{this.fecha_asesinato}}</td>
-                            <td>
-                                {{!-- <a href="/partidas/{{../partida.id}}/deleteplayer/{{this.id_jugador}}"
-                                    class="text-primary"><i class="fa-solid fa-trash"></i>Del</a> --}}
-                            </td>
+                            <td>{{ formatearSpHora this.fecha_asesinato}}</td>
+                            <td>{{this.asesinatos}}</td>
                         </tr>
-
                         {{/each}}
                     </table>
-                    {{else}}
-                    <div class="col-md-4-mx-auto">
-                        <div class="card card-body text-center">
-                            <tr>No hay jugadores guardados <a href="/partidas/{{id}}/add_player"> Crea uno!</a></tr>
-                        </div>
-                    </div>
                     {{/if}}
-
-
                 </div>
             </div>
         </div>

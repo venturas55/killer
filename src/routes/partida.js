@@ -163,8 +163,8 @@ router.get('/inicio', async (req, res) => {
 router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
   id_jugador = req.user.id;
-  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
-  //console.log(partida);
+  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
+  console.log(partida);
   //console.log(partida[0]);
   res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
 });

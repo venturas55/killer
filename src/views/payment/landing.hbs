@@ -1,79 +1,81 @@
 <form method="POST" name="donateForm" action="/payment/create-checkout-session">
-        <div id="actual-form" style="display: block;">
-            <input type="hidden" name="currency_code" value="EUR">
-            <div id="radiobuttons-table-header" class="text-center mt-2">
-                <h2>Importe de la donación (EUR)</h2>
-            </div>
-            <fieldset class="frequency-options">
-                <ul>
-                    <li>
-                        <input type="radio" name="frequency" id="frequency_onetime" value="payment"
-                            onclick="donationForm.toggleMonthly(false);" checked="" class="btn-check">
-                        <label class="btn btn-outline-warning" for="frequency_onetime">Una sola vez</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="frequency" id="frequency_monthly" value="subscription"
-                            onclick="donationForm.toggleMonthly(true);" class="btn-check">
-                        <label class="btn btn-outline-warning" for="frequency_monthly">Mensual</label>
-                    </li>
-                </ul>
-            </fieldset>
-            <fieldset class="amount-options">
-                <legend class="sr-only">
-                    Importe de la donación (EUR)
-                </legend>
-                <ul>
-                    <li class="radiobuttons-cell input_amount_0">
-                        <input type="radio" name="amount" id="input_amount_0" value="2" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_0">2 €</label>
-                    </li>
-                    <li class="radiobuttons-cell input_amount_1">
-                        <input type="radio" name="amount" id="input_amount_1" value="5" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_1">5 €</label>
-                    </li>
-                    <li class="radiobuttons-cell input_amount_2">
-                        <input type="radio" name="amount" id="input_amount_2" value="10" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_2">10 €</label>
-                    </li>
-                    <li class="radiobuttons-cell input_amount_3">
-                        <input type="radio" name="amount" id="input_amount_3" value="20" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_3">20 €</label>
-                    </li>
-                    <li class="radiobuttons-cell input_amount_4">
-                        <input type="radio" name="amount" id="input_amount_4" value="30" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_4">30 €</label>
-                    </li>
-                    <li class="radiobuttons-cell input_amount_5">
-                        <input type="radio" name="amount" id="input_amount_5" value="50" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_5">50 €</label>
-                    </li>
-                    <li class="radiobuttons-cell input_amount_6">
-                        <input type="radio" name="amount" id="input_amount_6" value="100" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_6">100 €</label>
-                    </li>
-                    <li class="radiobuttons-cell input_amount_other">
-                        <input type="radio" name="amount" id="input_amount_other" value="200"
-                            onclick="document.getElementById('input_amount_other_box').focus();" class="btn-check">
-                        <label class="btn btn-outline-warning" for="input_amount_other">
-                            <span>Otro</span>
-                            <span class="input-euro right">
-                                <input id="input_amount_other_box" type="number" size="4" value="200">
-                            </span>
-                        </label>
-                    </li>
-                </ul>
-
-                <div class="cajita m-4">
-                    <input type="checkbox" class="lp-checkbox" id="ptf-checkbox" value="false" name="taxes">
-                    <span for="ptf-checkbox">
-                        Generosamente, acepto añadir <span id="gastos">X</span> € a la donación para cubrir los gastos
-                        bancarios
-                        y que Wikimedia reciba el 100&nbsp;% de mi donación.</span>
-                </div>
-            </fieldset>
+    <div id="actual-form" style="display: block;">
+        <input type="hidden" name="currency_code" value="EUR">
+        <div id="radiobuttons-table-header" class="text-center mt-2">
+            <h2>Importe de la donación (EUR)</h2>
         </div>
+        <fieldset class="frequency-options">
+            <ul>
+                <li>
+                    <input type="radio" name="frequency" id="frequency_onetime" value="payment"
+                        onclick="donationForm.toggleMonthly(false);" checked="" class="btn-check">
+                    <label class="btn btn-outline-warning" for="frequency_onetime">Una sola vez</label>
+                </li>
+                <li>
+                    <input type="radio" name="frequency" id="frequency_monthly" value="subscription"
+                        onclick="donationForm.toggleMonthly(true);" class="btn-check">
+                    <label class="btn btn-outline-warning" for="frequency_monthly">Mensual</label>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset class="amount-options">
+            <legend class="sr-only">
+                Importe de la donación (EUR)
+            </legend>
+            <ul>
+                <li class="radiobuttons-cell input_amount_0">
+                    <input type="radio" name="amount" id="input_amount_0" value="2" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_0">2 €</label>
+                </li>
+                <li class="radiobuttons-cell input_amount_1">
+                    <input type="radio" name="amount" id="input_amount_1" value="5" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_1">5 €</label>
+                </li>
+                <li class="radiobuttons-cell input_amount_2">
+                    <input type="radio" name="amount" id="input_amount_2" value="10" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_2">10 €</label>
+                </li>
+                <li class="radiobuttons-cell input_amount_3">
+                    <input type="radio" name="amount" id="input_amount_3" value="20" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_3">20 €</label>
+                </li>
+                <li class="radiobuttons-cell input_amount_4">
+                    <input type="radio" name="amount" id="input_amount_4" value="30" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_4">30 €</label>
+                </li>
+                <li class="radiobuttons-cell input_amount_5">
+                    <input type="radio" name="amount" id="input_amount_5" value="50" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_5">50 €</label>
+                </li>
+                <li class="radiobuttons-cell input_amount_6">
+                    <input type="radio" name="amount" id="input_amount_6" value="100" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_6">100 €</label>
+                </li>
+                <li class="radiobuttons-cell input_amount_other">
+                    <input type="radio" name="amount" id="input_amount_other" value="200"
+                        onclick="document.getElementById('input_amount_other_box').focus();" class="btn-check">
+                    <label class="btn btn-outline-warning" for="input_amount_other">
+                        <span>Otro</span>
+                        <span class="input-euro right">
+                            <input id="input_amount_other_box" type="number" size="4" value="200">
+                        </span>
+                    </label>
+                </li>
+            </ul>
+
+            <div class="cajita m-4">
+                <input type="checkbox" class="lp-checkbox" id="ptf-checkbox" value="false" name="taxes">
+                <span for="ptf-checkbox">
+                    Generosamente, acepto añadir <span id="gastos">X</span> € a la donación para cubrir los gastos
+                    bancarios
+                    y que Wikimedia reciba el 100&nbsp;% de mi donación.</span>
+            </div>
+        </fieldset>
+    </div>
     <div class="text-center">
-        <button id="boton-donar" class="btn btn-primary"><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> HACER DONACION <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span></button>
+        <button id="boton-donar" class="btn btn-primary"><span class="spinner-grow spinner-grow-sm" role="status"
+                aria-hidden="true"></span> HACER DONACION <span class="spinner-grow spinner-grow-sm" role="status"
+                aria-hidden="true"></span></button>
     </div>
 </form>
 
@@ -130,8 +132,12 @@
     }
 
     li label {
+        display: inline-block;
+
         width: 100%;
         height: 100%;
+        line-height: 150%;
+        font-size: .85em;
     }
 
     #input_amount_other_box {
