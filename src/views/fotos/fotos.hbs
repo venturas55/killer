@@ -14,8 +14,9 @@
             {{else}}
             <a href="img/profiles/default.jpg" target="_blank">
                 <img src="/img/profiles/default.jpg" id="frame1" class="card-img-top" alt="default avatar" />
-                {{/if}}
             </a>
+            {{/if}}
+
             <div class="card-body text-center">
                 <form class="mt-2 mb-4" action="/jugador/upload" method="POST" enctype="multipart/form-data">
                     <div class="input-group mb-3">
@@ -27,7 +28,7 @@
                         onclick="clearImage1()">Guardar</button>
                 </form>
                 <div>
-                    <a href="/jugador/foto/delete/alive" class="btn btn-danger btn-block"> BORRAR</a>
+                    <a href="/jugador/fotos/delete/alive" class="btn btn-danger btn-block"> BORRAR</a>
                 </div>
             </div>
         </div>
@@ -38,13 +39,14 @@
             {{#if jugador.imagenDead}}
             <a href="/img/imagenes/{{jugador.imagenDead}}" target="_blank">
                 <img id="frame2" src="/img/imagenes/{{jugador.imagenDead}}" class="card-img-top"
-                    alt="avatar foto vivo" />
+                    alt="avatar foto muerto" />
             </a>
             {{else}}
             <a href="/img/imagenes/default.jpg" target="_blank">
                 <img id="frame2" src="/img/profiles/default.jpg" class="card-img-top" alt="default avatar" />
-                {{/if}}
+
             </a>
+            {{/if}}
             <div class="card-body text-center">
                 <form class="mt-2 mb-4" action="/jugador/upload" method="POST" enctype="multipart/form-data">
                     <div class="input-group mb-3">
@@ -56,7 +58,7 @@
                         onclick="clearImage2()">Guardar</button>
                 </form>
                 <div>
-                    <a href="/jugador/foto/delete/dead" class="btn btn-danger btn-block"> BORRAR</a>
+                    <a href="/jugador/fotos/delete/dead" class="btn btn-danger btn-block"> BORRAR</a>
 
                 </div>
 
