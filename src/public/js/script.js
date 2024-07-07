@@ -28,7 +28,7 @@ document.addEventListener('input', e => {
 
 /* PARA QUE FUNCIONE EL BOTON DE DONACIONES */
 //PARA IR AL PAGO 
-/* document.getElementById('donate-button').addEventListener('click', async () => {
+/* document.getElementById('boton-donar').addEventListener('click', async () => {
   console.log("click");
   const response = await fetch('/payment/create-checkout-session', {
       method: 'POST',

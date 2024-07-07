@@ -43,10 +43,10 @@ a {
 .cajita_disabled {
   color: whitesmoke;
   border: 2px #656152 solid;
-  background: linear-gradient(rgba(190, 194, 198, 0.99), rgba(140, 142, 145, 0.7)); 
+  background: linear-gradient(rgba(190, 194, 198, 0.99), rgba(140, 142, 145, 0.7));
 }
 
-.cajita_disabled h3{
+.cajita_disabled h3 {
   color: whitesmoke;
 }
 
@@ -66,7 +66,9 @@ a {
   color: whitesmoke;
 }
 
-.cajita h1,h2,h3{
+.cajita h1,
+h2,
+h3 {
   color: var(--amarillo);
 }
 
@@ -208,7 +210,7 @@ a {
 }
 
 .btn-style {
-  display:flex;
+  display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
@@ -224,7 +226,7 @@ a {
   font-weight: 100;
 }
 
-.btn-style>:first-child{
+.btn-style>:first-child {
   transform: scaleX(-1);
 }
 
@@ -263,15 +265,16 @@ a {
 
 .donate-button-container {
   position: fixed;
-	bottom: 3rem;
-	right: 1rem;
-	
-	margin: 10px;
-    z-index: 10;
-  pointer-events: none; /* Allow clicking through the container */
+  bottom: 3rem;
+  right: 1rem;
+
+  margin: 10px;
+  z-index: 10;
+  pointer-events: none;
+  /* Allow clicking through the container */
 }
 
-.donate-button-container img{
+.donate-button-container img {
   height: 50px;
 }
 
@@ -285,7 +288,8 @@ a {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  pointer-events: auto; /* Enable clicking on the button */
+  pointer-events: auto;
+  /* Enable clicking on the button */
 }
 
 #donate-button:hover {
@@ -298,19 +302,19 @@ a {
   transform: translateY(0);
 }
 
-.alert-flash{
-  z-index:100;
+.alert-flash {
+  z-index: 100;
 }
 
 #floating-wa {
-	position: fixed;
-	bottom: 0.4rem;
-	right: 0.4rem;
-	margin: 10px;
+  position: fixed;
+  bottom: 0.4rem;
+  right: 0.4rem;
+  margin: 10px;
   z-index: 10;
 }
 
-#floating-wa img{
-	height:5rem;
-	width:10rem;
+#floating-wa img {
+  height: 5rem;
+  width: 10rem;
 }

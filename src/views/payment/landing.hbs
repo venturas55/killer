@@ -1,9 +1,8 @@
 <form method="POST" name="donateForm" action="/payment/create-checkout-session">
-    <div id="donate-form-wrapper">
         <div id="actual-form" style="display: block;">
             <input type="hidden" name="currency_code" value="EUR">
-            <div id="radiobuttons-table-header">
-                Importe de la donación (EUR)
+            <div id="radiobuttons-table-header" class="text-center mt-2">
+                <h2>Importe de la donación (EUR)</h2>
             </div>
             <fieldset class="frequency-options">
                 <ul>
@@ -58,39 +57,37 @@
                         <label class="btn btn-outline-warning" for="input_amount_other">
                             <span>Otro</span>
                             <span class="input-euro right">
-                                <input id="input_amount_other_box" type="number" size="4"
-                                    value="200">
+                                <input id="input_amount_other_box" type="number" size="4" value="200">
                             </span>
                         </label>
                     </li>
                 </ul>
 
-                <div class="lp-checkbox-wrapper">
+                <div class="cajita m-4">
                     <input type="checkbox" class="lp-checkbox" id="ptf-checkbox" value="false" name="taxes">
-                    <label class="lp-checkbox-label" for="ptf-checkbox">
+                    <span for="ptf-checkbox">
                         Generosamente, acepto añadir <span id="gastos">X</span> € a la donación para cubrir los gastos
                         bancarios
-                        y que Wikimedia reciba el 100&nbsp;% de mi donación.</label>
+                        y que Wikimedia reciba el 100&nbsp;% de mi donación.</span>
                 </div>
             </fieldset>
-
         </div>
-    </div>
     <div class="text-center">
-        <button id="donate-button" class="btn btn-primary">HACER DONACION</button>
+        <button id="boton-donar" class="btn btn-primary"><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> HACER DONACION <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span></button>
     </div>
 </form>
 
-<div id="infobox-wrapper" role="complementary">
+<div id="infobox-wrapper" class="cajita m-4">
 
     <h2>¿Para qué usamos tus donaciones?</h2>
-
+    <hr>
     <p><b>Tecnología:</b> servidores, ancho de banda, mantenimiento y desarrollo. adriandeharo.es es uno de los sitios
         web más
         visitados del mundo, pero para su funcionamiento utiliza una mínima parte de los recursos que otros sitios
         emplean.
     </p>
-    <p><b>Empleados:</b> los otros 10 sitios web más visitados tienen plantillas con miles de personas, pero nosotros
+    <hr>
+    <p><b>Empleados:</b> los otros sitios web más visitados tienen plantillas con miles de personas, pero nosotros
         solo tenemos un empleado. Esto significa que tu donación supone una gran inversión en una organización sin
         ánimo de lucro altamente eficiente.
     </p>
@@ -115,8 +112,8 @@
         padding: 0px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 10px;
-        row-gap: 15px;
+        column-gap: 5px;
+        row-gap: 5px;
         justify-items: stretch;
     }
 
@@ -158,7 +155,7 @@
     .input-euro:before {
         position: absolute;
         top: -2px;
-        left:10px;
+        left: 10px;
         content: "€";
     }
 
