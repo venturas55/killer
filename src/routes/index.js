@@ -7,20 +7,21 @@ const funciones = require('../lib/funciones');
 
 router.get('/', async (req, res) => {
     res.render('index');
+});  
+
+
+
+router.get('/soporte', funciones.isAuthenticated,(req, res) => {
+    res.render('soporte',{user:req.user});
+});
+router.post('/sendSugerencia', funciones.isAuthenticated,(req, res) => {
+    const {titulo,descripcion} = req.body;
+    console.log(descripcion);
+    res.render('soporte',{user:req.user});
 });
 
-
-
-router.get('/contact', (req, res) => {
-    res.render('contact');
-});
-
-router.get('/pagina_aux2', (req, res) => {
-    res.render('pagina_aux2');
-});
 
 router.get('/profile', funciones.isAuthenticated, async (req, res) => {
-
     res.render('profile');
 });
 
@@ -46,7 +47,6 @@ router.post('/profile/edit/', funciones.isAuthenticated, async (req, res) => {
 });
 
 router.get('/prueba', async (req, res) => {
-
     res.render('prueba');
 });
 
