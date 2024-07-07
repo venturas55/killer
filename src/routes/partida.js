@@ -131,10 +131,10 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
 });
 
 //Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
-router.get('/listar', funciones.isAuthenticated,async (req, res) => {
+router.get('/listar', funciones.isAuthenticated, async (req, res) => {
   var id_jugador = req.user.id;
   try {
-    const partidasDondeParticipo = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status", [id_jugador,]);
+    const partidasDondeParticipo = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? AND NOT p.id_creador=? order by status", [id_jugador, id_jugador]);
     const partidas = await db.query(queries.queryPartidasPropias + " where p.id_creador=? order by status", [id_jugador,]);
     console.log(partidas);
     res.render('partidas/listar', { partidas, partidasDondeParticipo });
@@ -401,7 +401,7 @@ router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
     await db.query("insert into partidasenjuego (id_partida,id_jugador,id_victima,id_objeto) values ?", [items])
     const partida = await db.query("UPDATE partidas set status = 'enjuego' WHERE id=?", [id_partida,]);
     req.flash("succes", "Partida lanzada con exito");
-    res.redirect("/partidas/edit/" + id_partida);
+    res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
@@ -444,8 +444,8 @@ router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (
 
     let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_victima, id_partida]))[0];
     let victima = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [asesino.id_victima, id_partida]))[0];
-    //console.log(asesino);
-    //console.log(victima);
+    console.log(asesino);
+    console.log(victima);
     //Inserto la muerte en la tabla eliminaciones
     const eliminacion = {
       id_partida,
@@ -489,7 +489,7 @@ router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("error", "Hubo algun error: " + error.code);
     res.redirect("/error");
   }
 });
@@ -544,7 +544,7 @@ router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
     res.redirect("/partidas/listar");
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("error", "Hubo algun error: "+error.code);
     res.redirect("/error");
   }
 });
