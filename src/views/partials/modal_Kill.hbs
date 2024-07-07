@@ -14,15 +14,25 @@
                         </strong>
                         entregandole en mano <strong>{{objetivo.objeto}} </strong>
                     </p>
-
+                    {{#if ticketenviado}}
+                    <hr>
+                    <p>Ya has enviado una notificación de asesinato a la victima. </p>
+                    <p>Solo queda esperar a que la valide.</p>
+                    {{/if}}
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button class="btn btn-warning" data-bs-target="#killModalToggle"
                     data-bs-toggle="modal">CANCELAR</button>
+                {{#if ticketenviado}}
+
+
+                {{else}}
+
                 <button class="btn btn-warning" data-bs-target="#killModalToggle2" data-bs-toggle="modal"
                     data-bs-dismiss="modal">MATARLO</button>
+                {{/if}}
             </div>
         </div>
     </div>
@@ -40,8 +50,8 @@
                 <p>Le llegará un aviso a la victima, que tendrá que confirmar</p>
             </div>
             <div class="modal-footer">
-                <a href="/partidas/{{objetivo.id_partida}}/asesinar/{{objetivo.id_victima}}"
-                    class="btn btn-danger">SI, MATALO</a>
+                <a href="/partidas/{{objetivo.id_partida}}/asesinar/{{objetivo.id_victima}}" class="btn btn-danger">SI,
+                    MATALO</a>
 
                 <button class="btn btn-warning" data-bs-target="#killModalToggle2"
                     data-bs-toggle="modal">Cancelar</button>

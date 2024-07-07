@@ -13,7 +13,7 @@
 
     <div class="row">
         {{#when supervivientes.length 'gt' 1}}
-        <p> Queda {{tiempoHasta ../partida.0.fecha_fin}}</p>
+        <p> Quedan {{tiempoHasta ../partida.0.fecha_fin}}</p>
         {{/when}}
         {{#when supervivientes.length 'lte' 1}}
         <p> Acabó el {{formatearSpHora ../last_kill.fecha_eliminacion}} previsto el {{formatearSpHora
@@ -68,9 +68,7 @@
                         <div class="clearfix">
                             {{#if last_kill}}
                             <p> {{last_kill.asesino_user}} ha matado a {{last_kill.victima_user}} con
-                                {{last_kill.objeto}} a
-                                las
-                                {{formatearSpHora last_kill.fecha_eliminacion}} </p>
+                                {{last_kill.objeto}} el  {{formatearSpHora last_kill.fecha_eliminacion}} </p>
                             {{else}}
                             <p>Todavia no ha habido bajas!</p>
                             {{/if}}
@@ -78,12 +76,12 @@
                     </div>
             </div>
 
-            {{#if dididie}}
+            {{#if hemuerto}}
             <div class="col-md-12 mx-auto cajita mt-4">
                 <p>Estas mortimer</p>
                 {{#if dididie.fecha_eliminacion}}
                 <p> Te mató <strong> {{dididie.asesino_name}} </strong> con
-                    <strong>{{dididie.objeto}} </strong> a las <strong> {{formatearSpHora
+                    <strong>{{dididie.objeto}} </strong> el <strong> {{formatearSpHora
                         dididie.fecha_eliminacion}} </strong>
                 </p>
                 {{/if}}
@@ -120,13 +118,16 @@
                     {{../supervivientes.0.jugador_user}} </strong> <span> con un total de <strong>
                         {{../supervivientes.0.asesinatos}} eliminaciones</strong></span>
             </div>
+            <div class="d-flex justify-content-around my-4">
+                <a href="/partidas/plantillaindividual/{{ partida.0.id_partida}}">
+                    <button class="btn btn-style">VER ASESINOS</button>
+                </a>
+            </div>
             {{/if}}
             {{/when}}
         </div>
     </div>
-{{!--     <a href="/partidas/plantillaindividual/{{ partida.0.id_partida}}">
-        <button class="btn btn-style">VER ASESINOS</button>
-    </a> --}}
+    {{!-- --}}
 </div>
 
 

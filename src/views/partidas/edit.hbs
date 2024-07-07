@@ -1,7 +1,9 @@
 {{>logo}}
-<h1 class="text-center">Edición de la partida {{datospartida.id}} {{datospartida.titulo}} </h1>
-<div class="container mb-4">
-    <p class="text-center">
+<h1 class="text-center">Edición de la partida  {{datospartida.id_partida}}</h1>
+<h3 class="text-center"> {{datospartida.titulo}} </h3>
+<div class="container text-center mb-4">
+    <p >Partida creada por {{datospartida.usuario}} </p>
+    <p>
         Abierta entre el {{formatearSpHora datospartida.fecha_inicio}}
         y el {{formatearSpHora datospartida.fecha_fin}}
     </p>
@@ -42,14 +44,14 @@
                 {{else}}
                 <div class="col-md-12 mx-auto">
                     <div class="card card-body text-center p-1">
-                        <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id}}/add_player"> Crea
+                        <tr>No hay jugadores guardados <a href="/partidas/{{datospartida.id_partida}}/add_player"> Crea
                                 uno!</a></tr>
                     </div>
                 </div>
                 {{/if}}
                 {{#if esCreador}}
                 <div class="text-center m-2">
-                    <a href="/partidas/{{datospartida.id}}/add_player" class="btn btn-warning"> Añadir jugador</a>
+                    <a href="/partidas/{{datospartida.id_partida}}/add_player" class="btn btn-warning"> Añadir jugador</a>
                 </div>
                 {{/if}}
             </div>
@@ -78,10 +80,10 @@
                         <td>{{this.nombre}}</td>
                         <td class="d-none d-xl-table-cell">{{this.descripcion}} </td>
                         {{#if this.pictureURL}}
-                        <td> <a href="/partidas/{{../datospartida.id}}/ver_object/{{this.id}}"><img src="/img/imagenes/{{this.pictureURL}}" class="avatar avatar-xs m-2"
+                        <td> <a href="/partidas/{{../datospartida.id_partida}}/ver_object/{{this.id}}"><img src="/img/imagenes/{{this.pictureURL}}" class="avatar avatar-xs m-2"
                                 alt="avatar {{this.pictureURL}}'" /></a> </td>
                         {{else}}
-                        <td> <a href="/partidas/{{../datospartida.id}}/ver_object/{{this.id}}"> <img
+                        <td> <a href="/partidas/{{../datospartida.id_partida}}/ver_object/{{this.id}}"> <img
                                     src="/img/objeto.png" class="avatar avatar-xs m-2"
                                     alt="avatar {{this.pictureURL}}'" /></a></td>
                         {{/if}}
@@ -98,14 +100,14 @@
                     {{else}}
                     <div class="col-md-12 mx-auto">
                         <div class="card card-body text-center  p-1">
-                            <tr>No hay objetos guardados <a href="/partidas/{{datospartida.id}}/add_object"> Crea
-                                    uno!</a></tr>
+                            <tr>No hay objetos guardados{{#if esCreador}} <a href="/partidas/{{datospartida.id_partida}}/add_object"> Crea
+                                    uno!</a>  {{/if}}</tr>
                         </div>
                     </div>
                     {{/if}}
                     {{#if esCreador}}
                     <div class="text-center m-2">
-                        <a href="/partidas/{{datospartida.id}}/add_object" class="btn btn-warning"> Añadir objeto</a>
+                        <a href="/partidas/{{datospartida.id_partida}}/add_object" class="btn btn-warning"> Añadir objeto</a>
                     </div>
                     {{/if}}
                 </div>
@@ -121,7 +123,7 @@
                 {{#enCreacion datospartida.status}}
                 {{#when ../jugadores.length 'gte' 2 }}
                 {{#when ../objetos.length 'gte' ../jugadores.length }}
-                <a href="/partidas/start/{{../datospartida.id}}" class="btn btn-warning"> <i
+                <a href="/partidas/start/{{../datospartida.id_partida}}" class="btn btn-warning"> <i
                         class="fa-solid fa-play"></i> COMENZAR PARTIDA</a>
                 {{/when}}
                 {{/when}}
@@ -135,9 +137,9 @@
     <div class="row my-4"> {{!-- //BOTONES --}}
         <div class="col-md-12">
             <div class="d-flex  justify-content-around">
-                <a href="/partidas/editgame/{{datospartida.id}}" class="btn btn-style"> <i
+                <a href="/partidas/editgame/{{datospartida.id_partida}}" class="btn btn-style"> <i
                         class="fa-solid fa-pen"></i>Editar datos partida</a>
-                <a href="/partidas/delete/{{datospartida.id}}" class="btn btn-style"><i
+                <a href="/partidas/delete/{{datospartida.id_partida}}" class="btn btn-style"><i
                         class="fa-solid fa-trash"></i>Eliminar partida</a>
             </div>
         </div>

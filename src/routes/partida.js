@@ -159,6 +159,7 @@ router.get('/inicio', async (req, res) => {
     res.redirect("/error");
   }
 });
+
 //EN DESUSO TODO:
 router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
@@ -207,7 +208,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const objetivo = partida.filter(function (el) {
       return el.id_jugador === req.user.id
     })[0];
-    //console.log(objetivo);
+    console.log("mi objetivo");
+    console.log(objetivo);
 
 
     //===== TICKET =================
@@ -226,21 +228,28 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       return (uno < dos) ? -1 : (uno > dos) ? 1 : 0;
     });
     //===== LAST KILL =================
-    const last_kill = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
+    const last_kill = (await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
 
-    //============= DIE ========
-    var dididie;
-    if (objetivo) {
-      dididie = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima = ? order by e.fecha_eliminacion desc limit 1", [id_partida, objetivo.id_jugador]))[0];
-    }
+    //============= DID I DIE ========
+    var hemuerto = false;
+    var dididie = await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? AND e.id_victima = ? ", [id_partida, objetivo.id_jugador]);
     console.log("dididie");
     console.log(dididie);
+    if (dididie.length > 0)
+      hemuerto = true;
+    dididie = dididie[0];
+
+    //============DID I SEND TICKET =================
+    var ticketenviado = false;
+    var didisendticket = await db.query(queries.queryPartidasEnJuego + " WHERE id_partida=? AND id_jugador = ? AND id_victima=?", [id_partida, objetivo.id_jugador, objetivo.id_victima]);
+    if (didisendticket[0].ticket)
+      ticketenviado = true;
+    //console.log(ticketenviado);
+
     //================ SUPERVIVIENTES ===============
     const supervivientes = partida.filter(function (el) {
       return el.eliminado == 0
     });
-
-
     if (supervivientes.length == 1) {
       await db.query("update partidas set status='finalizada' where id=?", [id_partida]);
     }
@@ -251,7 +260,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       ganador = true;
     }
     //console.log(ganador);
-    res.render("partidas/plantilla", { partida, jugadores, objetos, ticket, objetivo, top_killers, last_kill, dididie, supervivientes, ganador });
+    res.render("partidas/plantilla", { partida, jugadores, objetos, ticket, objetivo, top_killers, last_kill, dididie, hemuerto, supervivientes, ganador, ticketenviado });
   } catch (error) {
     console.error(error);
     req.flash("error", "Hubo algun error");
@@ -308,17 +317,17 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
   console.log(id_partida);
   var esCreador = false;
   try {
-    const datospartida = (await db.query("select * from partidas WHERE id=?", [id_partida,]))[0];
+    const datospartida = (await db.query(queries.queryPartidas+" WHERE p.id=?", [id_partida,]))[0];
     const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
     const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_partida,]);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
+    console.log(datospartida);
 
-    console.log(datospartida.id_creador + " " + req.user.id);
-    console.log(datospartida.id_creador == req.user.id);
+    //console.log(datospartida.id_creador + " " + req.user.id);
+    //console.log(datospartida.id_creador == req.user.id);
     if (datospartida.id_creador == req.user.id)
       esCreador = true;
-    console.log(esCreador);
-    //console.log(jugadores);
+    //console.log(esCreador);
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida, esCreador });
   } catch (error) {
     console.error(error.code);
@@ -544,7 +553,7 @@ router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
     res.redirect("/partidas/listar");
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error: "+error.code);
+    req.flash("error", "Hubo algun error: " + error.code);
     res.redirect("/error");
   }
 });
