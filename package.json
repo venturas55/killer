@@ -36,6 +36,7 @@
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "sessions": "^0.0.2-7",
+    "stripe": "^16.2.0",
     "timeago.js": "^4.0.2",
     "uglify": "^0.1.5",
     "uuid": "^9.0.1",

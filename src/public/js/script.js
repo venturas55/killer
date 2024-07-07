@@ -23,3 +23,19 @@ document.addEventListener('input', e => {
   }
 }) */
 /* FIN para los INPUTS */ 
+
+
+
+/* PARA QUE FUNCIONE EL BOTON DE DONACIONES */
+document.getElementById('donate-button').addEventListener('click', async () => {
+  console.log("click");
+  const response = await fetch('/payment/create-checkout-session', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  });
+  const data = await response.json();
+  window.location.href = data.url;
+});
+/* FIN PARA QUE FUNCIONE EL BOTON DE DONACIONES */

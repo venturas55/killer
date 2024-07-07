@@ -11,8 +11,8 @@ router.get('/', async (req, res) => {
 
 
 
-router.get('/pagina_aux1', (req, res) => {
-    res.render('pagina_aux1');
+router.get('/contact', (req, res) => {
+    res.render('contact');
 });
 
 router.get('/pagina_aux2', (req, res) => {

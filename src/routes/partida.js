@@ -131,7 +131,7 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
 });
 
 //Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
-router.get('/listar', async (req, res) => {
+router.get('/listar', funciones.isAuthenticated,async (req, res) => {
   var id_jugador = req.user.id;
   try {
     const partidasDondeParticipo = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? order by status", [id_jugador,]);

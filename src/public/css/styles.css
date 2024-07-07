@@ -259,3 +259,58 @@ a {
 }
 
 /* // FIN INPUTS */
+
+
+.donate-button-container {
+  position: fixed;
+	bottom: 3rem;
+	right: 1rem;
+	
+	margin: 10px;
+    z-index: 10;
+  pointer-events: none; /* Allow clicking through the container */
+}
+
+.donate-button-container img{
+  height: 50px;
+}
+
+#donate-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  pointer-events: auto; /* Enable clicking on the button */
+}
+
+#donate-button:hover {
+  background-color: var(--amarillo);
+  transform: translateY(-2px);
+}
+
+#donate-button:active {
+  background-color: var(--amarillo);
+  transform: translateY(0);
+}
+
+.alert-flash{
+  z-index:100;
+}
+
+#floating-wa {
+	position: fixed;
+	bottom: 0.4rem;
+	right: 0.4rem;
+	margin: 10px;
+  z-index: 10;
+}
+
+#floating-wa img{
+	height:5rem;
+	width:10rem;
+}
