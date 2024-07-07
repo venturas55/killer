@@ -115,6 +115,7 @@ router.get("/jugador/foto/delete/:tipo", funciones.isAuthenticated, async (req, 
     const { tipo } = req.params;
     const { id } = req.user.id;
     let url;
+    console.log("voy a borrar");
     console.log(id);
     const jugador = (await db.query("select * from jugadores WHERE id_jugador=?", [req.user.id,]))[0];
     console.log(jugador);
