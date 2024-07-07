@@ -49,11 +49,11 @@ router.post('/payment/create-checkout-session', async (req, res) => {
 });
 
 router.get('/payment/success', async (req, res) => {
-    res.send("success");
+    res.render("payment/success");
 });
 
 router.get('/payment/cancel', async (req, res) => {
-    res.send("cancel");
+    res.render("payment/cancel");
 });
 
 module.exports = router;
