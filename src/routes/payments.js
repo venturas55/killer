@@ -4,10 +4,6 @@ require('dotenv').config();
 const router = express.Router();
 const Stripe = require('stripe');
 
-const passport = require('passport');
-const funciones = require('../lib/funciones');
-
-const pool = require("../database");
 const stripe = new Stripe(process.env.STRIPE_PRIV || 'PRIVATE KEY');
 
 router.get('/payment/landing', async (req, res) => {
@@ -38,27 +34,13 @@ router.post('/payment/create-checkout-session', async (req, res) => {
             quantity: 1,
         }],
         mode: 'payment',
-        success_url: 'http://localhost:5001/payment/success',
-        cancel_url: 'http://localhost:5001/payment/cancel',
+        //TODO: estos links tendrían que ser más dinamicos
+        success_url: 'http://killer.adriandeharo.es/payment/success',
+        cancel_url: 'http://killer.adriandeharo.es/payment/cancel',
     });
 
     res.redirect(session.url);
     //res.json(session.url);
-
-
-
-
-
-
-
-
-    //    console.log(req.user);
-    /*     const cus = await stripe.customers.create({
-            email: req.user.email,
-            name: req.user.full_name,
-            //usuario: req.user.usuario,
-        }) */
-
 });
 
 router.get('/payment/success', async (req, res) => {
