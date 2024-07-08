@@ -181,6 +181,15 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
        console.log(partida[i].id_jugador);
  
      } */
+    console.log(partida);
+
+    //=================== ES CREADOR ==========================
+    var esCreador = false;
+    console.log(esCreador + " " + partida[0].id_creador + " " + req.user.id);
+    if (partida[0].id_creador == req.user.id) {
+      esCreador = true;
+      console.log(esCreador);
+    }
 
     //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
     const jugadores = partida.map(function (el) {
@@ -208,8 +217,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const objetivo = partida.filter(function (el) {
       return el.id_jugador === req.user.id
     })[0];
-    console.log("mi objetivo");
-    console.log(objetivo);
+    //console.log("mi objetivo");
+    //console.log(objetivo);
 
 
     //===== TICKET =================
@@ -233,8 +242,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     //============= DID I DIE ========
     var hemuerto = false;
     var dididie = await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? AND e.id_victima = ? ", [id_partida, objetivo.id_jugador]);
-    console.log("dididie");
-    console.log(dididie);
+    //console.log("dididie");
+    //console.log(dididie);
     if (dididie.length > 0)
       hemuerto = true;
     dididie = dididie[0];
@@ -260,7 +269,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       ganador = true;
     }
     //console.log(ganador);
-    res.render("partidas/plantilla", { partida, jugadores, objetos, ticket, objetivo, top_killers, last_kill, dididie, hemuerto, supervivientes, ganador, ticketenviado });
+    res.render("partidas/plantilla", { partida, jugadores, objetos, ticket, objetivo, top_killers, last_kill, dididie, hemuerto, supervivientes, ganador, ticketenviado, esCreador });
   } catch (error) {
     console.error(error);
     req.flash("error", "Hubo algun error");
@@ -317,7 +326,7 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
   console.log(id_partida);
   var esCreador = false;
   try {
-    const datospartida = (await db.query(queries.queryPartidas+" WHERE p.id=?", [id_partida,]))[0];
+    const datospartida = (await db.query(queries.queryPartidas + " WHERE p.id=?", [id_partida,]))[0];
     const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
     const jugadores = await db.query(queries.queryJugadores + " WHERE id_partida=?", [id_partida,]);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=?", [id_partida,]);
@@ -325,9 +334,10 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
 
     //console.log(datospartida.id_creador + " " + req.user.id);
     //console.log(datospartida.id_creador == req.user.id);
-    if (datospartida.id_creador == req.user.id)
+    if (datospartida.id_creador == req.user.id) {
       esCreador = true;
-    //console.log(esCreador);
+      console.log(esCreador);
+    }
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida, esCreador });
   } catch (error) {
     console.error(error.code);
@@ -336,12 +346,16 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
   }
 });
 router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) => {
+
   const { id_partida } = req.params;
-  console.log(req.params);
-  console.log(req.body);
+  console.log(id_partida);
+
+  //console.log(req.params);
+  //console.log(req.body);
   try {
-    let partida = (await db.query(queries.queryPartidas + " WHERE id=?", [id_partida]))[0];
-    console.log(partida.fecha_fin);
+    let partida = (await db.query(queries.queryPartidas + " WHERE p.id=?", [id_partida]))[0];
+    console.log(partida);
+
     var date = partida.fecha_inicio;
     partida.fecha_inicio = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate() + "T" + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
     date = partida.fecha_fin;
@@ -385,6 +399,26 @@ router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) =
     res.redirect("/partidas/listar");
   }
 
+});
+router.get("/editObjects/:id_partida", funciones.isAuthenticated, async (req, res) => {
+  const { id_partida } = req.params;
+  console.log(id_partida);
+  var esCreador = false;
+  try {
+    const datospartida = (await db.query(queries.queryPartidas + " WHERE p.id=?", [id_partida,]))[0];
+    const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
+
+    if (datospartida.id_creador == req.user.id) {
+      esCreador = true;
+      console.log(esCreador);
+    }
+    console.log(datospartida);
+    res.render("partidas/edit_objects", { datospartida, objetos, esCreador });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
 });
 router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
@@ -519,10 +553,17 @@ router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, asy
 router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, async (req, res) => {
   const { id_jugador, id_partida } = req.params;
   try {
-    await db.query("DELETE FROM jugadores WHERE id_jugador=? AND id_partida=?", [id_jugador, id_partida]);
-    req.flash("success", "Jugador quitado de la lista correctamente");
-    console.log("=>" + id_partida);
-    res.redirect("/partidas/edit/" + id_partida);
+    var q = await db.query("SELECT * from partidas where id=?",[id_partida,]);
+    if (q.status == 'encreacion') {
+      await db.query("DELETE FROM jugadores WHERE id_jugador=? AND id_partida=?", [id_jugador, id_partida]);
+      req.flash("success", "Jugador quitado de la lista correctamente");
+      console.log("=>" + id_partida);
+      res.redirect("/partidas/edit/" + id_partida);
+
+    } else {
+      req.flash("error", "Solo se pueden eliminar jugadores durante la creación de la partida");
+      res.redirect("/partidas/plantilla/" + id_partida);
+    }
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
@@ -532,10 +573,16 @@ router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, asy
 router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, async (req, res) => {
   const { id_objecto, id_partida } = req.params;
   try {
-    await db.query("DELETE FROM objetos WHERE id=?", [id_objecto]);
-    req.flash("success", "Objeto quitado de la lista correctamente");
-    console.log("borrado objeto");
-    res.redirect("/partidas/edit/" + id_partida);
+    var q = await db.query("SELECT * from partidas where id=?",[id_partida,]);
+    if (q.status == 'encreacion') {
+      await db.query("DELETE FROM objetos WHERE id=?", [id_objecto]);
+      req.flash("success", "Objeto quitado de la lista correctamente");
+      console.log("borrado objeto");
+      res.redirect("/partidas/edit/" + id_partida);
+    } else {
+      req.flash("error", "Solo se pueden eliminar jugadores durante la creación de la partida");
+      res.redirect("/partidas/plantilla/" + id_partida);
+    }
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");

@@ -1,0 +1,69 @@
+{{>logo}}
+<h1 class="text-center">Edición de la partida {{datospartida.id_partida}}</h1>
+<h3 class="text-center"> {{datospartida.titulo}} </h3>
+<div class="container text-center mb-4">
+    <p>Partida creada por {{datospartida.usuario}} </p>
+    <p>
+        Abierta entre el {{formatearSpHora datospartida.fecha_inicio}}
+        y el {{formatearSpHora datospartida.fecha_fin}}
+    </p>
+
+    <div class="row my-4"> {{!-- //OBJETOS --}}
+        <div class="col-md-12">
+            <div class="card p-1 bg-secondary text-center">
+                <div>
+                    <h4> OBJETOS - Nº total: {{objetos.length}}</h4>
+
+                    <table class="table table-dark table-striped">
+                        <tr>
+                            <th class="d-none d-xl-table-cell">Id</th>
+                            <th>Nombre</th>
+                            <th class="d-none d-xl-table-cell">Descripcion</th>
+                            <th>Imagen</th>
+                            {{#if esCreador}} <th>Options</th> {{/if}}
+                        </tr>
+                </div>
+                <div>
+                    {{#each objetos}}
+                    <tr>
+                        <td class="d-none d-xl-table-cell">{{this.id}}</td>
+                        <td>{{this.nombre}}</td>
+                        <td class="d-none d-xl-table-cell">{{this.descripcion}} </td>
+                        {{#if this.pictureURL}}
+                        <td> <a href="/partidas/{{../datospartida.id_partida}}/ver_object/{{this.id}}"><img
+                                    src="/img/imagenes/{{this.pictureURL}}" class="avatar avatar-xs m-2"
+                                    alt="avatar {{this.pictureURL}}'" /></a> </td>
+                        {{else}}
+                        <td> <a href="/partidas/{{../datospartida.id_partida}}/ver_object/{{this.id}}"> <img
+                                    src="/img/objeto.png" class="avatar avatar-xs m-2"
+                                    alt="avatar {{this.pictureURL}}'" /></a></td>
+                        {{/if}}
+                        {{#if ../esCreador}} <td>
+                            <a href="/partidas/{{this.id_partida}}/edit_object/{{this.id}}" class="text-warning"><i
+                                    class="fa-solid fa-pencil"></i>Edit</a>
+
+                        </td> {{/if}}
+                    </tr>
+
+                    {{/each}}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    {{#if esCreador}}
+    <div class="row my-4"> {{!-- //BOTONES --}}
+        <div class="col-md-12">
+            <div class="d-flex  justify-content-around">
+                <a href="/partidas/editgame/{{datospartida.id_partida}}" class="btn btn-style"> <i
+                        class="fa-solid fa-pen"></i>Editar datos partida</a>
+                <a href="/partidas/delete/{{datospartida.id_partida}}" class="btn btn-style"><i
+                        class="fa-solid fa-trash"></i>Eliminar partida</a>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</div>
