@@ -25,7 +25,7 @@
             <ul>
                 <li class="radiobuttons-cell input_amount_0">
                     <input type="radio" name="amount" id="input_amount_0" value="2" class="btn-check">
-                    <label class="btn btn-outline-warning" for="input_amount_0">2 €</label>
+                    <label class="btn btn-outline-warning" for="input_amount_0" >2 €</label>
                 </li>
                 <li class="radiobuttons-cell input_amount_1">
                     <input type="radio" name="amount" id="input_amount_1" value="5" class="btn-check">
@@ -55,9 +55,8 @@
                     <input type="radio" name="amount" id="input_amount_other" value="200"
                         onclick="document.getElementById('input_amount_other_box').focus();" class="btn-check">
                     <label class="btn btn-outline-warning" for="input_amount_other">
-                        <span>Otro</span>
-                        <span class="input-euro right">
-                            <input id="input_amount_other_box" type="number" size="4" value="200">
+                        <span class="input-euro">
+                            <input id="input_amount_other_box" type="number" style="width: 100%;" value="200">
                         </span>
                     </label>
                 </li>
@@ -68,7 +67,7 @@
                 <span for="ptf-checkbox">
                     Generosamente, acepto añadir <span id="gastos">X</span> € a la donación para cubrir los gastos
                     bancarios
-                    y que Wikimedia reciba el 100&nbsp;% de mi donación.</span>
+                    y que Adrian reciba el 100&nbsp;% de mi donación.</span>
             </div>
         </fieldset>
     </div>
@@ -151,22 +150,20 @@
 
     .input-euro {
         position: relative;
+        color:var(--amarillo);
     }
 
     .input-euro.right input {
-        padding-right: 18px;
+        padding-right: 10px;
         text-align: end;
+        line-height: 100%;
     }
 
     .input-euro:before {
         position: absolute;
-        top: -2px;
-        left: 10px;
+        top: 0px;
+        right: 10%;
         content: "€";
     }
 
-
-    .input-euro.right:before {
-        right: 5px;
-    }
 </style>
