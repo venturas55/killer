@@ -22,9 +22,20 @@
 
         <div class="col-12 mx-auto">
             <div class="cajita my-4"> {{!-- //ASESINOS Y ARMAS--}}
-                <h1 class="d-inline"> {{ partida.0.titulo}} </h2> - <h4 class="d-inline"> {{ partida.0.id_partida}}
+
+<figure class="text-center">
+  <blockquote class="blockquote">
+       <h1 class="d-inline"> {{ partida.0.titulo}} </h2> - <h4 class="d-inline"> {{ partida.0.id_partida}}
                     </h4>
-                    <p>{{ partida.0.descripcion }}</p>
+      <p>{{ partida.0.descripcion }}</p>
+  </blockquote>
+<figcaption class="blockquote-footer">Administrada por {{partida.0.usuario_creador}}</figcaption>
+</figure>
+
+
+             
+                  
+                   
                     <hr>
                     <div class="d-flex flex-row align-items-center justify-content-around"> {{!-- //ASESINOS Y
                         OBJETOS--}}

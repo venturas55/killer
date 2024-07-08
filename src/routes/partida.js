@@ -136,6 +136,7 @@ router.get('/listar', funciones.isAuthenticated, async (req, res) => {
   try {
     const partidasDondeParticipo = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? AND NOT p.id_creador=? order by status", [id_jugador, id_jugador]);
     const partidas = await db.query(queries.queryPartidasPropias + " where p.id_creador=? order by status", [id_jugador,]);
+    //const partidas = await db.query(queries.queryPartidas + " where p.id_creador=? order by status", [id_jugador,]);
     console.log(partidas);
     res.render('partidas/listar', { partidas, partidasDondeParticipo });
   } catch (error) {
