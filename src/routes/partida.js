@@ -220,6 +220,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     })[0];
     console.log("mi objetivo");
     console.log(objetivo);
+    //Solo habrá objetivo si estas jugando por lo que se puede usar para renderizar en funcion de si el "admin" juega o no
 
 
     //===== TICKET =================
@@ -241,21 +242,28 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const last_kill = (await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
 
     //============= DID I DIE ========
-    var hemuerto = false;
-    var dididie = await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? AND e.id_victima = ? ", [id_partida, objetivo.id_jugador]);
-    //console.log("dididie");
-    //console.log(dididie);
-    if (dididie.length > 0)
-      hemuerto = true;
-    dididie = dididie[0];
+    //Si estoy jugando
+    if (objetivo) {
+      var hemuerto = false;
+      var dididie = await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? AND e.id_victima = ? ", [id_partida, objetivo.id_jugador]);
+      //console.log("dididie");
+      //console.log(dididie);
+      if (dididie.length > 0)
+        hemuerto = true;
+      dididie = dididie[0];
+
+    }
+
 
     //============DID I SEND TICKET =================
-    var ticketenviado = false;
-    var didisendticket = await db.query(queries.queryPartidasEnJuego + " WHERE id_partida=? AND id_jugador = ? AND id_victima=?", [id_partida, objetivo.id_jugador, objetivo.id_victima]);
-    if (didisendticket[0].ticket)
-      ticketenviado = true;
-    //console.log(ticketenviado);
-
+    //Si estoy jugando
+    if (objetivo) {
+      var ticketenviado = false;
+      var didisendticket = await db.query(queries.queryPartidasEnJuego + " WHERE id_partida=? AND id_jugador = ? AND id_victima=?", [id_partida, objetivo.id_jugador, objetivo.id_victima]);
+      if (didisendticket[0].ticket)
+        ticketenviado = true;
+      //console.log(ticketenviado);
+    }
     //================ SUPERVIVIENTES ===============
     const supervivientes = partida.filter(function (el) {
       return el.eliminado == 0
@@ -554,7 +562,7 @@ router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, asy
 router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, async (req, res) => {
   const { id_jugador, id_partida } = req.params;
   try {
-    var q = await db.query("SELECT * from partidas where id=?",[id_partida,]);
+    var q = await db.query("SELECT * from partidas where id=?", [id_partida,]);
     if (q.status == 'encreacion') {
       await db.query("DELETE FROM jugadores WHERE id_jugador=? AND id_partida=?", [id_jugador, id_partida]);
       req.flash("success", "Jugador quitado de la lista correctamente");
@@ -574,7 +582,7 @@ router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, asy
 router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, async (req, res) => {
   const { id_objecto, id_partida } = req.params;
   try {
-    var q = await db.query("SELECT * from partidas where id=?",[id_partida,]);
+    var q = await db.query("SELECT * from partidas where id=?", [id_partida,]);
     if (q.status == 'encreacion') {
       await db.query("DELETE FROM objetos WHERE id=?", [id_objecto]);
       req.flash("success", "Objeto quitado de la lista correctamente");
