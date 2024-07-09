@@ -218,8 +218,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const objetivo = partida.filter(function (el) {
       return el.id_jugador === req.user.id
     })[0];
-    //console.log("mi objetivo");
-    //console.log(objetivo);
+    console.log("mi objetivo");
+    console.log(objetivo);
 
 
     //===== TICKET =================
