@@ -110,7 +110,7 @@ router.get("/jugador/foto/:id_partida/:id_jugador", async (req, res) => {
     let { id_jugador, id_partida } = req.params;
     var eliminado=false;
     var jugador = (await db.query("select * from usuarios u LEFT JOIN eliminaciones e ON e.id_victima=u.id where u.id=? and e.id_partida=?", [id_jugador,id_partida]))[0];
-    jugador ? eliminado = true : jugador = (await db.query("select * from usuarios u LEFT JOIN eliminaciones e ON e.id_asesino=u.id where u.id=? and e.id_partida=?", [id_jugador,id_partida]))[0];
+    jugador ? eliminado = true : jugador = (await db.query("select * from usuarios u Where u.id=?", [id_jugador,]))[0];
     res.render("fotos/foto", { jugador, eliminado });
 });
 
@@ -118,6 +118,7 @@ router.get("/jugador/foto/:id_partida/:id_jugador", async (req, res) => {
 router.get("/jugador/foto/:id_jugador", async (req, res) => {
     let { id_jugador } = req.params;
     var jugador = (await db.query("select * from usuarios u where u.id=?", [id_jugador,]))[0];
+
     res.render("fotos/fotoplayer", { jugador, });
 });
 
