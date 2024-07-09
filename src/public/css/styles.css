@@ -33,6 +33,7 @@ a {
 
 .cajita {
   border: 3px var(--amarillo) solid;
+  color: var(--amarillo);
   padding: 1em;
   border-radius: 10px;
   background: linear-gradient(rgba(56, 65, 73, 0.99), rgba(32, 34, 38, 0.7));
@@ -40,8 +41,13 @@ a {
 }
 
 .cajita_disabled {
-  border: 2px var(--gris) solid;
-  background-color: #000000;
+  color: whitesmoke;
+  border: 2px #656152 solid;
+  background: linear-gradient(rgba(190, 194, 198, 0.99), rgba(140, 142, 145, 0.7));
+}
+
+.cajita_disabled h3 {
+  color: whitesmoke;
 }
 
 .cajita:hover {
@@ -58,6 +64,12 @@ a {
 
 .cajita p {
   color: whitesmoke;
+}
+
+.cajita h1,
+h2,
+h3 {
+  color: var(--amarillo);
 }
 
 .fondo {
@@ -198,7 +210,7 @@ a {
 }
 
 .btn-style {
-  display:flex;
+  display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
@@ -214,7 +226,7 @@ a {
   font-weight: 100;
 }
 
-.btn-style>:first-child{
+.btn-style>:first-child {
   transform: scaleX(-1);
 }
 
@@ -249,3 +261,60 @@ a {
 }
 
 /* // FIN INPUTS */
+
+
+.donate-button-container {
+  position: fixed;
+  bottom: 3rem;
+  right: 1rem;
+
+  margin: 10px;
+  z-index: 10;
+  pointer-events: none;
+  /* Allow clicking through the container */
+}
+
+.donate-button-container img {
+  height: 50px;
+}
+
+#donate-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  pointer-events: auto;
+  /* Enable clicking on the button */
+}
+
+#donate-button:hover {
+  background-color: var(--amarillo);
+  transform: translateY(-2px);
+}
+
+#donate-button:active {
+  background-color: var(--amarillo);
+  transform: translateY(0);
+}
+
+.alert-flash {
+  z-index: 100;
+}
+
+#floating-wa {
+  position: fixed;
+  bottom: 0.4rem;
+  right: 0.4rem;
+  margin: 10px;
+  z-index: 10;
+}
+
+#floating-wa img {
+  height: 5rem;
+  width: 10rem;
+}

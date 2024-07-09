@@ -98,7 +98,9 @@ helpers.when = (operand_1, operator, operand_2, options) => {
     'eq': function (l, r) { return l == r; },
     'noteq': function (l, r) { return l != r; },
     'gt': function (l, r) { return Number(l) > Number(r); },
+    'lt': function (l, r) { return Number(l) < Number(r); },
     'gte': function (l, r) { return Number(l) >= Number(r); },
+    'lte': function (l, r) { return Number(l) <= Number(r); },
     'or': function (l, r) { return l || r; },
     'and': function (l, r) { return l && r; },
     '%': function (l, r) { return (l % r) === 0; }
@@ -133,6 +135,13 @@ helpers.enPausa = (value, options) => {
 
 helpers.enCreacion = (value, options) => {
   if (value == "encreacion") {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+};
+
+helpers.finalizada = (value, options) => {
+  if (value == "finalizada") {
     return options.fn(this);
   }
   return options.inverse(this);

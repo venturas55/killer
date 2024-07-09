@@ -110,10 +110,10 @@ router.get("/jugador/fotosjuego/", async (req, res) => {
     res.render("fotos/fotos", { jugador, });
 });
 
-router.get("/jugador/foto/delete/:tipo", funciones.isAuthenticated, async (req, res) => {
+router.get("/jugador/fotos/delete/:tipo", funciones.isAuthenticated, async (req, res) => {
     //console.log(req.params);
     const { tipo } = req.params;
-    const { id } = req.user.id;
+    const  id  = req.user.id;
     let url;
     console.log(id);
     const jugador = (await db.query("select * from jugadores WHERE id_jugador=?", [req.user.id,]))[0];
@@ -173,7 +173,7 @@ router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadF
     const { id_partida } = req.params;
     const { nombre, descripcion } = req.body;
     var pictureURL = "";
-    if (typeof req.file!== 'undefined')
+    if (typeof req.file !== 'undefined')
         pictureURL = req.file.filename;
     try {
         const {
@@ -185,7 +185,6 @@ router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadF
             descripcion,
             pictureURL,
             id_partida,
-
         };
         const a = await db.query("INSERT INTO objetos set ?", [item_1]);
         req.flash("success", "Objeto insertado correctamente");
@@ -197,14 +196,27 @@ router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadF
     }
 });
 
-router.get("/objeto/foto/:id_objeto", async (req, res) => {
-    let { id_objeto } = req.params;
-    const objeto = (await db.query(queries.queryObjetos + " WHERE id=?", [id_objeto,]))[0];
-
-    res.render("fotos/fotoobjeto", { objeto, });
+router.post("/partidas/:id_partida/edit_object/:id_object", funciones.hasPermission, uploadFoto, async (req, res) => {
+    const { id_object, id_partida } = req.params;
+    const { nombre, descripcion } = req.body;
+    var pictureURL = "";
+    if (typeof req.file !== 'undefined')
+        pictureURL = req.file.filename;
+    try {
+        const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object, id_partida]))[0];
+        const item_1 = {
+            nombre,
+            descripcion,
+            pictureURL,
+            id_partida,
+        };
+        const a = await db.query("UPDATE objetos set ? where id=?", [item_1,id_object]);
+        res.redirect("/partidas/edit/"+id_partida);
+    } catch (error) {
+        console.error(error.code);
+        req.flash("error", "Hubo algun error");
+        res.redirect("/error");
+    }
 });
-
-
-
 
 module.exports = router;

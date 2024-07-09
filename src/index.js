@@ -62,6 +62,7 @@ app.use(require('./routes/authentication'));
 app.use('/partidas',require('./routes/partida')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
 app.use(require('./routes/api'));
 app.use(require('./routes/fotos'));
+app.use(require('./routes/payments'));
 
 
 //Public
@@ -71,5 +72,5 @@ app.use(express.static(path.join(__dirname,'public')));
   ); */
 //Starting
 app.listen(app.get('port'),()=>{
-    console.log("Running on http://localhost:4001", app.get('port'));
+    console.log("Running on http://localhost:"+ app.get('port'));
 })

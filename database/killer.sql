@@ -1,6 +1,7 @@
 drop database killer2;
-create database killer2;
-use killer2;
+drop database killer;
+create database killer;
+use killer;
 DROP TABLE IF EXISTS sessions;
 
 DROP TABLE IF EXISTS partidajugadores;
@@ -32,7 +33,7 @@ CREATE TABLE `partidas` (
   `fecha_inicio` TIMESTAMP,
   `fecha_fin` TIMESTAMP,
   `id_creador` int(11),
-  `status` enum ('encreacion', 'enpausa', 'enjuego','enedicion') default 'encreacion',
+  `status` enum ('encreacion', 'enpausa', 'enjuego','finalizada') default 'encreacion',
   FOREIGN KEY (id_creador) REFERENCES usuarios(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de info de partidas';
 
@@ -91,6 +92,14 @@ CREATE TABLE solicitudes (
   FOREIGN KEY (id_partida) REFERENCES partidas(id),
   FOREIGN KEY (id_jugador) REFERENCES usuarios(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de solicituddes en juego';
+
+CREATE TABLE `tokens` (
+  `user_id` int(11) NOT NULL,
+  `hashedtoken` varchar(200) PRIMARY KEY,
+  `expires` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de tokens';
+
 
 INSERT INTO
   `usuarios` (
