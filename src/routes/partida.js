@@ -251,9 +251,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       if (dididie.length > 0)
         hemuerto = true;
       dididie = dididie[0];
-
     }
-
 
     //============DID I SEND TICKET =================
     //Si estoy jugando
