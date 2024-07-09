@@ -2,11 +2,11 @@
 <div class="container-fluid mb-4">
   <div class="hazard-background">
   </div>
-  <div class="row  justify-content-center">
-    <h2 class="text-center">FOTO {{#if eliminado}} DE LA VICTIMA {{else}} DEL KILLER</h2>
+  <div class="row  text-center">
+    <h2>FOTO {{#if eliminado}} DE LA VICTIMA {{else}} DEL KILLER</h2>
     {{/if}}
+    <p class="text-white"> {{jugador.full_name}} - {{jugador.usuario}} </p>
   </div>
-  <p class="text-white"> {{jugador.full_name}} - {{jugador.usuario}} </p>
 
   <div class="row justify-content-center">
     <div class="card m-2 mb-5" style="max-width: 80%;">
