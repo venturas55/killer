@@ -95,11 +95,21 @@ router.get("/profile/borrarfoto/:id/:url", funciones.isAuthenticated, async (req
 });
 
 //FOTOS DEL JUEGO KILLER, VIVO Y MUERTO
-router.get("/jugador/foto/:id_jugador/:eliminado", async (req, res) => {
+//ESTA VERSION DE LA RUTA ES PARA USAR LAS FOTOS VIVO MUERTO
+// TODO: implementar que al subir una foto SE COPIE DIRECTAMENTE TAMBIEN EN LA TABLA DE VIVO Y EN LA DE MUERTO EN B/N
+/* router.get("/jugador/foto/:id_jugador/:eliminado", async (req, res) => {
     let { id_jugador, eliminado } = req.params;
     const jugador = (await db.query(queries.queryJugadores + " WHERE id_jugador=?", [id_jugador,]))[0];
     eliminado == 1 ? eliminado = true : eliminado = false;
     console.log(eliminado);
+    res.render("fotos/foto", { jugador, eliminado });
+}); */
+
+router.get("/jugador/foto/:id_partida/:id_jugador", async (req, res) => {
+    let { id_jugador, id_partida } = req.params;
+    var eliminado=false;
+    var jugador = (await db.query("select * from usuarios u LEFT JOIN eliminaciones e ON e.id_victima=u.id where u.id=? and e.id_partida=?", [id_jugador,id_partida]))[0];
+    jugador ? eliminado = true : jugador = (await db.query("select * from usuarios u LEFT JOIN eliminaciones e ON e.id_asesino=u.id where u.id=? and e.id_partida=?", [id_jugador,id_partida]))[0];
     res.render("fotos/foto", { jugador, eliminado });
 });
 
