@@ -86,13 +86,6 @@ CREATE TABLE eliminaciones (
   FOREIGN KEY (id_objeto) REFERENCES objetos(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de eliminaciones en juego';
 
-CREATE TABLE solicitudes (
-  id_partida varchar(5) NOT NULL,
-  id_jugador int(11) NOT NULL,
-  FOREIGN KEY (id_partida) REFERENCES partidas(id),
-  FOREIGN KEY (id_jugador) REFERENCES usuarios(id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de solicituddes en juego';
-
 CREATE TABLE `tokens` (
   `user_id` int(11) NOT NULL,
   `hashedtoken` varchar(200) PRIMARY KEY,
