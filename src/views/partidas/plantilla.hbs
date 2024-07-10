@@ -44,7 +44,8 @@
                         <h5>Asesinos</h5>
                         {{#each jugadores}}
                         <a href="/jugador/foto/{{../partida.0.id_partida}}/{{this.id}}">
-                            <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.usuario}} </p>
+                            {{!-- <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.usuario}} </p> --}}
+                            <p> {{this.usuario}} </p>
                         </a>
                         {{/each}}
                     </div>
