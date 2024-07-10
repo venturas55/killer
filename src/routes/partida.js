@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { unlink } = require('fs-extra');
-const path = require('path');
 const queries = require("./queries");
-//const { nanoid } = require("nanoid");
 const funciones = require("../lib/funciones");
 
 const db = require("../database"); //db hace referencia a la BBDD
@@ -112,7 +109,7 @@ router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, asyn
 
 //READ
 //Para mostrar listado de partidas para el admin
-router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
+/* router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
   try {
     const id_jugador = req.user.id;
     const partidas = await db.query(queries.queryPartidasDistinc + " where p.status='encreacion'  group by p.id", [id_jugador]);
@@ -128,7 +125,31 @@ router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
     req.flash("error", "Hubo algun error");
     res.redirect("/error");
   }
-});
+}); */
+
+//Para mostrar listado de partidas en las que NO esta incluido el jugador
+/* router.get('/inicio', async (req, res) => {
+  id_jugador = req.user.id;
+  try {
+    const partidas = await db.query(queries.queryPartidasActivas + " where pej.id_jugador=?", [id_jugador]);
+    console.log(partidas);
+    res.render('partidas/listar', { partidas, });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+}); */
+
+//EN DESUSO TODO:
+/* router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
+  const { id_partida } = req.params;
+  id_jugador = req.user.id;
+  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
+  console.log(partida);
+  //console.log(partida[0]);
+  res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
+}); */
 
 //Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
 router.get('/listar', funciones.isAuthenticated, async (req, res) => {
@@ -146,30 +167,6 @@ router.get('/listar', funciones.isAuthenticated, async (req, res) => {
   }
 });
 
-
-//Para mostrar listado de partidas en las que NO esta incluido el jugador
-router.get('/inicio', async (req, res) => {
-  id_jugador = req.user.id;
-  try {
-    const partidas = await db.query(queries.queryPartidasActivas + " where pej.id_jugador=?", [id_jugador]);
-    console.log(partidas);
-    res.render('partidas/listar', { partidas, });
-  } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/error");
-  }
-});
-
-//EN DESUSO TODO:
-router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
-  const { id_partida } = req.params;
-  id_jugador = req.user.id;
-  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
-  console.log(partida);
-  //console.log(partida[0]);
-  res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
-});
 //CARGA LA PANTALLA PRINCIPAL DE UNA PARTIDA
 router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
@@ -408,26 +405,6 @@ router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) =
   }
 
 });
-router.get("/editObjects/:id_partida", funciones.isAuthenticated, async (req, res) => {
-  const { id_partida } = req.params;
-  console.log(id_partida);
-  var esCreador = false;
-  try {
-    const datospartida = (await db.query(queries.queryPartidas + " WHERE p.id=?", [id_partida,]))[0];
-    const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
-
-    if (datospartida.id_creador == req.user.id) {
-      esCreador = true;
-      console.log(esCreador);
-    }
-    console.log(datospartida);
-    res.render("partidas/edit_objects", { datospartida, objetos, esCreador });
-  } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/error");
-  }
-});
 router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   try {
@@ -557,6 +534,27 @@ router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, asy
   }
 });
 
+//EDIT OBJETOS
+router.get("/editObjects/:id_partida", funciones.isAuthenticated, async (req, res) => {
+  const { id_partida } = req.params;
+  console.log(id_partida);
+  var esCreador = false;
+  try {
+    const datospartida = (await db.query(queries.queryPartidas + " WHERE p.id=?", [id_partida,]))[0];
+    const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
+
+    if (datospartida.id_creador == req.user.id) {
+      esCreador = true;
+      console.log(esCreador);
+    }
+    console.log(datospartida);
+    res.render("partidas/edit_objects", { datospartida, objetos, esCreador });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+});
 //DELETE
 router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, async (req, res) => {
   const { id_jugador, id_partida } = req.params;

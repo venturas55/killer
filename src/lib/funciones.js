@@ -52,7 +52,7 @@ helpers.encryptPass = async (password) => {
     const sal = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, sal);
     return password;
-};
+}
 
 helpers.verifyPassword = async (password, hashedPassword) => {
     try {

@@ -9,7 +9,6 @@ const multer = require('multer');
 const { access, constants } = require('fs');
 const funciones = require("../lib/funciones.js");
 const { v4: uuidv4 } = require('uuid');
-const queries = require("./queries");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

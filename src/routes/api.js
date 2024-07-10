@@ -1,7 +1,6 @@
 const express = require('express');
 const { Passport } = require('passport');
 const router = express.Router();
-
 const passport=require('passport');
 const funciones = require('../lib/funciones');
 

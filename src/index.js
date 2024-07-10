@@ -1,7 +1,5 @@
 const express = require('express');
 const morgan = require('morgan');
-const multer = require('multer');
-const fs = require('fs');
 const exphbs = require('express-handlebars'); //Para usar plantillas
 const path = require('path');               //Para manejar directorios, basicamente unirlos 
 const flash = require('connect-flash');  //Para mostar mensajes
@@ -43,7 +41,6 @@ app.use(passport.session());    //para que sepa donde guardar y como manejar los
 
 
 //Variables globales
-
 app.use((req,res,next) =>{
     app.locals.signupMessage = req.flash('signupMessage');
     app.locals.success = req.flash('success');
@@ -57,9 +54,7 @@ app.use((req,res,next) =>{
 //Routes
 app.use(require('./routes')); //busca automaticamente el archivo index.js
 app.use(require('./routes/authentication'));
-//app.use('/objetos',require('./routes/items1')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
-//app.use('/jugadores',require('./routes/items2')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
-app.use('/partidas',require('./routes/partida')); //ruta de las items1. siempre precedido por el primer argumento '/items1' 
+app.use('/partidas',require('./routes/partida')); 
 app.use(require('./routes/api'));
 app.use(require('./routes/fotos'));
 app.use(require('./routes/payments'));
