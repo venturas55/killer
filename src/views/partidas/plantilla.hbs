@@ -33,10 +33,6 @@
                     <figcaption class="blockquote-footer">Administrada por {{partida.0.usuario_creador}}</figcaption>
                 </figure>
 
-
-
-
-
                 <hr>
                 <div class="d-flex flex-row align-items-center justify-content-around"> {{!-- //ASESINOS Y
                     OBJETOS--}}
@@ -44,8 +40,8 @@
                         <h5>Asesinos</h5>
                         {{#each jugadores}}
                         <a href="/jugador/foto/{{../partida.0.id_partida}}/{{this.id}}">
-                            {{!-- <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.usuario}} </p> --}}
-                            <p> {{this.full_name}} </p>
+                            <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.usuario}} </p>
+                           
                         </a>
                         {{/each}}
                     </div>
@@ -53,7 +49,8 @@
                         <h5>Armas</h5>
                         {{#each objetos}}
                         <a href="/partidas/{{../partida.0.id_partida}}/ver_object/{{this.id}}">
-                            <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p>
+                            {{!-- <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p> --}}
+                             <p> {{this.nombre}} </p>
                         </a>
                         {{/each}}
                     </div>
