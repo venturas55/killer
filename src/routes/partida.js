@@ -177,6 +177,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
   try {
     let ganador = false;
     id_jugador = req.user.id;
+    console.log(id_partida);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
     /*   for (let i = 0; i < partida.length; i++){
        console.log(partida[i].id_jugador);
@@ -186,7 +187,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
 
     //=================== ES CREADOR ==========================
     var esCreador = false;
-    console.log(esCreador + " " + partida[0].id_creador + " " + req.user.id);
+    //console.log(esCreador + " " + partida[0].id_creador + " " + req.user.id);
     if (partida[0].id_creador == req.user.id) {
       esCreador = true;
       console.log(esCreador);
