@@ -63,6 +63,7 @@ app.use('/partidas',require('./routes/partida')); //ruta de las items1. siempre 
 app.use(require('./routes/api'));
 app.use(require('./routes/fotos'));
 app.use(require('./routes/payments'));
+app.use(require('./routes/profile'));
 
 
 //Public
