@@ -4,7 +4,7 @@
         <div class="col-md-12 mx-auto cajita">
             <p> <span> <strong>'{{ticket.jugador_name}}'</strong> ha reportado que te ha matado con <strong>
                         '{{ticket.objeto}}' </strong> . Es verdad?</span></p>
-            <a href="/partidas/{{ticket.id_partida}}/muerte/{{ticket.id_victima}}" class="btn btn-warning">Aceptar</a>
+            <a href="/partidas/{{ticket.id_partida}}/muerte" class="btn btn-warning">Aceptar</a>
             <a href="/partidas/{{ticket.id_partida}}/rejectkill/{{ticket.id_victima}}" class="btn btn-warning">
                 Denegar</a>
         </div>
@@ -129,7 +129,7 @@
                         {{../supervivientes.0.asesinatos}} eliminaciones</strong></span>
             </div>
             <div class="d-flex justify-content-around my-4">
-                <a href="/partidas/plantillaindividual/{{ partida.0.id_partida}}">
+                <a href="/partidas/plantillaindividual/{{ ../partida.0.id_partida}}">
                     <button class="btn btn-style">VER ASESINOS</button>
                 </a>
             </div>

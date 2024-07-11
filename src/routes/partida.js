@@ -107,6 +107,7 @@ router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, asyn
   res.render("objetos/ver_object", { objeto, id_partida });
 });
 
+//EN DESUSO TODO:
 //READ
 //Para mostrar listado de partidas para el admin
 /* router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
@@ -141,15 +142,14 @@ router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, asyn
   }
 }); */
 
-//EN DESUSO TODO:
-/* router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
+router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
   id_jugador = req.user.id;
   const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
   console.log(partida);
   //console.log(partida[0]);
   res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
-}); */
+});
 
 //Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
 router.get('/listar', funciones.isAuthenticated, async (req, res) => {
@@ -174,7 +174,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
   try {
     let ganador = false;
     id_jugador = req.user.id;
-    console.log(id_partida);
+    //console.log(id_partida);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
     /*   for (let i = 0; i < partida.length; i++){
        console.log(partida[i].id_jugador);
@@ -187,7 +187,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     //console.log(esCreador + " " + partida[0].id_creador + " " + req.user.id);
     if (partida[0].id_creador == req.user.id) {
       esCreador = true;
-      console.log(esCreador);
+      //console.log(esCreador);
     }
 
     //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
@@ -216,8 +216,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     const objetivo = partida.filter(function (el) {
       return el.id_jugador === req.user.id
     })[0];
-    console.log("mi objetivo");
-    console.log(objetivo);
+    //console.log("mi objetivo");
+    //console.log(objetivo);
     //Solo habrá objetivo si estas jugando por lo que se puede usar para renderizar en funcion de si el "admin" juega o no
 
 
@@ -238,6 +238,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     });
     //===== LAST KILL =================
     const last_kill = (await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
+    console.log(last_kill);
 
     //============= DID I DIE ========
     //Si estoy jugando
@@ -287,9 +288,8 @@ router.get("/join", funciones.isAuthenticated, async (req, res) => {
 });
 router.post("/join", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.body;
-  console.log(id_partida + " " + req.user.id);
+  //console.log(id_partida + " " + req.user.id);
   const item = { id_partida, id_jugador: req.user.id };
-
 
   try {
     await db.query("INSERT INTO jugadores set ?", [item]);
@@ -317,11 +317,6 @@ router.post("/join", funciones.isAuthenticated, async (req, res) => {
     req.flash("error", "Hubo algun error");
     res.redirect("/error");
   }
-
-
-
-
-
 });
 
 
@@ -454,6 +449,7 @@ router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async
   /* TODO: verificar que esta en tiempo */
   // funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
   console.log("aviso enviado");
+  //TODO: SE ALMACENAR EL TICKET EN LA FILA DONDE ID_JUGADOR (ID_ASESINO) Y ID_VICTIMA ES LA VICTIMA. Ahora mismo pienso que seria mejor almacenar el ticket en la fila de la ID_VICTIMA.
 
   try {
     await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
@@ -465,46 +461,79 @@ router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async
     res.redirect("/error");
   }
 });
-//Ruta para CONFIRMAR la solicitud de un asesinato. ES UNA MUERTE
-router.get("/:id_partida/muerte/:id_victima", funciones.isAuthenticated, async (req, res) => {
+//Ruta para BORRAR NOTIFICACION la solicitud e un asesinato.
+router.get("/:id_partida/borrarasesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
-  try {
+  /* TODO: verificar que esta en tiempo */
+  // funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
+  console.log("aviso enviado");
+  //TODO: SE ALMACENAR EL TICKET EN LA FILA DONDE ID_JUGADOR (ID_ASESINO) Y ID_VICTIMA ES LA VICTIMA. Ahora mismo pienso que seria mejor almacenar el ticket en la fila de la ID_VICTIMA.
 
-    let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_victima, id_partida]))[0];
-    let victima = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [asesino.id_victima, id_partida]))[0];
+  try {
+    await db.query("update partidasenjuego set ticket = false where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
+    req.flash("success", "Aviso de asesinato borrado");
+    res.redirect("/partidas/plantilla/" + id_partida);
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+});
+
+//Ruta para CONFIRMAR la solicitud de un asesinato. ES UNA MUERTE
+router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) => {
+  const { id_partida } = req.params;
+  id_jugador = req.user.id;
+  try {
+    //jugador envia ticket a aseisno, se almacena en tickjet del aseisno. EN LA TABLA PARTIDASENJUEGO.
+    //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
+    let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
+    console.log("1")
     console.log(asesino);
-    console.log(victima);
-    //Inserto la muerte en la tabla eliminaciones
+    //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al ASESINO y en id_victima a la JUGADOR 
+    let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
+    //console.log("2")
+    //console.log(victima);
+    console.log("3");
+
+    //VICTIMA=JUGADOR
+    // Marco la victima muerta y su fecha.quito el ticket
+    jugador.eliminado = true;
+    jugador.fecha_asesinato = new Date();
+    jugador.ticket = false;
+
+    //ASESINO
+    //Sumo muerte Actualizo nuevo objetivo
+    asesino.asesinatos++;
+    //guardo datos a machacar del asesino
+    let victimaaux = asesino.id_victima;
+    let objetoaux = asesino.id_objeto;
+
+    //machaco nuevos datos del asesino que hereda del jugador asesinado, VICTIMA
+    asesino.id_victima = jugador.id_victima;
+    asesino.id_objeto = jugador.id_objeto;
+    asesino.fecha_asesinato = new Date();
+    asesino.ticket=false;
+    //recupero datos machacados del asesino a la victima. DATOS CON LOS QUE SE MATO. UN MUERTO TENDRA EN ID_VICTIMA A SU ASESINO ASI COMO EL OBJETO CON EL QUE LE MATARON
+    jugador.id_victima = victimaaux;
+    jugador.id_objeto = objetoaux;
+    jugador.eliminado = 1;
+
+    //Creo el asesinato
     const eliminacion = {
       id_partida,
       'id_asesino': asesino.id_jugador,
       'id_victima': asesino.id_victima,
       'id_objeto': asesino.id_objeto,
+
     }
-    await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
+    //Inserto la muerte en la tabla eliminaciones
+      await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
+    //await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
 
-    // Marco la victima muerta y su fecha.
-    victima.eliminado = true;
-    victima.fecha_asesinato = new Date();
+    console.log("4")
+    await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [jugador, id_partida, jugador.id_jugador,]);
 
-
-    //Sumo muerte. quito el ticket. Actualizo nuevo objetivo
-    asesino.ticket = false;
-    asesino.asesinatos++;
-    //guardo datos a machacar del asesino
-    let victimaaux = asesino.id_victima;
-    let objetoaux = asesino.id_objeto;
-    //machaco datos del asesino
-    asesino.id_victima = victima.id_victima;
-    asesino.id_objeto = victima.id_objeto;
-    //recupero datos machacados del asesino a la victima. DATOS CON LOS QUE SE MATO
-    victima.id_victima = victimaaux;
-    victima.id_objeto = objetoaux;
-
-    asesino.fecha_asesinato = new Date();
-    //console.log(asesino);
-    //console.log(id_partida + " " + id_victima + " " + asesino.id_jugador);
-    await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [victima, id_partida, victima.id_jugador,]);
     await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [asesino, id_partida, asesino.id_jugador]);
 
     //VERIFICAR SI SE ACABA LA PARTIDA BASANDONOS EN SUPERVIVIENTES

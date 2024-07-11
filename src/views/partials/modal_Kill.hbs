@@ -26,10 +26,9 @@
                 <button class="btn btn-warning" data-bs-target="#killModalToggle"
                     data-bs-toggle="modal">CANCELAR</button>
                 {{#if ticketenviado}}
-
-
+                <button class="btn btn-warning" data-bs-target="#killModalToggle3" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">BORRAR NOTIFICACION</button>
                 {{else}}
-
                 <button class="btn btn-warning" data-bs-target="#killModalToggle2" data-bs-toggle="modal"
                     data-bs-dismiss="modal">MATARLO</button>
                 {{/if}}
@@ -55,6 +54,28 @@
 
                 <button class="btn btn-warning" data-bs-target="#killModalToggle2"
                     data-bs-toggle="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="killModalToggle3" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="killModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="killModalToggleLabel3">Confirmación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seguro que quieres cancelar el aviso enviado???</p>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <a href="/partidas/{{objetivo.id_partida}}/borrarasesinar/{{objetivo.id_victima}}" class="btn btn-danger">SI,
+                    CANCELAR</a>
+
+                <button class="btn btn-warning" data-bs-target="#killModalToggle3" data-bs-toggle="modal">NO, DEJAR
+                    AVISO</button>
             </div>
         </div>
     </div>
