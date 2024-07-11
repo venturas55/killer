@@ -107,6 +107,11 @@
             {{else}}
             <div class="col-md-12 mx-auto mt-4">
                 <p> Aunque eres administrador de la partida, no participas en ella</p>
+                            <div class="d-flex justify-content-around my-4">
+                <a href="/partidas/plantillaindividual/{{ ../partida.0.id_partida}}">
+                    <button class="btn btn-style">VER PARTIDA</button>
+                </a>
+            </div>
             </div>
             {{/if}}
             {{/when}}
@@ -130,7 +135,7 @@
             </div>
             <div class="d-flex justify-content-around my-4">
                 <a href="/partidas/plantillaindividual/{{ ../partida.0.id_partida}}">
-                    <button class="btn btn-style">VER ASESINOS</button>
+                    <button class="btn btn-style">VER PARTIDA</button>
                 </a>
             </div>
             {{/if}}

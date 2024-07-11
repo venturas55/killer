@@ -142,10 +142,11 @@ router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, asyn
   }
 }); */
 
-router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, async (req, res) => {
+router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   id_jugador = req.user.id;
-  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
+  //const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
+  const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? ORDER BY pej.asesinatos desc", [id_partida,]);
   console.log(partida);
   //console.log(partida[0]);
   res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
