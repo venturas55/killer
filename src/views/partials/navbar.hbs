@@ -4,12 +4,16 @@
     <a  href="/partidas/listar">
       <img class=" avatar-s" src="/img/poli.svg" alt="svg"></a>
   </div>
+  <div class="mx-4 navbar-brand">
+    {{#if user}}
+    {{>avatar}}
+    {{/if}}
 
+  </div>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
       {{#if user}}
@@ -38,11 +42,6 @@
   </div>
 
 
-  <div class="mx-4 navbar-brand">
-    {{#if user}}
-    {{>avatar}}
-    {{/if}}
 
-  </div>
 
 </nav>

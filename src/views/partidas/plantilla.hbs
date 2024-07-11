@@ -13,7 +13,7 @@
 
     <div class="row">
         {{#when supervivientes.length 'gt' 1}}
-        <p> Quedan {{tiempoHasta ../partida.0.fecha_fin}}</p>
+        <p> Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos</p>
         {{/when}}
         {{#when supervivientes.length 'lte' 1}}
         <p> Acabó el {{formatearSpHora ../last_kill.fecha_eliminacion}} previsto el {{formatearSpHora
