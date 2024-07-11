@@ -103,6 +103,19 @@ helpers.hasPermission = async (req, res, next) => {
     return res.render('error', { error });
 }
 
+helpers.esCreadorPartida = async (req, res, next) => {
+    var id_partida = req.params.id_partida;
+    if(id_partida == null)
+        id_partida=req.body.id_partida;
+    const partida = (await db.query("select * from partidas where id = ?", [id_partida]))[0];
+    //console.log(partida);
+    //Si es el creador de la partida
+    if (partida.id_creador == req.user.id)
+        return next();
+    var error = "No tienes permisos";
+    return res.render('error', { error });
+}
+
 helpers.isNotAdmin = (req, res, next) => {
     if (!req.user.privilegio == "admin") {
         return next();

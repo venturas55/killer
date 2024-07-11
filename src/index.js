@@ -59,6 +59,7 @@ app.use(require('./routes/api'));
 app.use(require('./routes/fotos'));
 app.use(require('./routes/payments'));
 app.use(require('./routes/profile'));
+app.use('/comunicados',require('./routes/comunicado'));
 
 
 //Public

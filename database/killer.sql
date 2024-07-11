@@ -93,6 +93,13 @@ CREATE TABLE `tokens` (
   FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de tokens';
 
+CREATE TABLE `comunicados` (
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  `titulo` varchar(50) NOT NULL,
+  `descripcion` varchar(250) DEFAULT NULL,
+  `id_partida` varchar(5),
+  FOREIGN KEY (id_partida) REFERENCES partidas(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de comunicados';
 
 INSERT INTO
   `usuarios` (

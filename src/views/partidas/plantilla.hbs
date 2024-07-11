@@ -1,16 +1,5 @@
 <div class="container p-2 text-center mb-4">
-    {{#if ticket}}
-    <div class="row">
-        <div class="col-md-12 mx-auto cajita">
-            <p> <span> <strong>'{{ticket.jugador_name}}'</strong> ha reportado que te ha matado con <strong>
-                        '{{ticket.objeto}}' </strong> . Es verdad?</span></p>
-            <a href="/partidas/{{ticket.id_partida}}/muerte" class="btn btn-warning">Aceptar</a>
-            <a href="/partidas/{{ticket.id_partida}}/rejectkill/{{ticket.id_victima}}" class="btn btn-warning">
-                Denegar</a>
-        </div>
-    </div>
-    {{/if}}
-
+    {{>ticket}}
     <div class="row">
         {{#when supervivientes.length 'gt' 1}}
         <p> Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos</p>
@@ -41,7 +30,7 @@
                         {{#each jugadores}}
                         <a href="/jugador/foto/{{../partida.0.id_partida}}/{{this.id}}">
                             <p {{#if this.eliminado}}class="tachado" {{/if}}> {{this.full_name}} </p>
-                           
+
                         </a>
                         {{/each}}
                     </div>
@@ -50,7 +39,7 @@
                         {{#each objetos}}
                         <a href="/partidas/{{../partida.0.id_partida}}/ver_object/{{this.id}}">
                             {{!-- <p {{#if this.eliminado}} class="tachado" {{/if}}> {{this.nombre}} </p> --}}
-                             <p> {{this.nombre}} </p>
+                            <p> {{this.nombre}} </p>
                         </a>
                         {{/each}}
                     </div>
@@ -107,11 +96,11 @@
             {{else}}
             <div class="col-md-12 mx-auto mt-4">
                 <p> Aunque eres administrador de la partida, no participas en ella</p>
-                            <div class="d-flex justify-content-around my-4">
-                <a href="/partidas/plantillaindividual/{{ ../partida.0.id_partida}}">
-                    <button class="btn btn-style">VER PARTIDA</button>
-                </a>
-            </div>
+                <div class="d-flex justify-content-around my-4">
+                    <a href="/partidas/plantillaindividual/{{ ../partida.0.id_partida}}">
+                        <button class="btn btn-style">VER PARTIDA</button>
+                    </a>
+                </div>
             </div>
             {{/if}}
             {{/when}}
@@ -147,8 +136,13 @@
         <div class="col-md-12">
             <div class="d-flex  justify-content-around">
                 <a href="/partidas/editObjects/{{partida.0.id_partida}}" class="btn btn-style"> <i
-                        class="fa-solid fa-pen"></i>Editar Objetos</a>
+                        class="fa-solid fa-pen"></i>EDITAR OBJETOS</a>
+                <a href="/comunicados/list/{{partida.0.id_partida}}">
+                    <button class="btn btn-style">COMUNICADOS</button>
+                </a>
+         
             </div>
+
         </div>
     </div>
     {{/if}}

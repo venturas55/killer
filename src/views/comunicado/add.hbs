@@ -1,0 +1,27 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <div class="card">
+                <div class="text-center">
+                    <h1>ENVIAR UN COMUNICADO en {{id_partida}}</h1>
+                </div>
+                <div class="card-body">
+                    <form class="row g-3" action="/comunicados/add" method="post">
+                        <input type="hidden" value="{{id_partida}}" name="id_partida">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Titulo</label>
+                            <input type="text" class="form-control" name="titulo" id="exampleFormControlInput1" placeholder="Introduzca el titulo">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Comunicado</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" name="descripcion" rows="3" placeholder="Detalle el comunicado aqui"></textarea>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-warning mb-3">ENVIAR</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
