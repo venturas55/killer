@@ -86,12 +86,4 @@ router.post("/edit", funciones.isAuthenticated, async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
 module.exports = router;
