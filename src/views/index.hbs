@@ -9,15 +9,15 @@
     </div>
     <div class="text-white">
         <div class="text-start">
-         <p> ¡Bienvenido a nuestra emocionante comunidad!</p>
-        <p> Estamos encantados de tenerte aquí, listo para sumergirte en el apasionante mundo de nuestro gestor
-            de
-            juego
-            KILLER.</p>
-        <p> En nuestra app, encontrarás un lugar donde la diversión y la estrategia se unen para crear
-            experiencias de juego inolvidables.</p>
-        <p> ¿Listo para un desafío? ¡Regístrate ahora y desbloquea un mundo de posibilidades!</p>
-        <p>Al unirte a nosotros, podrás:</p>
+            <p> ¡Bienvenido a nuestra emocionante comunidad!</p>
+            <p> Estamos encantados de tenerte aquí, listo para sumergirte en el apasionante mundo de nuestro gestor
+                de
+                juego
+                KILLER.</p>
+            <p> En nuestra app, encontrarás un lugar donde la diversión y la estrategia se unen para crear
+                experiencias de juego inolvidables.</p>
+            <p> ¿Listo para un desafío? ¡Regístrate ahora y desbloquea un mundo de posibilidades!</p>
+            <p>Al unirte a nosotros, podrás:</p>
         </div>
         <ul class="text-justify">
             <li>
@@ -34,37 +34,34 @@
             </li>
         </ul>
         <div class="text-start">
-        <p> No importa si eres un experto estratega o un principiante entusiasta; aquí encontrarás partidas para
-            todos
-            los niveles de habilidad. ¡La diversión está garantizada!</p>
-        <p> Así que, ¿qué estás esperando? Regístrate, crea tu perfil y empieza a explorar. El próximo desafío
-            está
-            a
-            solo un clic de distancia.</p>
-        <p> ¡Únete a la diversión, desafía a tus amigos o conoce a nuevos jugadores para disfrutar de partidas
-            llenas de
-            emoción y estrategia! ¡Nos vemos en la vida real!</p> 
-        <p> ¡Regístrate ahora y comienza tu aventura en nuestros juegos KILLER!</p>
-        </p>
-</div>
+            <p> No importa si eres un experto estratega o un principiante entusiasta; aquí encontrarás partidas para
+                todos
+                los niveles de habilidad. ¡La diversión está garantizada!</p>
+            <p> Así que, ¿qué estás esperando? Regístrate, crea tu perfil y empieza a explorar. El próximo desafío
+                está
+                a
+                solo un clic de distancia.</p>
+            <p> ¡Únete a la diversión, desafía a tus amigos o conoce a nuevos jugadores para disfrutar de partidas
+                llenas de
+                emoción y estrategia! ¡Nos vemos en la vida real!</p>
+            <p> ¡Regístrate ahora y comienza tu aventura en nuestros juegos KILLER!</p>
+            </p>
+        </div>
     </div>
 
-
     {{#if user}}
-    <div class="container text-center mb-4"> <a href="/partidas/listar">
+    <div class="container text-center my-4"> <a href="/partidas/listar">
             <button class="btn btn-warning">PARTIDAS</button>
         </a></div>
     {{!-- <div class="container text-center"> <a href="/logout">
             <button class="btn btn-warning">LOGOUT</button></a></div> --}}
     {{else}}
-    <div class="container text-center mb-3">
+    <div class="d-flex flex-column  justify-content-aroud">
+        <a href="/signin" class="my-3"> <button class="btn btn-warning">INICIAR SESION</button></a>
+
         <a href="/signup">
             <button class="btn btn-warning">CREAR CUENTA</button>
         </a>
     </div>
-
-    <div class="container text-center mb-3">
-        <a href="/signin"> <button class="btn btn-warning">INICIAR SESION</button></a>
-    </div>
     {{/if}}
-   </div>
+</div>
