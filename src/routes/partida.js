@@ -168,6 +168,18 @@ router.get('/listar', funciones.isAuthenticated, async (req, res) => {
   }
 });
 
+////Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
+router.get('/listartodas', funciones.isAdmin, async (req, res) => {
+  try {
+    const partidasDondeParticipo = await db.query(queries.queryPartidasPropias + "  order by status", []);
+    res.render('partidas/listar', { partidasDondeParticipo });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+});
+
 //CARGA LA PANTALLA PRINCIPAL DE UNA PARTIDA
 router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
