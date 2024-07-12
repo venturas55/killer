@@ -22,9 +22,7 @@
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-warning" data-bs-target="#killModalToggle"
-                    data-bs-toggle="modal">CANCELAR</button>
+            <div class="modal-footer d-flex flex-column align-content-center">
                 {{#if ticketenviado}}
                 <button class="btn btn-warning" data-bs-target="#killModalToggle3" data-bs-toggle="modal"
                     data-bs-dismiss="modal">BORRAR NOTIFICACION</button>
@@ -32,6 +30,8 @@
                 <button class="btn btn-warning" data-bs-target="#killModalToggle2" data-bs-toggle="modal"
                     data-bs-dismiss="modal">MATARLO</button>
                 {{/if}}
+                <button class="btn btn-warning" data-bs-target="#killModalToggle"
+                    data-bs-toggle="modal">CANCELAR</button>
             </div>
         </div>
     </div>
@@ -48,12 +48,12 @@
                 <p>Seguro que has logrado eliminarlo???</p>
                 <p>Le llegará un aviso a la victima, que tendrá que confirmar</p>
             </div>
-            <div class="modal-footer">
-                <a href="/partidas/{{objetivo.id_partida}}/asesinar/{{objetivo.id_victima}}" class="btn btn-danger">SI,
+            <div class="modal-footer d-flex flex-column align-content-center">
+                <a href="/partidas/{{objetivo.id_partida}}/asesinar/{{objetivo.id_victima}}" class="btn btn-danger">SI, LO HE
                     MATALO</a>
 
                 <button class="btn btn-warning" data-bs-target="#killModalToggle2"
-                    data-bs-toggle="modal">Cancelar</button>
+                    data-bs-toggle="modal">ESTABA DE BROMA</button>
             </div>
         </div>
     </div>
@@ -70,8 +70,9 @@
                 <p>Seguro que quieres cancelar el aviso enviado???</p>
                 <p></p>
             </div>
-            <div class="modal-footer">
-                <a href="/partidas/{{objetivo.id_partida}}/borrarasesinar/{{objetivo.id_victima}}" class="btn btn-danger">SI,
+            <div class="modal-footer d-flex flex-column align-content-center">
+                <a href="/partidas/{{objetivo.id_partida}}/borrarasesinar/{{objetivo.id_victima}}"
+                    class="btn btn-danger">SI,
                     CANCELAR</a>
 
                 <button class="btn btn-warning" data-bs-target="#killModalToggle3" data-bs-toggle="modal">NO, DEJAR

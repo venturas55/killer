@@ -1,22 +1,25 @@
 {{>logo}}
 <div class="container py-2">
     <div class="row">
-        <div class="col-md-12 ">
-            <h1>COMUNICADOS EN LA PARTIDA {{ partida.titulo }} - {{ partida.descripcion }}</h1>
+        <div class="col-md-12 text-center">
+            <h1>COMUNICADOS </h1>
+            <h2>{{ partida.titulo }} </h2>
+            <p>{{ partida.descripcion }}</p>
+            <hr>
             <div>
                 <h2 class="text-center"> Listado de comunicados</h2>
                 {{#if comunicados}}
                 <table class="table table-dark table-striped">
                     <tr>
-                        <th>id</th>
+                        <th class="d-none d-xl-table-cell">id</th>
                         <th>titulo</th>
-                        <th>Descripcion</th>
+                        <th >Descripcion</th>
                         <th>Fecha</th>
                         <th>Accion</th>
                     </tr>
                     {{#each comunicados}}
-                    <tr class="table-active">
-                        <td>
+                    <tr class="">
+                        <td  class="d-none d-xl-table-cell">
                             <p> {{this.id}}</p> </a>
                         </td>
                         <td>
@@ -29,13 +32,18 @@
                             <p> {{formatearSpHora this.fecha}}</p>
                         </td>
                         <td class="d-flex flex-row">
-                            <a href="/comunicados/edit/{{this.id}}" class="text-warning"><i
-                                    class="fa-solid fa-pencil"></i>Edit</a>
+                            <form action="/comunicados/edit" method="post" class="m-0 p-0">
+                                <input type="hidden" value="{{this.id}}" name="id">
+                                <input type="hidden" value="{{this.id_partida}}" name="id_partida">
+                                <button class="btn btn-link text-decoration-none mx-1 p-0">
+                                    <a class="text-warning"><i class="fa-solid fa-pencil"></i>Edit</a></button>
+                            </form>
 
                             <form action="/comunicados/del" method="post" class="m-0 p-0">
                                 <input type="hidden" value="{{this.id}}" name="id">
                                 <input type="hidden" value="{{this.id_partida}}" name="id_partida">
-                                <button class="btn btn-link text-decoration-none mx-1 p-0"> <a class="text-warning"><i class="fa-solid fa-trash"></i>Del</a></button>
+                                <button class="btn btn-link text-decoration-none mx-1 p-0"> <a class="text-warning"><i
+                                            class="fa-solid fa-trash"></i>Del</a></button>
                             </form>
                         </td>
                     </tr>
@@ -46,6 +54,7 @@
         </div>
     </div>
     <div class="text-center m-2">
-        <a href="/comunicados/add/{{partida.id}}" class="btn btn-warning"> AÑADIR COMUNICADO</a>
+        <a href="/comunicados/add/{{partida.id}}" class="btn btn-warning my-3"> AÑADIR COMUNICADO</a>
+        <a href="/partidas/plantilla/{{partida.id}}" class="btn btn-warning my-3"> VOLVER A LA PARTIDA</a>
     </div>
 </div>

@@ -7,21 +7,27 @@ const db = require("../database"); //db hace referencia a la BBDD
 
 
 //RUTA PARA ENVIAR COMUNICADOS /partidas/enviarComunicado/
-router.get("/list/:id_partida", funciones.esCreadorPartida, async (req, res) => {
+router.get("/list/:id_partida", funciones.isAuthenticated, async (req, res) => {
     const id_partida = req.params.id_partida;
     try {
         //console.log(id_partida);
         const comunicados = await db.query("select * from comunicados where id_partida=?", [id_partida]);
         //console.log(comunicados);
         var partida = (await db.query("select * from partidas where id=?", [id_partida]))[0];
-        res.render("comunicado/list", { comunicados, partida: partida });
+        console.log(partida.id_creador);
+        if(partida.id_creador ===req.user.id){
+            res.render("comunicado/list", { comunicados, partida: partida });
+        }
+        else{
+            res.render("comunicado/list2", { comunicados, partida: partida });
+        }
     } catch (error) {
         console.error(error.code);
         req.flash("error", "Hubo algun error");
         res.redirect("/error");
     }
 });
-router.get("/add/:id_partida", funciones.isAuthenticated, async (req, res) => {
+router.get("/add/:id_partida", funciones.hasPermission, async (req, res) => {
     console.log("YE");
     const id_partida = req.params;
     try {
@@ -33,7 +39,7 @@ router.get("/add/:id_partida", funciones.isAuthenticated, async (req, res) => {
         res.redirect("/error");
     }
 });
-router.post("/add", funciones.esCreadorPartida, async (req, res) => {
+router.post("/add", funciones.hasPermission, async (req, res) => {
     const { titulo, descripcion, id_partida } = req.body
     try {
         //await db.query("select * from jugadores where id_partida=?", [id_partida]);
@@ -53,7 +59,7 @@ router.post("/add", funciones.esCreadorPartida, async (req, res) => {
         res.redirect("/error");
     }
 });
-router.get("/edit/:id", funciones.isAuthenticated, async (req, res) => {
+router.get("/edit/:id", funciones.hasPermission, async (req, res) => {
     const { id } = req.params;
     console.log(id);
     try {
@@ -66,7 +72,7 @@ router.get("/edit/:id", funciones.isAuthenticated, async (req, res) => {
     }
 });
 
-router.post("/edit", funciones.isAuthenticated, async (req, res) => {
+router.post("/edit", funciones.hasPermission, async (req, res) => {
     const { id, titulo, descripcion, id_partida } = req.body;
     const newComunicado = {
         id,

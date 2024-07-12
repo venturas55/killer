@@ -137,15 +137,19 @@
             <div class="d-flex  justify-content-around">
                 <a href="/partidas/editObjects/{{partida.0.id_partida}}" class="btn btn-style"> <i
                         class="fa-solid fa-pen"></i>EDITAR OBJETOS</a>
-                <a href="/comunicados/list/{{partida.0.id_partida}}">
-                    <button class="btn btn-style">COMUNICADOS</button>
-                </a>
-         
             </div>
-
         </div>
     </div>
     {{/if}}
+    <div class="row my-4"> {{!-- //BOTONES --}}
+        <div class="col-md-12">
+            <div class="d-flex  justify-content-around">
+                <a href="/comunicados/list/{{partida.0.id_partida}}">
+                    <button class="btn btn-style">COMUNICADOS</button>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{>modal_Kill}}
