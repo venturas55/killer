@@ -85,8 +85,11 @@ helpers.isAdmin = (req, res, next) => {
 }
 
 helpers.hasPermission = async (req, res, next) => {
-    //console.log(req.params);
-    const partida = (await db.query("select * from partidas where id = ?", [req.params.id_partida]))[0];
+    //BIEN LEE POR PARAMS O POR BODY
+    var id_partida = req.params.id_partida;
+    if (id_partida == null)
+        id_partida = req.body.id_partida;
+    const partida = (await db.query("select * from partidas where id = ?", [id_partida]))[0];
     //console.log(partida);
     //si es admin
     if (req.user && req.user.privilegio == "admin") {
@@ -104,9 +107,10 @@ helpers.hasPermission = async (req, res, next) => {
 }
 
 helpers.esCreadorPartida = async (req, res, next) => {
+    //BIEN LEE POR PARAMS O POR BODY
     var id_partida = req.params.id_partida;
-    if(id_partida == null)
-        id_partida=req.body.id_partida;
+    if (id_partida == null)
+        id_partida = req.body.id_partida;
     const partida = (await db.query("select * from partidas where id = ?", [id_partida]))[0];
     //console.log(partida);
     //Si es el creador de la partida
@@ -175,7 +179,7 @@ helpers.S5 = async () => {
     //e ha tenido que añadir la condicion de que empiece por una letra para guardar objetos que llevan el id.
     let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return characters.charAt(Math.floor(Math.random() * characters.length)) + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-//const guid = () => (S5()).toUpperCase();
+    //const guid = () => (S5()).toUpperCase();
 
 
 }
@@ -193,3 +197,18 @@ helpers.getCode = () => {
 }
 
 module.exports = helpers;
+
+//BIEN LEE POR PARAMS O POR BODY
+/*     var { id, id_partida } = req.params;
+    if (id_partida == null)
+        id_partida = req.body.id_partida;
+    if (id == null)
+        id = req.body.id_partida.id;
+    console.log(id + " " + id_partida)
+    var filtro;
+    if (id_partida == null)
+        filtro = id;
+    else
+        filtro = id_partida;
+
+        console.log("filtro " + filtro); */

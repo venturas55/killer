@@ -11,7 +11,8 @@
                         <th>id</th>
                         <th>titulo</th>
                         <th>Descripcion</th>
-                        <th>Descripcion</th>
+                        <th>Fecha</th>
+                        <th>Accion</th>
                     </tr>
                     {{#each comunicados}}
                     <tr class="table-active">
@@ -25,11 +26,18 @@
                             <p> {{this.descripcion}}</p>
                         </td>
                         <td>
+                            <p> {{formatearSpHora this.fecha}}</p>
+                        </td>
+                        <td class="d-flex flex-row">
                             <a href="/comunicados/edit/{{this.id}}" class="text-warning"><i
                                     class="fa-solid fa-pencil"></i>Edit</a>
-                            <a href="/comunicados/del/{{this.id}}" class="text-warning"><i
-                                    class="fa-solid fa-trash"></i>Del</a>
-                        </td> 
+
+                            <form action="/comunicados/del" method="post" class="m-0 p-0">
+                                <input type="hidden" value="{{this.id}}" name="id">
+                                <input type="hidden" value="{{this.id_partida}}" name="id_partida">
+                                <button class="btn btn-link text-decoration-none mx-1 p-0"> <a class="text-warning"><i class="fa-solid fa-trash"></i>Del</a></button>
+                            </form>
+                        </td>
                     </tr>
                     {{/each}}
                 </table>
@@ -37,7 +45,7 @@
             </div>
         </div>
     </div>
-              <div class="text-center m-2">
-                        <a href="/comunicados/add/{{partida.id}}" class="btn btn-warning"> AÑADIR COMUNICADO</a>
-                    </div>
+    <div class="text-center m-2">
+        <a href="/comunicados/add/{{partida.id}}" class="btn btn-warning"> AÑADIR COMUNICADO</a>
+    </div>
 </div>
