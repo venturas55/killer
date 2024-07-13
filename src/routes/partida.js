@@ -189,6 +189,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     id_jugador = req.user.id;
     //console.log(id_partida);
     const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
+    const eliminaciones = await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? order by ua.usuario ", [id_partida,]);
     /*   for (let i = 0; i < partida.length; i++){
        console.log(partida[i].id_jugador);
  
@@ -212,7 +213,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       var textB = b.usuario.toUpperCase();
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
-    //console.log(jugadores);
+    console.log("JUGADORES");
+    console.log(jugadores);
 
     //==============Obtengo un listado de los OBJETOS ordenados alfabeticamente.===========
     const objetos = partida.map(function (el) {
@@ -223,7 +225,8 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       var textB = b.nombre.toUpperCase();
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
-    //console.log(objetos);
+    console.log("OBJETOS");
+    console.log(objetos);
 
     //===== OBJETIVO =================
     const objetivo = partida.filter(function (el) {
@@ -250,16 +253,16 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       return (uno < dos) ? -1 : (uno > dos) ? 1 : 0;
     });
     //===== LAST KILL =================
-    const last_kill = (await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
+    const last_kill = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
     console.log(last_kill);
 
     //============= DID I DIE ========
     //Si estoy jugando
     if (objetivo) {
       var hemuerto = false;
-      var dididie = await db.query(queries.queryEliminacionesUsuariosObjetos + " WHERE e.id_partida=? AND e.id_victima = ? ", [id_partida, objetivo.id_jugador]);
-      //console.log("dididie");
-      //console.log(dididie);
+      var dididie = await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima = ? ", [id_partida, objetivo.id_jugador]);
+      console.log("dididie");
+      console.log(dididie);
       if (dididie.length > 0)
         hemuerto = true;
       dididie = dididie[0];
@@ -493,55 +496,56 @@ router.get("/:id_partida/borrarasesinar/:id_victima", funciones.isAuthenticated,
   }
 });
 
-//Ruta para CONFIRMAR la solicitud de un asesinato. ES UNA MUERTE
+//Ruta para CONFIRMAR la solicitud de un asesinato. ES UNA MUERTE. JUGADOR ES QUIEN MUERE!!! ES DECIR VICTIMA.
 router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
-  id_jugador = req.user.id;
+  var id_jugador = req.user.id;
   try {
-    //jugador envia ticket a aseisno, se almacena en tickjet del aseisno. EN LA TABLA PARTIDASENJUEGO.
+    //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
     //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
     let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
     console.log("1")
     console.log(asesino);
-    //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al ASESINO y en id_victima a la JUGADOR 
+    //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
     let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
     //console.log("2")
     //console.log(victima);
     console.log("3");
 
-    //VICTIMA=JUGADOR
+    //Creo el asesinato
+    const eliminacion = {
+      id_partida,
+      'id_asesino': asesino.id_jugador,
+      'id_victima': id_jugador,
+      'id_objeto': asesino.id_objeto,
+    }
+    //Inserto la muerte en la tabla eliminaciones
+    await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
+
+    //ACTUALIZO VICTIMA=JUGADOR
     // Marco la victima muerta y su fecha.quito el ticket
     jugador.eliminado = true;
     jugador.fecha_asesinato = new Date();
     jugador.ticket = false;
 
-    //ASESINO
-    //Sumo muerte Actualizo nuevo objetivo
-    asesino.asesinatos++;
+
     //guardo datos a machacar del asesino
-    let victimaaux = asesino.id_victima;
     let objetoaux = asesino.id_objeto;
 
-    //machaco nuevos datos del asesino que hereda del jugador asesinado, VICTIMA
+    //ASESINO
+    //Asigno nuevos datos del asesino que hereda del jugador asesinado, VICTIMA
     asesino.id_victima = jugador.id_victima;
     asesino.id_objeto = jugador.id_objeto;
-    asesino.fecha_asesinato = new Date();
-    asesino.ticket=false;
+    asesino.ticket = false;
+    //Sumo muerte Actualizo nuevo objetivo
+    asesino.asesinatos++;
+
     //recupero datos machacados del asesino a la victima. DATOS CON LOS QUE SE MATO. UN MUERTO TENDRA EN ID_VICTIMA A SU ASESINO ASI COMO EL OBJETO CON EL QUE LE MATARON
-    jugador.id_victima = victimaaux;
+    jugador.id_victima = asesino.id_jugador;
     jugador.id_objeto = objetoaux;
     jugador.eliminado = 1;
 
-    //Creo el asesinato
-    const eliminacion = {
-      id_partida,
-      'id_asesino': asesino.id_jugador,
-      'id_victima': asesino.id_victima,
-      'id_objeto': asesino.id_objeto,
 
-    }
-    //Inserto la muerte en la tabla eliminaciones
-      await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
     //await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
 
     console.log("4")
@@ -639,11 +643,12 @@ router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, asy
 });
 router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
+  console.log("BORRANDO PARTIDA...");
   try {
     let a = await db.query("DELETE FROM partidasenjuego WHERE id_partida=?", [id_partida]);
+    let d = await db.query("DELETE FROM eliminaciones WHERE id_partida=?", [id_partida]);
     let b = await db.query("DELETE FROM objetos WHERE id_partida=?", [id_partida]);
     let c = await db.query("DELETE FROM jugadores WHERE id_partida=?", [id_partida]);
-    let d = await db.query("DELETE FROM eliminaciones WHERE id_partida=?", [id_partida]);
     let e = await db.query("DELETE FROM partidas WHERE id=?", [id_partida]);
     req.flash("success", "Partida borrada correctamente");
     res.redirect("/partidas/listar");
