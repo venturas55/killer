@@ -20,7 +20,7 @@ CREATE TABLE `usuarios` (
   `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `usuario` varchar(50) NOT NULL,
   `contrasena` varchar(250) NOT NULL,
-  `email` varchar(200) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL UNIQUE,
   `full_name` varchar(200) DEFAULT NULL,
   `privilegio` varchar(30) DEFAULT NULL,
   `pictureURL` varchar(100) CHARACTER SET utf16 COLLATE utf16_spanish2_ci DEFAULT NULL
