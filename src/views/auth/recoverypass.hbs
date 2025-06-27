@@ -8,14 +8,12 @@
         </div>
         <div class="card-body">
           <img src="/img/logo.png" alt="Un LOGO" class="card-img-top mx-auto m-2 rounder-circle w-50">
-          <p>Introduza su usuario y email</p>
+          <p>Introduza su email</p>
           <form action="/profile/email/recordarpass" method="POST">
 
+   
             <div class="form-group mb-4">
-              <input type="text" name="usuario" placeholder="Usuario" class="form-control" autofocus />
-            </div>
-            <div class="form-group mb-4">
-              <input type="email" name="email" placeholder="e-mail" class="form-control" />
+              <input type="email" name="email" placeholder="e-mail" class="form-control" autofocus/>
             </div>
             <div class="form-group mb-4">
               <button class="btn btn-warning btn-block" onclick='document.getElementById("mensaje").innerHTML="Se está enviando correo, en breve será redirigido"'>

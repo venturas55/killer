@@ -459,7 +459,7 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
   }
 });
 
-//Ruta para NOTIFICAR la solicitud e un asesinato.
+//Ruta para NOTIFICAR la solicitud de un asesinato.
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
   /* TODO: verificar que esta en tiempo */
@@ -505,7 +505,7 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
     //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
     let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
     console.log("1")
-    console.log(asesino);
+    console.log(asesino.ticket);
     //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
     let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
     //console.log("2")
