@@ -1,4 +1,4 @@
-const { format } = require('timeago.js');
+import format from 'timeago.js';
 const helpers = {};
 
 helpers.timeago = (timestamp) => {

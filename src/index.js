@@ -9,6 +9,7 @@ import { config } from './config.js';
 import * as path from "path";
 import * as url from "url";
 import passport from "passport";
+import handlebars from "./lib/handlebars.js";
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 //Initialization
@@ -23,7 +24,7 @@ app.engine('.hbs', engine({  //con esto se configura el app.engine
     layoutDir: path.join(app.get('views'),'layouts'),
     partialsDir: path.join(app.get('views'),'partials'),
     extname: '.hbs',
-    helpers: './lib/handlebars.js' //no hay nada aun
+    helpers: handlebars //no hay nada aun
 }));
 app.set('view engine','.hbs'); //Para utilizar el app.engine
 
