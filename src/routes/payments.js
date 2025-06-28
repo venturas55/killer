@@ -1,8 +1,9 @@
-const express = require('express');
-require('dotenv').config();
+import { Router } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const router = express.Router();
-const Stripe = require('stripe');
+const router = Router();
+import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_PRIV || 'PRIVATE KEY');
 
@@ -51,4 +52,4 @@ router.get('/payment/cancel', async (req, res) => {
     res.render("payment/cancel");
 });
 
-module.exports = router;
+export default router;

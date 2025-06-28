@@ -1,4 +1,3 @@
-drop database killer2;
 drop database killer;
 create database killer;
 use killer;
@@ -102,6 +101,15 @@ CREATE TABLE `comunicados` (
   `fecha` TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   FOREIGN KEY (id_partida) REFERENCES partidas(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de comunicados';
+
+ALTER TABLE `usuarios`
+  ADD COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
+  ADD COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
+
+
+ALTER TABLE `partidas`
+  ADD COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
+  ADD COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
 
 INSERT INTO
   `usuarios` (

@@ -13,7 +13,7 @@ const queries = {
     queryPartidasActivas: "select pej.id_partida,pej.id_jugador,pej.id_victima, pej.eliminado, pej.id_objeto,pej.asesinatos,pej.ticket,pej.eliminado,pej.fecha_asesinato,p.titulo,p.descripcion,p.id_creador,p.fecha_inicio,p.fecha_fin,p.status,uv.usuario as victima_user, uv.full_name as victima_name,uv.pictureURL as foto_victima, ua.full_name as jugador_name ,ua.usuario as jugador_user,o.nombre as objeto,o.descripcion as descripcion_objeto,uc.usuario as usuario_creador, uc.full_name as creador_name, uc.email as email_creador from partidasenjuego pej LEFT JOIN partidas p ON pej.id_partida=p.id LEFT JOIN usuarios uv ON uv.id=pej.id_victima LEFT JOIN objetos o ON o.id=pej.id_objeto LEFT JOIN usuarios ua ON ua.id=pej.id_jugador LEFT JOIN usuarios uc ON p.id_creador=uc.id",
 };
 
-module.exports = queries;
+export default queries;
 
 //CONSULTAR ASESINATOS
 // select pej.id_partida,pej.id_jugador,pej.id_victima, pej.id_objeto,pej.asesinatos,pej.eliminado,pej.fecha_asesinato,uv.usuario as victima_user, uv.full_name as victima_name, ua.full_name as jugador_name ,ua.usuario as jugador_user,o.nombre as objeto from partidasenjuego pej LEFT JOIN partidas p ON pej.id_partida=p.id LEFT JOIN usuarios uv ON uv.id=pej.id_victima LEFT JOIN objetos o ON o.id=pej.id_objeto LEFT JOIN usuarios ua ON ua.id=pej.id_jugador LEFT JOIN usuarios uc ON p.id_creador=uc.id  WHERE pej.id_partida='U370A' and pej.asesinatos>0;

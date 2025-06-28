@@ -1,9 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const queries = require("./queries");
-const funciones = require("../lib/funciones");
-
-const db = require("../database"); //db hace referencia a la BBDD
+import { Router } from "express";
+const router = Router();
+import funciones from "../lib/funciones.js";
+import db from "../database.js"; //db hace referencia a la BBDD
 
 
 //RUTA PARA ENVIAR COMUNICADOS /partidas/enviarComunicado/
@@ -28,7 +26,6 @@ router.get("/list/:id_partida", funciones.isAuthenticated, async (req, res) => {
     }
 });
 router.get("/add/:id_partida", funciones.hasPermission, async (req, res) => {
-    console.log("YE");
     const id_partida = req.params;
     try {
 
@@ -49,7 +46,7 @@ router.post("/add", funciones.hasPermission, async (req, res) => {
             titulo
         }
         console.log(comunicado);
-        await db.query("insert into comunicados set ?", [comunicado])
+        await query("insert into comunicados set ?", [comunicado])
         req.flash("success", "Comunicado enviado");
         res.redirect("/comunicados/list/" + id_partida);
     } catch (error) {
@@ -109,4 +106,4 @@ router.post("/del", funciones.hasPermission, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

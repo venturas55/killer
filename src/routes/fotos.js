@@ -1,14 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const { unlink } = require('fs-extra');
-const fs = require('fs');
-const path = require('path');
-const db = require("../database"); //db hace referencia a la BBDD
-const multer = require('multer');
-//const { access, constants } = require('node:fs');
-const { access, constants } = require('fs');
-const funciones = require("../lib/funciones.js");
-const { v4: uuidv4 } = require('uuid');
+import { Router } from "express";
+const router = Router();
+
+import fse from 'fs-extra';
+import fs from 'fs';
+import path from 'path';
+import db from "../database.js"; //db hace referencia a la BBDD
+import multer from 'multer';
+import { access, constants } from 'fs';
+import funciones from "../lib/funciones.js";
+import { v4 as uuidv4 } from 'uuid';
+import { imageSizeLimitErrorHandler } from "../lib/validaciones.js";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -62,7 +63,7 @@ router.post('/profile/upload/:id', funciones.isAuthenticated, uploadFoto, async 
                 console.log("No tiene foto de perfil");
             } else {
                 console.log('File exists. Deleting now ...');
-                await unlink(filePath);
+                await fse.unlink(filePath);
             }
         });
     }
@@ -237,4 +238,4 @@ router.post("/partidas/:id_partida/edit_object/:id_object", funciones.hasPermiss
     }
 });
 
-module.exports = router;
+export default router;

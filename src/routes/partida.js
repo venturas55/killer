@@ -1,9 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const queries = require("./queries");
-const funciones = require("../lib/funciones");
-
-const db = require("../database"); //db hace referencia a la BBDD
+import { Router } from "express";
+const router = Router();
+import queries from "./queries.js";
+import funciones from "../lib/funciones.js";
+import db from "../database.js"; //db hace referencia a la BBDD
 
 //GESTION DEL CRUD
 //CREATE
@@ -659,4 +658,4 @@ router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

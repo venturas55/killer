@@ -1,7 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const funciones = require("../lib/funciones");
-const db = require("../database"); //db hace referencia a la BBDD
+import { Router } from 'express';
+const router = Router();
+import funciones from "../lib/funciones.js";
+import db from "../database.js"; //db hace referencia a la BBDD
 
 
 router.get('/profile', funciones.isAuthenticated, async (req, res) => {
@@ -27,4 +27,4 @@ router.post('/profile/edit', funciones.isAuthenticated, async (req, res) => {
     res.redirect('/profile');
 });
 
-module.exports = router;
+export default router;

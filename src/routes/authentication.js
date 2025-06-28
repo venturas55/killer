@@ -1,10 +1,9 @@
-const express = require('express');
-const { Passport } = require('passport');
-const router = express.Router();
-const nodemailer = require('nodemailer');
-const passport = require('passport');
-const db = require("../database"); //db hace referencia a la BBDD
-const funciones = require('../lib/funciones');
+import { Router } from 'express';
+import passport from 'passport';
+const router = Router();
+import { createTransport } from 'nodemailer';
+import funciones from '../lib/funciones.js';
+import db from "../database.js"; //db hace referencia a la BBDD
 
 router.get('/signup', funciones.isNotAuthenticated, (req, res) => {
     res.render('auth/signup')
@@ -45,22 +44,22 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
     const email = req.body.email;
     const usuario = req.body.usuario;
     // console.log(email + " " + usuario);
-    var rows = await db.query("SELECT * FROM usuarios WHERE email= ?", [email]);
+    var rows = await query("SELECT * FROM usuarios WHERE email= ?", [email]);
     if (rows.length > 0) {
         var user = rows[0];
         const user_id = user.id;
         var token = funciones.getCode();
         const hash = await funciones.encryptPass(token);
         //console.log(hash);
-        var hasAnyToken = await db.query("SELECT * FROM tokens WHERE user_id=?", [user_id]);
+        var hasAnyToken = await query("SELECT * FROM tokens WHERE user_id=?", [user_id]);
         if (hasAnyToken.length > 0) {
-            rows = await db.query("UPDATE tokens set hashedtoken=? , expires =NOW()+ interval 5 minute where user_id=?", [hash, user_id,]);
+            rows = await query("UPDATE tokens set hashedtoken=? , expires =NOW()+ interval 5 minute where user_id=?", [hash, user_id,]);
         } else {
-            rows = await db.query("INSERT INTO tokens (user_id,hashedtoken, expires) VALUES (?,?, NOW()+ interval 5 minute)", [user_id, hash]);
+            rows = await query("INSERT INTO tokens (user_id,hashedtoken, expires) VALUES (?,?, NOW()+ interval 5 minute)", [user_id, hash]);
         }
 
      
-        const transporter = nodemailer.createTransport({
+        const transporter = createTransport({
             service: 'ovh',
             host: "smtp.mail.ovh.net",
             secure: true,
@@ -162,8 +161,8 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
 });
 router.get('/profile/email/verifypass/:user_id/:code', async (req, res) => {
     const { user_id, code } = req.params;
-    await db.query("DELETE FROM tokens WHERE expires < NOW()");
-    var [token] = await db.query("SELECT * FROM tokens WHERE user_id=? ", [user_id]);
+    await query("DELETE FROM tokens WHERE expires < NOW()");
+    var [token] = await query("SELECT * FROM tokens WHERE user_id=? ", [user_id]);
     console.log(token);
    
     if (token) {
@@ -191,8 +190,8 @@ router.post('/profile/recoverysetpass', async (req, res) => {
     const { password, id } = req.body;
     //console.log(password + " "+ id);
     var encryptedPass = await funciones.encryptPass(password);
-    const result = await db.query("UPDATE usuarios set contrasena=? where id=?", [encryptedPass, id]);
+    const result = await query("UPDATE usuarios set contrasena=? where id=?", [encryptedPass, id]);
     req.flash("success", "Contraseña actualizada correctamente");
     res.redirect("/");
 });
-module.exports = router;
+export default router;

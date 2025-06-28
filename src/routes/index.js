@@ -1,7 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const nodemailer = require('nodemailer');
-const funciones = require('../lib/funciones');
+import { Router } from 'express';
+const router = Router();
+import { createTransport } from 'nodemailer';
+import funciones from '../lib/funciones.js';
 
 router.get('/', async (req, res) => {
     res.render('index');
@@ -18,7 +18,7 @@ router.post('/sendSugerencia', funciones.isAuthenticated,(req, res) => {
     const email = req.user.email;
 
 
-    const transporter = nodemailer.createTransport({
+    const transporter = createTransport({
         service: 'ovh',
         host: "smtp.mail.ovh.net",
         secure: true,
@@ -66,4 +66,4 @@ router.get('/prueba', async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;
