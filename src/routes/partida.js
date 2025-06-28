@@ -138,6 +138,34 @@ router.get("/:id_partida/add_existing_object", funciones.hasPermission, async (r
   }
 
 });
+
+router.post("/:id_partida/add_existing_object", funciones.hasPermission, async (req, res) => {
+    const { id_partida } = req.params;
+    const { nombre, descripcion } = req.body;
+    var pictureURL = "";
+    if (typeof req.file !== 'undefined')
+        pictureURL = req.file.filename;
+    try {
+        const {
+            nombre,
+            descripcion,
+        } = req.body;
+        const item_1 = {
+            nombre,
+            descripcion,
+            pictureURL,
+            id_partida,
+        };
+        const a = await db.query("INSERT INTO objetos set ?", [item_1]);
+        req.flash("success", "Objeto insertado correctamente");
+        res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
+    } catch (error) {
+        console.error(error.code);
+        req.flash("error", "Hubo algun error");
+        res.redirect("/error");
+    }
+});
+
 router.get("/:id_partida/edit_object/:id_object", funciones.hasPermission, async (req, res) => {
   const { id_partida, id_object } = req.params;
   const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object, id_partida]))[0];
