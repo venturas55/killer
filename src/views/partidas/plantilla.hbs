@@ -1,29 +1,45 @@
 <div class="container p-2 text-center mb-4">
     {{>ticket}}
     <div class="row">
-        {{#when supervivientes.length 'gt' 1}}
-        <p> Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos</p>
-        {{/when}}
+        {{!-- Si sólo queda un superviviente, la partida acabó por eliminación --}}
         {{#when supervivientes.length 'lte' 1}}
-        <p> Acabó el {{formatearSpHora ../last_kill.fecha_eliminacion}} previsto el {{formatearSpHora
-            ../partida.0.fecha_fin}} </p>
+        <p>
+            Acabó el {{formatearSpHora ../last_kill.fecha_eliminacion}}
+            (previsto el {{formatearSpHora ../partida.0.fecha_fin}})
+        </p>
+        {{/when}}
+        {{#when supervivientes.length 'gt' 1}}
+            {{!-- Si ha terminado por tiempo --}}
+            {{#when (tiempoHasta partida.0.fecha_fin) 'eq' 'finalizado'}}
+            <p>
+                La partida terminó el {{formatearSpHora ../partida.0.fecha_fin}}
+            </p>
+            {{/when}}
+            {{#when (tiempoHasta partida.0.fecha_fin) 'noteq' 'finalizado'}}
+            {{!-- Si todavía queda tiempo --}}
+            <p>
+                Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos
+            </p>
+            {{/when}}
         {{/when}}
 
+
+
         <div class="col-12 mx-auto">
-            <div class="cajita my-4"> {{!-- //ASESINOS Y ARMAS--}}
+            <div class="cajita my-4"> {{!-- ASESINOS Y ARMAS--}}
 
                 <figure class="text-center">
                     <blockquote class="blockquote">
-                        <h1 class="d-inline"> {{ partida.0.titulo}} </h2> - <h4 class="d-inline"> {{
-                                partida.0.id_partida}}
-                            </h4>
-                            <p>{{ partida.0.descripcion }}</p>
+                        <h1 class="d-inline"> {{ partida.0.titulo}} </h1> - <h4 class="d-inline"> {{
+                            partida.0.id_partida}}
+                        </h4>
+                        <p>{{ partida.0.descripcion }}</p>
                     </blockquote>
                     <figcaption class="blockquote-footer">Administrada por {{partida.0.usuario_creador}}</figcaption>
                 </figure>
 
                 <hr>
-                <div class="d-flex flex-row align-items-center justify-content-around"> {{!-- //ASESINOS Y
+                <div class="d-flex flex-row align-items-center justify-content-around"> {{!-- ASESINOS Y
                     OBJETOS--}}
                     <div>
                         <h5>Asesinos</h5>

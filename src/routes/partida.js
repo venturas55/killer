@@ -182,118 +182,123 @@ router.get('/listartodas', funciones.isAdmin, async (req, res) => {
 //CARGA LA PANTALLA PRINCIPAL DE UNA PARTIDA
 router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
+  const id_jugador = req.user.id;
 
   try {
     let ganador = false;
-    id_jugador = req.user.id;
-    //console.log(id_partida);
-    const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? order by ua.usuario ", [id_partida,]);
-    const eliminaciones = await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? order by ua.usuario ", [id_partida,]);
-    /*   for (let i = 0; i < partida.length; i++){
-       console.log(partida[i].id_jugador);
- 
-     } */
-    console.log(partida);
+    let hemuerto = false;
+    let ticketenviado = false;
 
-    //=================== ES CREADOR ==========================
-    var esCreador = false;
-    //console.log(esCreador + " " + partida[0].id_creador + " " + req.user.id);
-    if (partida[0].id_creador == req.user.id) {
-      esCreador = true;
-      //console.log(esCreador);
+    // Traer partida y eliminaciones
+    const partida = await db.query(
+      queries.queryPartidasActivas + " WHERE pej.id_partida=? ORDER BY ua.usuario",
+      [id_partida]
+    );
+
+    if (partida.length === 0) {
+      req.flash("error", "No se encontró la partida.");
+      return res.redirect("/error");
     }
 
-    //=============Obtengo un listado de los JUGADORES ordenados alfabeticamente.=================
-    const jugadores = partida.map(function (el) {
-      return { 'id': el.id_jugador, 'usuario': el.jugador_user, 'full_name': el.jugador_name, 'eliminado': el.eliminado, }
-    });
-    jugadores.sort(function (a, b) {
-      var textA = a.usuario.toUpperCase();
-      var textB = b.usuario.toUpperCase();
-      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    });
-    console.log("JUGADORES");
-    console.log(jugadores);
+    const eliminaciones = await db.query(
+      queries.queryEliminaciones + " WHERE e.id_partida=? ORDER BY ua.usuario",
+      [id_partida]
+    );
 
-    //==============Obtengo un listado de los OBJETOS ordenados alfabeticamente.===========
-    const objetos = partida.map(function (el) {
-      return { 'id': el.id_objeto, 'nombre': el.objeto, 'descripcion': el.descripcion_objeto, 'eliminado': el.eliminado, }
-    });
-    objetos.sort(function (a, b) {
-      var textA = a.nombre.toUpperCase();
-      var textB = b.nombre.toUpperCase();
-      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    });
-    console.log("OBJETOS");
-    console.log(objetos);
+    // ¿Es creador?
+    const esCreador = partida[0].id_creador === id_jugador;
 
-    //===== OBJETIVO =================
-    const objetivo = partida.filter(function (el) {
-      return el.id_jugador === req.user.id
-    })[0];
-    //console.log("mi objetivo");
-    //console.log(objetivo);
-    //Solo habrá objetivo si estas jugando por lo que se puede usar para renderizar en funcion de si el "admin" juega o no
+    // Listado de jugadores
+    const jugadores = partida
+      .map(el => ({
+        id: el.id_jugador,
+        usuario: el.jugador_user,
+        full_name: el.jugador_name,
+        eliminado: el.eliminado
+      }))
+      .sort((a, b) => a.usuario.localeCompare(b.usuario, "es"));
 
+    // Listado de objetos
+    const objetos = partida
+      .map(el => ({
+        id: el.id_objeto,
+        nombre: el.objeto,
+        descripcion: el.descripcion_objeto,
+        eliminado: el.eliminado
+      }))
+      .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
 
-    //===== TICKET =================
-    const ticket = partida.filter(function (el) {
-      return el.ticket == 1 && el.id_victima == req.user.id
-    })[0];
+    // Objetivo personal
+    const objetivo = partida.find(el => el.id_jugador === id_jugador);
 
+    // Última eliminación
+    const lastKillQuery = await db.query(
+      queries.queryEliminaciones + " WHERE e.id_partida=? ORDER BY e.fecha_eliminacion DESC LIMIT 1",
+      [id_partida]
+    );
+    const last_kill = lastKillQuery[0];
 
-    //===== TOP KILLERS =================
-    const top_killers = partida.filter(function (el) {
-      return el.asesinatos > 0
-    });
-    top_killers.sort(function (a, b) {
-      var dos = a.asesinatos;
-      var uno = b.asesinatos;
-      return (uno < dos) ? -1 : (uno > dos) ? 1 : 0;
-    });
-    //===== LAST KILL =================
-    const last_kill = (await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? order by e.fecha_eliminacion desc limit 1", [id_partida,]))[0];
-    console.log(last_kill);
+    // Top killers
+    const top_killers = partida
+      .filter(el => el.asesinatos > 0)
+      .sort((a, b) => b.asesinatos - a.asesinatos);
 
-    //============= DID I DIE ========
-    //Si estoy jugando
+    // Si estoy jugando, comprobar si he muerto o enviado ticket
+    let dididie = null;
     if (objetivo) {
-      var hemuerto = false;
-      var dididie = await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima = ? ", [id_partida, objetivo.id_jugador]);
-      console.log("dididie");
-      console.log(dididie);
-      if (dididie.length > 0)
+      const muerteQuery = await db.query(
+        queries.queryEliminaciones + " WHERE e.id_partida=? AND e.id_victima=?",
+        [id_partida, id_jugador]
+      );
+      if (muerteQuery.length > 0) {
         hemuerto = true;
-      dididie = dididie[0];
-    }
+        dididie = muerteQuery[0];
+      }
 
-    //============DID I SEND TICKET =================
-    //Si estoy jugando
-    if (objetivo) {
-      var ticketenviado = false;
-      var didisendticket = await db.query(queries.queryPartidasEnJuego + " WHERE id_partida=? AND id_jugador = ? AND id_victima=?", [id_partida, objetivo.id_jugador, objetivo.id_victima]);
-      if (didisendticket[0].ticket)
+      const ticketQuery = await db.query(
+        queries.queryPartidasEnJuego + " WHERE id_partida=? AND id_jugador=? AND id_victima=?",
+        [id_partida, id_jugador, objetivo.id_victima]
+      );
+      if (ticketQuery[0]?.ticket) {
         ticketenviado = true;
-      //console.log(ticketenviado);
-    }
-    //================ SUPERVIVIENTES ===============
-    const supervivientes = partida.filter(function (el) {
-      return el.eliminado == 0
-    });
-    if (supervivientes.length == 1) {
-      await db.query("update partidas set status='finalizada' where id=?", [id_partida]);
+      }
     }
 
-    //======== Es el propio jugador el ganador???? =====
-    //console.log(supervivientes.length + " " + supervivientes[0].id_jugador + " " + req.user.id)
-    if (supervivientes.length == 1 && supervivientes[0].id_jugador == req.user.id) {
-      ganador = true;
+    // Ticket recibido
+    const ticket = partida.find(el => el.ticket === 1 && el.id_victima === id_jugador);
+
+    // Supervivientes
+    const supervivientes = partida.filter(el => el.eliminado === 0);
+
+    if (supervivientes.length === 1) {
+      // Solo actualizar si no está finalizada
+      await db.query(
+        "UPDATE partidas SET status='finalizada' WHERE id=? AND status!='finalizada'",
+        [id_partida]
+      );
+      if (supervivientes[0].id_jugador === id_jugador) {
+        ganador = true;
+      }
     }
-    //console.log(ganador);
-    res.render("partidas/plantilla", { partida, jugadores, objetos, ticket, objetivo, top_killers, last_kill, dididie, hemuerto, supervivientes, ganador, ticketenviado, esCreador });
+
+    res.render("partidas/plantilla", {
+      partida,
+      jugadores,
+      objetos,
+      ticket,
+      objetivo,
+      top_killers,
+      last_kill,
+      dididie,
+      hemuerto,
+      supervivientes,
+      ganador,
+      ticketenviado,
+      esCreador
+    });
   } catch (error) {
     console.error(error);
-    req.flash("error", "Hubo algun error");
+    req.flash("error", "Hubo algún error");
     res.redirect("/error");
   }
 });
