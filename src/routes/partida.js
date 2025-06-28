@@ -1,8 +1,37 @@
-import { Router } from "express";
+import { Router } from 'express';
+import passport from 'passport';
 const router = Router();
-import queries from "./queries.js";
-import funciones from "../lib/funciones.js";
+import { createTransport } from 'nodemailer';
+import funciones from '../lib/funciones.js';
 import db from "../database.js"; //db hace referencia a la BBDD
+import queries from './queries.js';
+
+// Middleware to check partida end conditions
+const checkPartidaStatus = async (req, res, next) => {
+  try {
+    // Get all active partidas
+    const activePartidas = await db.query(
+      "SELECT * FROM partidas WHERE status IN ('enjuego', 'enpausa')"
+    );
+
+    for (const partida of activePartidas) {
+      // Check if partida has ended due to time
+      if (new Date(partida.fecha_fin) < new Date()) {
+        await db.query(
+          "UPDATE partidas SET status='finalizada' WHERE id=?",
+          [partida.id]
+        );
+      }
+    }
+    next();
+  } catch (error) {
+    console.error('Error checking partida status:', error);
+    next();
+  }
+};
+
+// Apply the middleware to all partida routes
+router.use(checkPartidaStatus);
 
 //GESTION DEL CRUD
 //CREATE
@@ -94,6 +123,21 @@ router.get("/:id_partida/add_object", funciones.hasPermission, (req, res) => {
   const { id_partida } = req.params;
   res.render("objetos/add_object", { id_partida });
 });
+
+router.get("/:id_partida/add_existing_object", funciones.hasPermission, async (req, res) => {
+  const { id_partida } = req.params;
+
+  try {
+    const objetos = await db.query("Select * from objetos");
+    console.log(objetos);
+    res.render("objetos/add_existingObject", { objetos, id_partida });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+
+});
 router.get("/:id_partida/edit_object/:id_object", funciones.hasPermission, async (req, res) => {
   const { id_partida, id_object } = req.params;
   const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object, id_partida]))[0];
@@ -105,41 +149,6 @@ router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, asyn
   const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object, id_partida]))[0];
   res.render("objetos/ver_object", { objeto, id_partida });
 });
-
-//EN DESUSO TODO:
-//READ
-//Para mostrar listado de partidas para el admin
-/* router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
-  try {
-    const id_jugador = req.user.id;
-    const partidas = await db.query(queries.queryPartidasDistinc + " where p.status='encreacion'  group by p.id", [id_jugador]);
-    const aplica = await db.query(queries.queryJugadores + " where id_jugador=?", [id_jugador]);
-    console.log(partidas);
-    console.log(aplica);
-    //TODO: comprobar si cada partida[i] se encuentra en alguna de las aplicadas. Meter la info en el array partidas
-
-
-    res.render("partidas/listarotras", { partidas });
-  } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/error");
-  }
-}); */
-
-//Para mostrar listado de partidas en las que NO esta incluido el jugador
-/* router.get('/inicio', async (req, res) => {
-  id_jugador = req.user.id;
-  try {
-    const partidas = await db.query(queries.queryPartidasActivas + " where pej.id_jugador=?", [id_jugador]);
-    console.log(partidas);
-    res.render('partidas/listar', { partidas, });
-  } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/error");
-  }
-}); */
 
 router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
@@ -153,17 +162,50 @@ router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, funcio
 
 //Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
 router.get('/listar', funciones.isAuthenticated, async (req, res) => {
-  var id_jugador = req.user.id;
   try {
-    const partidasDondeParticipo = await db.query(queries.queryPartidasJugador + " where j.id_jugador=? AND NOT p.id_creador=? order by status", [id_jugador, id_jugador]);
-    const partidas = await db.query(queries.queryPartidasPropias + " where p.id_creador=? order by status", [id_jugador,]);
-    //const partidas = await db.query(queries.queryPartidas + " where p.id_creador=? order by status", [id_jugador,]);
-    console.log(partidas);
-    res.render('partidas/listar', { partidas, partidasDondeParticipo });
+    const id_jugador = req.user.id;
+    
+    // Get partidas where user is a player but not the creator
+    const partidasDondeParticipo = await db.query(
+      queries.queryPartidasJugador + 
+      " WHERE j.id_jugador=? AND NOT p.id_creador=? ORDER BY status",
+      [id_jugador, id_jugador]
+    );
+    
+    // Get partidas created by the user
+    const partidas = await db.query(
+      queries.queryPartidasPropias + 
+      " WHERE p.id_creador=? ORDER BY status",
+      [id_jugador]
+    );
+
+    // Log the retrieved partidas for debugging
+    console.log(`Found ${partidas.length} partidas created by user ${id_jugador}`);
+    console.log(`Found ${partidasDondeParticipo.length} partidas where user ${id_jugador} is a player`);
+
+    // Render the view with both sets of partidas
+    res.render('partidas/listar', {
+      partidas,
+      partidasDondeParticipo,
+      user: req.user
+    });
+
   } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    console.error(`Error listing partidas for user ${req.user.id}:`, error);
+    
+    // Provide more specific error messages based on error type
+    switch (error.code) {
+      case 'ER_BAD_NULL_ERROR':
+        req.flash('error', 'Error de base de datos: datos nulos');
+        break;
+      case 'ER_TABLEACCESS_DENIED_ERROR':
+        req.flash('error', 'Error de permisos en la base de datos');
+        break;
+      default:
+        req.flash('error', 'Error al cargar las partidas');
+    }
+    
+    res.redirect('/error');
   }
 });
 
@@ -183,7 +225,6 @@ router.get('/listartodas', funciones.isAdmin, async (req, res) => {
 router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res) => {
   const { id_partida } = req.params;
   const id_jugador = req.user.id;
-
   try {
     let ganador = false;
     let hemuerto = false;
@@ -297,7 +338,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       esCreador
     });
   } catch (error) {
-    console.error(error);
+    console.error(">Un error:",error);
     req.flash("error", "Hubo algún error");
     res.redirect("/error");
   }
@@ -505,6 +546,16 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
   const { id_partida } = req.params;
   var id_jugador = req.user.id;
   try {
+
+    let partida = (await db.query("select * from partidas WHERE  id_partida=?", [id_partida]))[0];
+    if (partida.status != 'enjuego') {
+      req.flash("error", "La partida no está en juego");
+      res.redirect("/partidas/plantilla/" + id_partida);
+    }
+    if (partida.fecha_fin < new Date()) {
+      req.flash("error", "La partida ha terminado");
+      res.redirect("/partidas/plantilla/" + id_partida);
+    }
     //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
     //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
     let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
@@ -531,6 +582,36 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
     jugador.eliminado = true;
     jugador.fecha_asesinato = new Date();
     jugador.ticket = false;
+
+    // Check if this elimination results in only one player remaining
+    const remainingPlayers = await db.query(
+      "SELECT COUNT(*) as remaining FROM partidasenjuego WHERE id_partida=? AND eliminado=0",
+      [id_partida]
+    );
+
+    if (remainingPlayers[0].remaining === 1) {
+      // Update partida status to finalizada
+      await db.query(
+        "UPDATE partidas SET status='finalizada' WHERE id=?",
+        [id_partida]
+      );
+      // Get the winner
+      const winner = await db.query(
+        "SELECT id_jugador FROM partidasenjuego WHERE id_partida=? AND eliminado=0",
+        [id_partida]
+      );
+      if (winner[0]?.id_jugador === id_jugador) {
+        // Current player is the winner
+        req.flash("success", "¡Enhorabuena! Has ganado la partida");
+      } else {
+        // Someone else is the winner
+        const winnerName = await db.query(
+          "SELECT jugador_user FROM usuarios WHERE id=?",
+          [winner[0].id_jugador]
+        );
+        req.flash("info", `La partida ha terminado. El ganador es ${winnerName[0]?.jugador_user}`);
+      }
+    }
 
 
     //guardo datos a machacar del asesino
