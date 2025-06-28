@@ -17,7 +17,7 @@
                     <tr>
                         <th class="d-none d-xl-table-cell">Id</th>
                         <th class="d-none d-xl-table-cell">Usuario</th>
-                        <th >Nombre</th>
+                        <th>Nombre</th>
                         <th>Imagen</th>
                         {{#if esCreador}} <th>Options</th> {{/if}}
                     </tr>
@@ -115,8 +115,8 @@
                     {{/if}}
                     {{#if esCreador}}
                     <div class="text-center m-2">
-                        <a href="/partidas/{{datospartida.id_partida}}/add_existing_object" class="btn btn-warning"> Añadir
-                            objeto existente</a>
+                        <a href="/partidas/{{datospartida.id_partida}}/add_object" class="btn btn-warning"> Añadir nuevo objeto</a>
+                        <a href="/partidas/{{datospartida.id_partida}}/add_existing_object" class="btn btn-warning"> Añadir objeto ya existente</a>
                     </div>
                     {{/if}}
                 </div>
