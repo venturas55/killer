@@ -141,21 +141,16 @@ router.get("/:id_partida/add_existing_object", funciones.hasPermission, async (r
 
 router.post("/:id_partida/add_existing_object", funciones.hasPermission, async (req, res) => {
     const { id_partida } = req.params;
-    const { nombre, descripcion } = req.body;
-    var pictureURL = "";
-    if (typeof req.file !== 'undefined')
-        pictureURL = req.file.filename;
+    console.log(req.body );
+    const { nombre, descripcion,pictureURL } = req.body;   
     try {
-        const {
-            nombre,
-            descripcion,
-        } = req.body;
         const item_1 = {
             nombre,
             descripcion,
             pictureURL,
             id_partida,
         };
+        console.log("item",item_1);
         const a = await db.query("INSERT INTO objetos set ?", [item_1]);
         req.flash("success", "Objeto insertado correctamente");
         res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
@@ -737,8 +732,11 @@ router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, asy
 });
 router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, async (req, res) => {
   const { id_objecto, id_partida } = req.params;
+  console.log("objeto",id_objecto);
+  console.log("partida",id_partida);
   try {
-    var q = await db.query("SELECT * from partidas where id=?", [id_partida,]);
+    var [q] = await db.query("SELECT * from partidas where id=?", [id_partida,]);
+    console.log(q.status);
     if (q.status == 'encreacion') {
       await db.query("DELETE FROM objetos WHERE id=?", [id_objecto]);
       req.flash("success", "Objeto quitado de la lista correctamente");
@@ -746,11 +744,11 @@ router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, asy
       res.redirect("/partidas/edit/" + id_partida);
     } else {
       req.flash("error", "Solo se pueden eliminar jugadores durante la creación de la partida");
-      res.redirect("/partidas/plantilla/" + id_partida);
+      res.redirect("/partidas/edit/" + id_partida);
     }
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("error", "Hubo algun error:"+error);
     res.redirect("/error");
   }
 });

@@ -28,7 +28,8 @@
                         <div class="input-group mb-3">
                             <input type="hidden" name="tipo" value="objeto" />
                         </div>
-                        <img src="/img/imagenes/{{objeto.pictureURL}}" class="w-100 m-2" alt="No carga foto" id="pictureURLInput" />
+                        <input type="hidden" name="pictureURL" value="{{objeto.pictureURL}}" id="pictureURLInput"/>
+                        <img src="/img/imagenes/{{objeto.pictureURL}}" class="w-100 m-2" alt="No carga foto" id="pictureURLPicture" />
 
                         <div class="d-flex justify-content-around m-4">
                             <button class="btn btn-style btn-block">AÑADIR</button>
@@ -46,6 +47,7 @@
         const nombreInput = document.getElementById('nombreInput');
         const descripcionInput = document.getElementById('descripcionInput');
         const pictureURLInput = document.getElementById('pictureURLInput');
+        const pictureURLPicture = document.getElementById('pictureURLPicture');
 
         select.addEventListener('change', function () {
             const selectedOption = this.options[this.selectedIndex];
@@ -53,14 +55,15 @@
             // Update form fields
             nombreInput.value = selectedOption.dataset.nombre;
             descripcionInput.value = selectedOption.dataset.descripcion;
+            pictureURLInput.value = selectedOption.dataset.pictureurl;
 
             // Update image preview
             //console.log(selectedOption.dataset);
             if (selectedOption.dataset.pictureurl) {
-                pictureURLInput.src = "/img/imagenes/"+selectedOption.dataset.pictureurl;
-                pictureURLInput.alt = "/img/imagenes/"+selectedOption.dataset.pictureurl;
+                pictureURLPicture.src = "/img/imagenes/"+selectedOption.dataset.pictureurl;
+                pictureURLPicture.alt = "/img/imagenes/"+selectedOption.dataset.pictureurl;
             } else {
-                pictureURLInput.src = '';
+                pictureURLPicture.src = '';
             }
 
         });

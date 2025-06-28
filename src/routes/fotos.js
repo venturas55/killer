@@ -10,6 +10,8 @@ import { access, constants } from 'fs';
 import funciones from "../lib/funciones.js";
 import { v4 as uuidv4 } from 'uuid';
 import { imageSizeLimitErrorHandler } from "../lib/validaciones.js";
+import * as url from "url";
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
