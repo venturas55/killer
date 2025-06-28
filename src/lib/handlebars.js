@@ -147,4 +147,4 @@ helpers.finalizada = (value, options) => {
   return options.inverse(this);
 };
 
-module.exports = helpers;
+export default helpers;
