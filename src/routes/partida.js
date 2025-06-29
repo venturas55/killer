@@ -173,6 +173,41 @@ router.get("/:id_partida/ver_object/:id_object", funciones.isAuthenticated, asyn
   res.render("objetos/ver_object", { objeto, id_partida });
 });
 
+//EN DESUSO TODO:
+//READ
+//Para mostrar listado de partidas para el admin
+/* router.get("/listarotras", funciones.isAuthenticated, async (req, res) => {
+  try {
+    const id_jugador = req.user.id;
+    const partidas = await db.query(queries.queryPartidasDistinc + " where p.status='encreacion'  group by p.id", [id_jugador]);
+    const aplica = await db.query(queries.queryJugadores + " where id_jugador=?", [id_jugador]);
+    console.log(partidas);
+    console.log(aplica);
+    //TODO: comprobar si cada partida[i] se encuentra en alguna de las aplicadas. Meter la info en el array partidas
+
+
+    res.render("partidas/listarotras", { partidas });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+}); */
+
+//Para mostrar listado de partidas en las que NO esta incluido el jugador
+/* router.get('/inicio', async (req, res) => {
+  id_jugador = req.user.id;
+  try {
+    const partidas = await db.query(queries.queryPartidasActivas + " where pej.id_jugador=?", [id_jugador]);
+    console.log(partidas);
+    res.render('partidas/listar', { partidas, });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+}); */
+
 router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
   id_jugador = req.user.id;
@@ -579,16 +614,13 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
       req.flash("error", "La partida ha terminado");
       res.redirect("/partidas/plantilla/" + id_partida);
     }
-    //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
+        //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
     //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
     let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
-    console.log("1")
-    console.log(asesino.ticket);
     //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
     let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
     //console.log("2")
     //console.log(victima);
-    console.log("3");
 
     //Creo el asesinato
     const eliminacion = {
@@ -732,11 +764,8 @@ router.get("/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, asy
 });
 router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, async (req, res) => {
   const { id_objecto, id_partida } = req.params;
-  console.log("objeto",id_objecto);
-  console.log("partida",id_partida);
   try {
-    var [q] = await db.query("SELECT * from partidas where id=?", [id_partida,]);
-    console.log(q.status);
+    var q = await db.query("SELECT * from partidas where id=?", [id_partida,]);
     if (q.status == 'encreacion') {
       await db.query("DELETE FROM objetos WHERE id=?", [id_objecto]);
       req.flash("success", "Objeto quitado de la lista correctamente");
@@ -748,7 +777,7 @@ router.get("/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, asy
     }
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error:"+error);
+    req.flash("error", "Hubo algun error:",error);
     res.redirect("/error");
   }
 });

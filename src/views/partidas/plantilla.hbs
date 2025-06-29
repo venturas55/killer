@@ -10,12 +10,12 @@
         {{/when}}
         {{#when supervivientes.length 'gt' 1}}
             {{!-- Si ha terminado por tiempo --}}
-            {{#when (tiempoHasta partida.0.fecha_fin) 'eq' 'finalizado'}}
+            {{#when (tiempoHasta ../partida.0.fecha_fin) 'eq' 'finalizado'}}
             <p>
                 La partida terminó el {{formatearSpHora ../partida.0.fecha_fin}}
             </p>
             {{/when}}
-            {{#when (tiempoHasta partida.0.fecha_fin) 'noteq' 'finalizado'}}
+            {{#when (tiempoHasta ../partida.0.fecha_fin) 'noteq' 'finalizado'}}
             {{!-- Si todavía queda tiempo --}}
             <p>
                 Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos
