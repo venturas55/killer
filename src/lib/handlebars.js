@@ -9,7 +9,7 @@ helpers.formatearSp = (fecha) => {
   if (fecha != null) {
     var timestamp = new Date(fecha);
     const mnth = ("0" + (timestamp.getMonth() + 1)).slice(-2),
-    day = ("0" + timestamp.getDate()).slice(-2);
+      day = ("0" + timestamp.getDate()).slice(-2);
     return [day, mnth, timestamp.getFullYear()].join("/");
   } else {
     return '';
@@ -24,7 +24,7 @@ helpers.formatearSpHora = (fecha) => {
       hours = ("0" + timestamp.getHours()).slice(-2),
       minutes = ("0" + timestamp.getMinutes()).slice(-2),
       seconds = ("0" + timestamp.getSeconds()).slice(-2);
-    return  [day, mnth, timestamp.getFullYear()].join("/")+ " a las " + hours + ":" + minutes  ;
+    return [day, mnth, timestamp.getFullYear()].join("/") + " a las " + hours + ":" + minutes;
   } else {
     return '';
   }
@@ -52,24 +52,24 @@ helpers.formatearEn = (fecha) => {
 }
 
 helpers.tiempoHasta = (fecha) => {
-  let dias, horas, min, sec;
   const diff = fecha - new Date();
-  dias = (diff / 60000 / 60 / 24);
-  horas = (dias - Math.trunc(dias))*24;
-  min = (horas-Math.trunc(horas))*60;
-  sec = (min - Math.trunc(min))*60;
-  console.log(dias + " "+ horas + " " + min + " " + sec);
-  dias > 0 ? dias = Math.trunc(dias)+"d "  : dias = "";
-  horas > 0 ? horas = Math.trunc(horas)+"h "  : horas = "";
-  min > 0 ? min = Math.trunc(min)+"min " : min = "";
-  sec > 0 ? sec = Math.trunc(sec)+"s" : sec = "";
 
-
-  if (diff > 0)
-    return dias+ horas+ min + sec;
-  else
+  if (diff <= 0) {
     return "finalizado";
-}
+  }
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const days = Math.floor(totalSeconds / (60 * 60 * 24));
+  const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+  const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (days > 0) {
+    return `${days}d ${hours}h`;
+  } else {
+    return `${hours}h ${minutes}min ${seconds}s`;
+  }
+};
 
 helpers.counter = (index) => {
   return index + 1;
