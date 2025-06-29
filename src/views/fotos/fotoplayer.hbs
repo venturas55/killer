@@ -1,18 +1,15 @@
 <!-- CUERPO -->
-<div class="container-fluid">
-  </div>
-  <div class="row  justify-content-center">
-    <h2 class="text-center my-4">FOTO DE {{jugador.full_name}}</h2>
-  </div>
+<div class="container py-4">
   <div class="row justify-content-center">
-    <div class="card m-1" style="max-width: 80%;">
-      <img src="/img/profiles/{{jugador.pictureURL}}" alt="Foto usuario">
+    <div class="col-12 col-md-8 text-center">
+      <h2 class="my-4">Foto de {{jugador.full_name}}</h2>
+      <div class="card shadow-sm mb-4">
+        <img src="/img/profiles/{{jugador.pictureURL}}" alt="Foto de {{jugador.full_name}}" class="card-img-top img-fluid rounded">
+      </div>
+      <a href="javascript:void(0)" onclick="history.back();" class="btn btn-warning btn-lg">
+        Volver
+      </a>
     </div>
-
-  </div>
-  <div class="row justify-content-center">
-    <a class="btn btn-warning m-4" style="max-width: 80%;" href="javascript:void(0)"
-      onclick="history.back();">Volver</a>
   </div>
 </div>
 {{>logo}}
