@@ -1,41 +1,48 @@
 {{>logo}}
-<div class="container p-4">
-    <div class="row">
-        <div class="col-md-4">
-             <div class="d-flex justify-content-around">
-                <h2 class="my-4">CREAR NUEVA PARTIDA </h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Crear Nueva Partida</h2>
             </div>
-
-            <form class="mt-5" action="/partidas/add" method="POST">
-                <div class="mb-3 w-100">
-                    <div class="inputBox ">
-                        <input class="" type="text" placeholder="Introduzca un titulo" name="titulo" autofocus required>
-                        <span>Titulo</span>
+            <form action="/partidas/add" method="POST">
+                <div class="mb-4">
+                    <div class="inputBox">
+                        <input class="w-100" type="text" name="titulo" placeholder="Introduzca un título" required autofocus>
+                        <span>Título</span>
                     </div>
-                    <div class="inputBox my-4">
-                        <input class="w-100" type="text" placeholder="Introduzca una descripcion" name="descripcion">
-                        <span>Descripcion</span>
-                    </div>
-                    <div class="inputBox my-4">
-                        <input type="datetime-local" name="fecha_inicio" required>
-                        <span>Fecha Inicio</span>
-                    </div>
-                    <div class="inputBox my-4">
-                        <input type="datetime-local" name="fecha_fin" required>
-                        <span>Fecha fin</span>
-                    </div>
-                    {{!-- <div class="form-group"><input class="form-control" type="text" name="titulo"
-                            placeholder="Titulo" autofocus />
-                    </div>
-                    <input class="form-control" type="text" name="descripcion" placeholder="Descripcion" />
-                    <input class="form-control" type="datetime-local" name="fecha_inicio" placeholder="" required />
-                    <input class="form-control" type="datetime-local" name="fecha_fin" placeholder="" required /> --}}
                 </div>
-                <div class="d-flex justify-content-around">
-                    <button class="btn btn-style btn-block m-2"> CREAR NUEVA PARTIDA</button>
+
+                <div class="mb-4">
+                    <div class="inputBox">
+                        <input class="w-100" type="text" name="descripcion" placeholder="Introduzca una descripción">
+                        <span>Descripción</span>
+                    </div>
+                </div>
+
+                <div class="inputBox my-4 d-flex justify-content-center">
+                    <div class="inputBox">
+                        <input type="datetime-local" name="fecha_inicio" required>
+                        <span>Fecha de inicio</span>
+                    </div>
+                </div>
+
+                <div class="inputBox my-4 d-flex justify-content-center">
+                    <div class="inputBox">
+                        <input type="datetime-local" name="fecha_fin" required>
+                        <span>Fecha de fin</span>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button class="btn btn-style btn-lg  text-center" style="display: flex; justify-content: center; align-items: center;">
+                        Crear Nueva Partida
+                    </button>
+                    <a href="javascript:void(0)" onclick="history.back();" class="btn btn-secondary">
+                        Atrás
+                    </a>
                 </div>
             </form>
-            {{!-- <a class="btn btn-style m-4" href="javascript:void(0)" onclick="history.back();">Cancelar</a> --}}
         </div>
     </div>
 </div>

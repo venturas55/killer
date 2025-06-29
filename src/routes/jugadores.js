@@ -161,6 +161,29 @@ router.get("/jugador/fotos/delete/:tipo", funciones.isAuthenticated, async (req,
     res.redirect('/jugador/fotosjuego');
 });
 
+//Borrar un jugador de una partida
+router.get("/jugador/:id_partida/deleteplayer/:id_jugador", funciones.hasPermission, async (req, res) => {
+  const { id_jugador, id_partida } = req.params;
+  try {
+    var q = await db.query("SELECT * from partidas where id=?", [id_partida,]);
+    if (q.status == 'encreacion') {
+      await db.query("DELETE FROM jugadores WHERE id_jugador=? AND id_partida=?", [id_jugador, id_partida]);
+      req.flash("success", "Jugador quitado de la lista correctamente");
+      console.log("=>" + id_partida);
+      res.redirect("/partidas/edit/" + id_partida);
+
+    } else {
+      req.flash("error", "Solo se pueden eliminar jugadores durante la creación de la partida");
+      res.redirect("/partidas/plantilla/" + id_partida);
+    }
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+});
+
+
 router.post('/jugador/upload', funciones.isAuthenticated, uploadFoto, async (req, res) => {
     const { tipo } = req.body;
     console.log(tipo);
@@ -189,55 +212,52 @@ router.post('/jugador/upload', funciones.isAuthenticated, uploadFoto, async (req
     res.redirect("/jugador/fotosjuego");
 });
 
-//FOTOS DEL OBJETO
-router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadFoto, async (req, res) => {
-    const { id_partida } = req.params;
-    const { nombre, descripcion } = req.body;
-    var pictureURL = "";
-    if (typeof req.file !== 'undefined')
-        pictureURL = req.file.filename;
-    try {
-        const {
-            nombre,
-            descripcion,
-        } = req.body;
-        const item_1 = {
-            nombre,
-            descripcion,
-            pictureURL,
-            id_partida,
-        };
-        const a = await db.query("INSERT INTO objetos set ?", [item_1]);
-        req.flash("success", "Objeto insertado correctamente");
-        res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
-    } catch (error) {
-        console.error(error.code);
-        req.flash("error", "Hubo algun error");
-        res.redirect("/error");
-    }
+//Rutas para añadir jugador a una partida
+router.get("/partidas/:id_partida/add_player", funciones.hasPermission, async (req, res) => {
+  const { id_partida } = req.params;
+  try {
+    const usuarios = await db.query("Select * from usuarios");
+    res.render("partidas/add_player", { usuarios, id_partida });
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
 });
+router.post("/partidas/:id_partida/add_player", funciones.hasPermission, async (req, res) => {
+  const {
+    jugador,
+  } = req.body;
+  const { id_partida } = req.params;
+  const item = { id_partida, id_jugador: jugador };
+  console.log(item);
 
-router.post("/partidas/:id_partida/edit_object/:id_object", funciones.hasPermission, uploadFoto, async (req, res) => {
-    const { id_object, id_partida } = req.params;
-    const { nombre, descripcion } = req.body;
-    var pictureURL = "";
-    if (typeof req.file !== 'undefined')
-        pictureURL = req.file.filename;
-    try {
-        const objeto = (await db.query("select * from objetos WHERE id=? and id_partida=?", [id_object, id_partida]))[0];
-        const item_1 = {
-            nombre,
-            descripcion,
-            pictureURL,
-            id_partida,
-        };
-        const a = await db.query("UPDATE objetos set ? where id=?", [item_1,id_object]);
-        res.redirect("/partidas/edit/"+id_partida);
-    } catch (error) {
-        console.error(error.code);
-        req.flash("error", "Hubo algun error");
-        res.redirect("/error");
+  try {
+    await db.query("INSERT INTO jugadores set ?", [item]);
+    req.flash("success", "Jugador insertado correctamente");
+    res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
+
+  } catch (error) {
+    console.error(error.code);
+    switch (error.code) {
+      case "ER_DUP_ENTRY":
+        console.log("Error ya estas agregado");
+        req.flash("error", "El jugador ya esta agregado.");
+        break;
+      case "ER_BAD_NULL_ERROR":
+        req.flash("error", "El campo NIF es obligatorio");
+        break;
+      case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
+        req.flash("error", "Hay un campo con valor incorrecto");
+        break;
+      /* 
+            default:
+              req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
     }
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error");
+  }
+
 });
 
 export default router;
