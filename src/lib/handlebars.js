@@ -51,6 +51,27 @@ helpers.formatearEn = (fecha) => {
   return [timestamp.getFullYear(), mnth, day].join("-");
 }
 
+//Este es el formateo necesario para encajar una fecha en un input de type="datetime-local"
+helpers.formatearDateTimeInput = (fecha) => {
+// Caso ideal: dateString = "2025-07-2T12:00"
+  const match = fecha.match(/^(\d{4})-(\d{1,2})-(\d{1,2})T(\d{1,2}):(\d{2})$/);
+  if (!match) {
+    return "";
+  }
+  const [, year, month, day, hour, minute] = match;
+  return (
+    year +
+    "-" +
+    String(month).padStart(2, "0") +
+    "-" +
+    String(day).padStart(2, "0") +
+    "T" +
+    String(hour).padStart(2, "0") +
+    ":" +
+    minute
+  );
+}
+
 helpers.tiempoHasta = (fecha) => {
   const diff = fecha - new Date();
 

@@ -121,17 +121,17 @@ router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, funcio
 router.get('/listar', funciones.isAuthenticated, async (req, res) => {
   try {
     const id_jugador = req.user.id;
-    
+
     // Get partidas where user is a player but not the creator
     const partidasDondeParticipo = await db.query(
-      queries.queryPartidasJugador + 
+      queries.queryPartidasJugador +
       " WHERE j.id_jugador=? AND NOT p.id_creador=? ORDER BY status",
       [id_jugador, id_jugador]
     );
-    
+
     // Get partidas created by the user
     const partidas = await db.query(
-      queries.queryPartidasPropias + 
+      queries.queryPartidasPropias +
       " WHERE p.id_creador=? ORDER BY status",
       [id_jugador]
     );
@@ -149,7 +149,7 @@ router.get('/listar', funciones.isAuthenticated, async (req, res) => {
 
   } catch (error) {
     console.error(`Error listing partidas for user ${req.user.id}:`, error);
-    
+
     // Provide more specific error messages based on error type
     switch (error.code) {
       case 'ER_BAD_NULL_ERROR':
@@ -161,7 +161,7 @@ router.get('/listar', funciones.isAuthenticated, async (req, res) => {
       default:
         req.flash('error', 'Error al cargar las partidas');
     }
-    
+
     res.redirect('/error');
   }
 });
@@ -295,7 +295,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
       esCreador
     });
   } catch (error) {
-    console.error(">Un error:",error);
+    console.error(">Un error:", error);
     req.flash("error", "Hubo algún error");
     res.redirect("/error");
   }
@@ -356,6 +356,7 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
       esCreador = true;
       console.log(esCreador);
     }
+
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida, esCreador });
   } catch (error) {
     console.error(error.code);
@@ -366,19 +367,14 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
 router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) => {
 
   const { id_partida } = req.params;
-  console.log(id_partida);
 
-  //console.log(req.params);
-  //console.log(req.body);
   try {
     let partida = (await db.query(queries.queryPartidas + " WHERE p.id=?", [id_partida]))[0];
-    console.log(partida);
-
+    console.log("partida: ", partida);
     var date = partida.fecha_inicio;
     partida.fecha_inicio = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate() + "T" + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
-    date = partida.fecha_fin;
-    partida.fecha_fin = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate() + "T" + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
-    console.log(partida.fecha_fin);
+    var datefin = partida.fecha_fin;
+    partida.fecha_fin = datefin.getFullYear() + "-" + (datefin.getMonth() + 1).toString().padStart(2, '0') + "-" + datefin.getDate() + "T" + datefin.getHours().toString().padStart(2, '0') + ":" + datefin.getMinutes().toString().padStart(2, '0');
     res.render("partidas/edit_game", { partida, });
   } catch (error) {
     console.error(error.code);
@@ -391,16 +387,19 @@ router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) =
     titulo, descripcion, fecha_inicio, fecha_fin, status
   } = req.body;
   const id = req.params.id_partida;
-  console.log("id" + id);
+
+  console.log("voy");
+  console.log(id);
   try {
     const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, status };
-    console.log(item);
+    console.log("partida a update: ", item);
 
     await db.query("UPDATE partidas set ? where id=?", [item, item.id]);
     req.flash("success", "Partida editada correctamenta");
-    res.redirect("/partidas/listar"); //te redirige una vez insertado el item
+    res.redirect("/partidas/editgame/" + id); //te redirige una vez insertado el item
   } catch (error) {
     console.error(error.code);
+    console.log("error: ",error)
     switch (error.code) {
       case "ER_BAD_NULL_ERROR":
         req.flash("error", "El campo  es obligatorio");
@@ -412,8 +411,7 @@ router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) =
       default:
         req.flash("error", "Hubo algun error al intentar añadir el jugador");
     }
-    req.flash("error", "Hubo algun error");
-
+    req.flash("error", "Hubo algun error:\n",error);
     res.redirect("/partidas/listar");
   }
 
@@ -513,7 +511,7 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
       req.flash("error", "La partida ha terminado");
       res.redirect("/partidas/plantilla/" + id_partida);
     }
-        //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
+    //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
     //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
     let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
     //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
