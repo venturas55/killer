@@ -36,8 +36,8 @@ router.post('/payment/create-checkout-session', async (req, res) => {
         }],
         mode: 'payment',
         //TODO: estos links tendrían que ser más dinamicos
-        success_url: 'http://killer.adriandeharo.es/payment/success',
-        cancel_url: 'http://killer.adriandeharo.es/payment/cancel',
+        success_url: `http://${req.headers.host}/payment/success`,
+        cancel_url: `http://${req.headers.host}/payment/cancel`
     });
 
     res.redirect(session.url);
