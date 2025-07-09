@@ -51,10 +51,10 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
         console.log(hash);
         var hasAnyToken = await db.query("SELECT * FROM tokens WHERE user_id=?", [user_id]);
         if (hasAnyToken.length > 0) {
-            rows = await db.query("UPDATE tokens set hashedtoken=? , expires =NOW()+ interval 25 minute where user_id=?", [hash, user_id,]);
+            rows = await db.query("UPDATE tokens set hashedtoken=? , expires =NOW()+ interval 24 hour where user_id=?", [hash, user_id,]);
         } else {
              console.log("insert token: "+hash);
-            rows = await db.query("INSERT INTO tokens (user_id,hashedtoken, expires) VALUES (?,?, NOW()+ interval 25 minute)", [user_id, hash]);
+            rows = await db.query("INSERT INTO tokens (user_id,hashedtoken, expires) VALUES (?,?, NOW()+ interval 24 hour)", [user_id, hash]);
         }
 
      
