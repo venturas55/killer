@@ -12,15 +12,17 @@ router.get('/payment/landing', async (req, res) => {
 });
 router.post('/payment/create-checkout-session', async (req, res) => {
     //console.log(req.user);
-    var importe = parseInt(req.body.amount);
+    var importe = parseFloat(req.body.amount);// Cantidad en céntimos (1€ = 100 céntimos)
     var frecuency = req.body.frequency;
     var taxes = req.body.taxes;
 
-    if (taxes)
-        importe = Number.parseFloat(parseInt(importe) * 1.015 + 0.25).toFixed(2);
-   console.log(importe + " "+ frecuency + " "+ taxes);
-
-    console.log();
+    if (taxes) {
+        // Si hay impuestos, calcula el nuevo importe
+        importe = Math.round((importe * 1.015 + 0.25) * 100); // Redondea el importe en centavos
+    } else {
+        importe = Math.round(importe * 100); // Asegúrate de enviar la cantidad en céntimos
+    }
+    console.log(importe + " " + frecuency + " " + taxes);
     console.log("Completando pago de " + importe);
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -30,7 +32,7 @@ router.post('/payment/create-checkout-session', async (req, res) => {
                 product_data: {
                     name: 'Donatativo por usar Killer',
                 },
-                unit_amount: importe * 100, // Cantidad en céntimos (1€ = 100 céntimos)
+                unit_amount: importe , 
             },
             quantity: 1,
         }],
