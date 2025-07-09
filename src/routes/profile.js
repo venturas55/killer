@@ -9,7 +9,6 @@ import db from "../database.js"; //db hace referencia a la BBDD
 router.get('/profile', funciones.isAuthenticated, async (req, res) => {
     res.render('auth/profile');
 });
-
 router.get('/profile/edit', funciones.isAuthenticated, (req, res) => {
     res.render('auth/profileEdit');
 });
