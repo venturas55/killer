@@ -71,9 +71,10 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
         });
 
         var mailOptions = {
-            from: "KILLER admin",
+            from: `"KILLER Support" <dev@guardiandelfaro.es>`,
             to: email,
             subject: 'Restablecer contraseña KILLER',
+            replyTo: 'dev@guardiandelfaro.es',  // Agrega una dirección de respuesta válida
             //text: 'Has olvidado tu contraseña. Haz click en el siguiente vinculo http://killer.guardiandelfaro.es/profile/email/verifypass/' + user_id + '/' + token + " para reestablecer una nueva contraseña.",
             html: ` 
             <!DOCTYPE html>
@@ -153,6 +154,7 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
             }
         });
     } else {
+        console.log("No existe ningún usuario con el correo proporcionado.");
         req.flash("danger", "No existe ningún usuario con el correo proporcionado.")
         res.redirect("/error");
     }
