@@ -4,7 +4,7 @@ const router = Router();
 import { createTransport } from 'nodemailer';
 import funciones from '../lib/funciones.js';
 import db from "../database.js"; //db hace referencia a la BBDD
-
+import {config} from "../config.js"
 router.get('/signup', funciones.isNotAuthenticated, (req, res) => {
     res.render('auth/signup')
 });
@@ -42,20 +42,19 @@ router.get('/profile/email/recordarpass/', async (req, res) => {
 });
 router.post('/profile/email/recordarpass/', async (req, res) => { //:email
     const email = req.body.email;
-    const usuario = req.body.usuario;
-    // console.log(email + " " + usuario);
     var rows = await db.query("SELECT * FROM usuarios WHERE email= ?", [email]);
     if (rows.length > 0) {
         var user = rows[0];
         const user_id = user.id;
         var token = funciones.getCode();
         const hash = await funciones.encryptPass(token);
-        //console.log(hash);
+        console.log(hash);
         var hasAnyToken = await db.query("SELECT * FROM tokens WHERE user_id=?", [user_id]);
         if (hasAnyToken.length > 0) {
-            rows = await db.query("UPDATE tokens set hashedtoken=? , expires =NOW()+ interval 5 minute where user_id=?", [hash, user_id,]);
+            rows = await db.query("UPDATE tokens set hashedtoken=? , expires =NOW()+ interval 25 minute where user_id=?", [hash, user_id,]);
         } else {
-            rows = await db.query("INSERT INTO tokens (user_id,hashedtoken, expires) VALUES (?,?, NOW()+ interval 5 minute)", [user_id, hash]);
+             console.log("insert token: "+hash);
+            rows = await db.query("INSERT INTO tokens (user_id,hashedtoken, expires) VALUES (?,?, NOW()+ interval 25 minute)", [user_id, hash]);
         }
 
      
@@ -66,8 +65,8 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
             port: 465,
 
             auth: {
-                user: process.env.EMAIL_ACCOUNT,
-                pass: process.env.EMAIL_PASS,
+                user: config.EMAIL_ACCOUNT,
+                pass: config.EMAIL_PASS,
             }
         });
 

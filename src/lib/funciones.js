@@ -53,7 +53,7 @@ funciones.encryptPass = async (password) => {
 
 funciones.verifyPassword = async (password, hashedPassword) => {
     try {
-        return await compare(password, hashedPassword);
+        return await bcryptjs.compare(password, hashedPassword);
     } catch (e) {
         console.log(e);
     }
