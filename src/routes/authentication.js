@@ -148,7 +148,7 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
 
             } else {
                 console.log('Email sent: ' + info.response);
-                req.flash("success", "Se ha enviado un token a la dirección de correo asociada para restablecer contraseña.");
+                req.flash("success", `Se ha enviado un token a la dirección de correo ${email} para restablecer contraseña.`);
                 res.redirect("/");
             }
         });

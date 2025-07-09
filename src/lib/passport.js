@@ -20,10 +20,10 @@ passport.use(
            
             if (rows.length > 0) {
                 const user = rows[0];
-                console.log(user);
-                var prueba = funciones.encryptPass(user.contrasena);
-                console.log("Pass "+prueba);
-                const validPassword = funciones.verifyPassword(password,user.contrasena);
+                //console.log(user);
+                //var prueba = funciones.encryptPass(user.contrasena);
+                //console.log("Pass "+prueba);
+                const validPassword = await funciones.verifyPassword(password,user.contrasena);
                 if (validPassword)
                     done(null, user, req.flash('success', "Welcome " + user.usuario));
                 else
