@@ -71,11 +71,10 @@ router.post('/profile/email/recordarpass/', async (req, res) => { //:email
         });
 
         var mailOptions = {
-            from: `"KILLER Support" <dev@guardiandelfaro.es>`,
+            from: `"KILLER Support" <${config.EMAIL_ACCOUNT}>`,
             to: email,
             subject: 'Restablecer contraseña KILLER',
-            replyTo: 'dev@guardiandelfaro.es',  // Agrega una dirección de respuesta válida
-            //text: 'Has olvidado tu contraseña. Haz click en el siguiente vinculo http://killer.guardiandelfaro.es/profile/email/verifypass/' + user_id + '/' + token + " para reestablecer una nueva contraseña.",
+            replyTo: `${config.EMAIL_ACCOUNT}`,  // Agrega una dirección de respuesta válida
             html: ` 
             <!DOCTYPE html>
             <html lang="es">
