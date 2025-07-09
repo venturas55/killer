@@ -46,7 +46,7 @@ router.post("/add", funciones.hasPermission, async (req, res) => {
             titulo
         }
         console.log(comunicado);
-        await query("insert into comunicados set ?", [comunicado])
+        await db.query("insert into comunicados set ?", [comunicado])
         req.flash("success", "Comunicado enviado");
         res.redirect("/comunicados/list/" + id_partida);
     } catch (error) {
