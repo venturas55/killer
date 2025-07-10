@@ -48,7 +48,7 @@ app.use(passport.session());    //para que sepa donde guardar y como manejar los
 app.use((req,res,next) =>{
     app.locals.signupMessage = req.flash('signupMessage');
     app.locals.success = req.flash('success');
-    app.locals.message = req.flash('message');
+    app.locals.message = req.flash('danger');
     app.locals.warning = req.flash('warning');
     app.locals.error = req.flash('error');
     app.locals.user = req.user;
