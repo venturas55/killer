@@ -25,9 +25,9 @@ passport.use(
                 if (validPassword)
                     done(null, user, req.flash('success', "Welcome " + user.usuario));
                 else
-                    done(null, false, req.flash('message', "El password introducido es incorrecto"));
+                    done(null, false, req.flash('danger', "El password introducido es incorrecto"));
             } else {
-                return done(null, false, req.flash('message', "Ese usuario no existe"));
+                return done(null, false, req.flash('danger', "Ese usuario no existe"));
             }
         }
     )
@@ -55,7 +55,7 @@ passport.use(
             if (yaExiste[0]) {
                 console.log(yaExiste[0].usuario);
                 console.log("Ya existe");
-                return done(null, false, req.flash('message', 'El usuario ya existe! Puebe con otro nombre de usuario.'));
+                return done(null, false, req.flash('danger', 'El usuario ya existe! Puebe con otro nombre de usuario.'));
             }
             else {
                 console.log("No existe");
