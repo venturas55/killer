@@ -25,9 +25,9 @@ passport.use(
                 if (validPassword)
                     done(null, user, req.flash('success', "Welcome " + user.usuario));
                 else
-                    done(null, false, req.flash('danger', "El password introducido es incorrecto"));
+                    done(null, false, req.flash('warning', "El password introducido es incorrecto"));
             } else {
-                return done(null, false, req.flash('danger', "Ese usuario no existe"));
+                return done(null, false, req.flash('warning', "Ese usuario no existe"));
             }
         }
     )
