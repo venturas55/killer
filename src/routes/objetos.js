@@ -126,9 +126,13 @@ router.get("/partidas/editObjects/:id_partida", funciones.isAuthenticated, async
 
 //Borrar un objeto de una partida
 router.get("/partidas/:id_partida/deleteobject/:id_objecto", funciones.hasPermission, async (req, res) => {
+  console.log("borrando objeto...");
   const { id_objecto, id_partida } = req.params;
+  console.log("id_objeto: ",id_objecto);
+  console.log("id_partida: ",id_partida);
   try {
-    var q = await db.query("SELECT * from partidas where id=?", [id_partida,]);
+    var [q] = await db.query("SELECT * from partidas where id=?", [id_partida,]);
+    console.log(q.status);
     if (q.status == 'encreacion') {
       await db.query("DELETE FROM objetos WHERE id=?", [id_objecto]);
       req.flash("success", "Objeto quitado de la lista correctamente");

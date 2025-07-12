@@ -1,22 +1,22 @@
 <div class="container p-4 mb-4">
-    {{>logo}}
+  {{>logo}}
   <div class="row my-4">
     <div class="col-md-4 mx-auto mb-4">
       <div class="card text-center text-dark">
         <div class="card-header">
-          NO RECUERDAS TU CONTRASEÑA
+          NO RECUERDAS TU USUARIO O CONTRASEÑA
         </div>
         <div class="card-body">
           <img src="/img/logo.png" alt="Un LOGO" class="card-img-top mx-auto m-2 rounder-circle w-50">
           <p>Introduza su email</p>
           <form action="/profile/email/recordarpass" method="POST">
-
-   
-            <div class="form-group mb-4">
-              <input type="email" name="email" placeholder="e-mail" class="form-control" autofocus/>
+            <p class="text-dark">Introduzca su cuenta de correo.</p>
+            <div class="form-group my-2">
+              <input type="email" name="email" placeholder="e-mail" class="form-control" autofocus />
             </div>
-            <div class="form-group mb-4">
-              <button class="btn btn-warning btn-block" onclick='document.getElementById("mensaje").innerHTML="Se está enviando correo, en breve será redirigido"'>
+            <div class="form-group my-4">
+              <button class="btn btn-warning btn-block"
+                onclick='document.getElementById("mensaje").innerHTML="Se está enviando correo, en breve será redirigido"'>
                 RESTABLECER CONTRASEÑA
               </button>
             </div>

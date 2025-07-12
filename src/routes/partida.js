@@ -44,10 +44,10 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
   } = req.body;
   let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   var id = characters.charAt(Math.floor(Math.random() * characters.length)) + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1).toUpperCase();
-  console.log(id);
+  //console.log(id);
   try {
-    const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, 'status': 'encreacion', 'id_creador': req.user.id };
-    console.log(item);
+    const item = { id, titulo, descripcion, fecha_inicio, fecha_fin, status: 'encreacion', id_creador: req.user.id };
+    //console.log(item);
     //console.log(nanoid(6));
     await db.query("INSERT INTO partidas set ?", [item]);
     req.flash("success", "Partida insertado correctamente comparte el codigo: " + item.id);
