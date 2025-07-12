@@ -55,7 +55,7 @@ passport.use(
             if (yaExiste[0]) {
                 console.log(yaExiste[0].usuario);
                 console.log("Ya existe");
-                return done(null, false, req.flash('danger', 'El usuario ya existe! Puebe con otro nombre de usuario.'));
+                return done(null, false, req.flash('danger', 'El usuario ya existe! Puebe con otro.'));
             }
             else {
                 console.log("No existe");
