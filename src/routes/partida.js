@@ -399,7 +399,7 @@ router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) =
     res.redirect("/partidas/editgame/" + id); //te redirige una vez insertado el item
   } catch (error) {
     console.error(error.code);
-    console.log("error: ",error)
+    console.log("error: ", error)
     switch (error.code) {
       case "ER_BAD_NULL_ERROR":
         req.flash("error", "El campo  es obligatorio");
@@ -411,7 +411,7 @@ router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) =
       default:
         req.flash("error", "Hubo algun error al intentar añadir el jugador");
     }
-    req.flash("error", "Hubo algun error:\n",error);
+    req.flash("error", "Hubo algun error:\n", error);
     res.redirect("/partidas/listar");
   }
 
@@ -501,8 +501,8 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
   const { id_partida } = req.params;
   var id_jugador = req.user.id;
   try {
-
-    let partida = (await db.query("select * from partidas WHERE  id_partida=?", [id_partida]))[0];
+    let partida = (await db.query("select * from partidas WHERE  id=?", [id_partida]))[0];
+    console.log("status: ", partida);
     if (partida.status != 'enjuego') {
       req.flash("error", "La partida no está en juego");
       res.redirect("/partidas/plantilla/" + id_partida);
