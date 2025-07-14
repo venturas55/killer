@@ -8,6 +8,7 @@ import db from "../database.js"; //db hace referencia a la BBDD
 import multer from 'multer';
 import { access, constants } from 'fs';
 import funciones from "../lib/funciones.js";
+import queries from "./queries.js";
 import { v4 as uuidv4 } from 'uuid';
 import { imageSizeLimitErrorHandler } from "../lib/validaciones.js";
 import * as url from "url";
@@ -109,17 +110,18 @@ router.get("/partidas/editObjects/:id_partida", funciones.isAuthenticated, async
   var esCreador = false;
   try {
     const datospartida = (await db.query(queries.queryPartidas + " WHERE p.id=?", [id_partida,]))[0];
+    console.log("datospartida: ",datospartida);
+
     const objetos = await db.query("select * from objetos WHERE id_partida=?", [id_partida,]);
 
     if (datospartida.id_creador == req.user.id) {
       esCreador = true;
       console.log(esCreador);
     }
-    console.log(datospartida);
     res.render("partidas/edit_objects", { datospartida, objetos, esCreador });
   } catch (error) {
-    console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    console.error(error);
+    req.flash("error", "Hubo algun error",error);
     res.redirect("/error");
   }
 });
