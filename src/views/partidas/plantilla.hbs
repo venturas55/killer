@@ -9,18 +9,18 @@
         </p>
         {{/when}}
         {{#when supervivientes.length 'gt' 1}}
-            {{!-- Si ha terminado por tiempo --}}
-            {{#when (tiempoHasta ../partida.0.fecha_fin) 'eq' 'finalizado'}}
-            <p>
-                La partida terminó el {{formatearSpHora ../partida.0.fecha_fin}}
-            </p>
-            {{/when}}
-            {{#when (tiempoHasta ../partida.0.fecha_fin) 'noteq' 'finalizado'}}
-            {{!-- Si todavía queda tiempo --}}
-            <p>
-                Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos
-            </p>
-            {{/when}}
+        {{!-- Si ha terminado por tiempo --}}
+        {{#when (tiempoHasta ../partida.0.fecha_fin) 'eq' 'finalizado'}}
+        <p>
+            La partida terminó el {{formatearSpHora ../partida.0.fecha_fin}}
+        </p>
+        {{/when}}
+        {{#when (tiempoHasta ../partida.0.fecha_fin) 'noteq' 'finalizado'}}
+        {{!-- Si todavía queda tiempo --}}
+        <p>
+            Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos
+        </p>
+        {{/when}}
         {{/when}}
 
 
@@ -113,7 +113,7 @@
             <div class="col-md-12 mx-auto mt-4">
                 <p> Aunque eres administrador de la partida, no participas en ella</p>
                 <div class="d-flex justify-content-around my-4">
-                    <a href="/partidas/plantillaindividual/{{ ../partida.0.id_partida}}">
+                    <a href="/partidas/plantillaindividual/{{ ../../partida.0.id_partida}}">
                         <button class="btn btn-style">VER PARTIDA</button>
                     </a>
                 </div>
@@ -134,12 +134,15 @@
             <div class="col-md-12 mx-auto cajita mt-4">
                 <h3>TENEMOS GANADOR!!</h3>
                 <p class="d-inline">El ganador es </p>
-                <h5 class="d-inline"> {{../supervivientes.0.jugador_name}} </h5> aka <strong>
-                    {{../supervivientes.0.jugador_user}} </strong> <span> con un total de <strong>
-                        {{../supervivientes.0.asesinatos}} eliminaciones</strong></span>
+                <h5 class="d-inline"><a
+                        href="/jugador/foto/{{../../partida.0.id_partida}}/{{../../supervivientes.0.id_jugador}}"
+                        class="link-danger"> <strong></strong>{{../../supervivientes.0.jugador_name}} </strong></a></h5>
+                <p class="d-inline">aka
+                    {{../../supervivientes.0.jugador_user}} <span> con un total de</p> <strong>
+                    {{../../supervivientes.0.asesinatos}} eliminaciones</strong></span>
             </div>
             <div class="d-flex justify-content-around my-4">
-                <a href="/partidas/plantillaindividual/{{ ../partida.0.id_partida}}">
+                <a href="/partidas/plantillaindividual/{{../../partida.0.id_partida}}">
                     <button class="btn btn-style">VER PARTIDA</button>
                 </a>
             </div>

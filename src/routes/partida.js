@@ -109,7 +109,7 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
 
 router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, funciones.hasPermission, async (req, res) => {
   const { id_partida } = req.params;
-  id_jugador = req.user.id;
+  var id_jugador = req.user.id;
   //const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
   const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? ORDER BY pej.asesinatos desc", [id_partida,]);
   console.log(partida);
@@ -267,7 +267,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
 
     // Supervivientes
     const supervivientes = partida.filter(el => el.eliminado === 0);
-
+    console.log("SUPER: ", supervivientes)
     if (supervivientes.length === 1) {
       // Solo actualizar si no está finalizada
       await db.query(
@@ -463,9 +463,10 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
   /* TODO: verificar que esta en tiempo */
+  //TODO: ENVIAR UN CORREO CON LA NOTIFICACION DE MUERTE
   // funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
   console.log("aviso enviado");
-  //TODO: SE ALMACENAR EL TICKET EN LA FILA DONDE ID_JUGADOR (ID_ASESINO) Y ID_VICTIMA ES LA VICTIMA. Ahora mismo pienso que seria mejor almacenar el ticket en la fila de la ID_VICTIMA.
+  //TODO: SE ALMACENAR EL TICKET EN LA FILA DONDE ID_JUGADOR (ID_ASESINO) Y ID_VICTIMA ES LA VICTIMA. Ahora mismo pienso que seria mejor una nueva tabla de tickets.
 
   try {
     await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
