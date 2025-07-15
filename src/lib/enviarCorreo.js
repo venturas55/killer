@@ -144,7 +144,7 @@ export function enviarCorreo(req, res, destinatario, id_partida) {
   const mailOptions = {
     from: `"KILLER Support" <${config.EMAIL_ACCOUNT}>`,
     to: destinatario.email,
-    subject: 'Has sido ASESINADO en el juego KILLER',
+    subject: 'Has sido ELIMINADO en el juego KILLER',
     replyTo: config.EMAIL_ACCOUNT,
     html
   };
