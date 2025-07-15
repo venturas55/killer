@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import passport from 'passport';
 const router = Router();
-import { createTransport } from 'nodemailer';
 import funciones from '../lib/funciones.js';
 import db from "../database.js"; //db hace referencia a la BBDD
 import queries from './queries.js';
+import { enviarCorreo } from '../lib/enviarCorreo.js';
 
 // Middleware to check partida end conditions
 const checkPartidaStatus = async (req, res, next) => {
@@ -89,7 +88,7 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 }); */
 
@@ -103,7 +102,7 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 }); */
 
@@ -174,7 +173,7 @@ router.get('/listartodas', funciones.isAdmin, async (req, res) => {
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 
@@ -195,7 +194,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
 
     if (partida.length === 0) {
       req.flash("error", "No se encontró la partida.");
-      return res.redirect("/error");
+      return res.redirect("/error",error);
     }
 
     const eliminaciones = await db.query(
@@ -267,7 +266,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
 
     // Supervivientes
     const supervivientes = partida.filter(el => el.eliminado === 0);
-    console.log("SUPER: ", supervivientes)
+    //console.log("SUPER: ", supervivientes)
     if (supervivientes.length === 1) {
       // Solo actualizar si no está finalizada
       await db.query(
@@ -297,7 +296,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
   } catch (error) {
     console.error(">Un error:", error);
     req.flash("error", "Hubo algún error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 //JOIN PARA unirse a una partida
@@ -333,7 +332,7 @@ router.post("/join", funciones.isAuthenticated, async (req, res) => {
               req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
     }
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 
@@ -361,7 +360,7 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) => {
@@ -379,7 +378,7 @@ router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) =>
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) => {
@@ -444,7 +443,7 @@ router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
@@ -455,7 +454,7 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 
@@ -463,19 +462,18 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
 router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async (req, res) => {
   const { id_victima, id_partida } = req.params;
   /* TODO: verificar que esta en tiempo */
-  //TODO: ENVIAR UN CORREO CON LA NOTIFICACION DE MUERTE
   // funciones.verifyActiveGame(id_partida).then(check=>console.log(check));
-  console.log("aviso enviado");
   //TODO: SE ALMACENAR EL TICKET EN LA FILA DONDE ID_JUGADOR (ID_ASESINO) Y ID_VICTIMA ES LA VICTIMA. Ahora mismo pienso que seria mejor una nueva tabla de tickets.
-
   try {
     await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
-    req.flash("success", "Aviso de asesinato enviado");
-    res.redirect("/partidas/plantilla/" + id_partida);
+    const [destinatario] = await db.query("select * from usuarios where id=?", id_victima);
+    enviarCorreo(req, res, destinatario, id_partida);
+/*     req.flash("success", "Aviso de asesinato enviado");
+    res.redirect("/partidas/plantilla/" + id_partida); */
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 //Ruta para BORRAR NOTIFICACION la solicitud e un asesinato.
@@ -493,7 +491,7 @@ router.get("/:id_partida/borrarasesinar/:id_victima", funciones.isAuthenticated,
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 
@@ -602,7 +600,90 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error: " + error.code);
-    res.redirect("/error");
+    res.redirect("/error",error);
+  }
+});
+router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
+  const { id_partida, id_jugador } = req.params;
+  try {
+    let partida = (await db.query("select * from partidas WHERE  id=?", [id_partida]))[0];
+    if (partida.status != 'enjuego') {
+      req.flash("error", "La partida no está en juego");
+      const error="La partida no está en juego";
+      res.redirect("/error",error);
+    }
+    if (partida.fecha_fin < new Date()) {
+      req.flash("error", "La partida ha terminado");
+       const error="La partida ha terminadoo";
+      res.redirect("/error",error);
+    }
+    //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
+    //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
+    let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
+    //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
+    let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
+    //console.log("2")
+    //console.log(victima);
+
+    //Creo el asesinato
+    const eliminacion = {
+      id_partida,
+      'id_asesino': asesino.id_jugador,
+      'id_victima': id_jugador,
+      'id_objeto': asesino.id_objeto,
+    }
+    //Inserto la muerte en la tabla eliminaciones
+    await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
+
+    //ACTUALIZO VICTIMA=JUGADOR
+    // Marco la victima muerta y su fecha.quito el ticket
+    jugador.eliminado = true;
+    jugador.fecha_asesinato = new Date();
+    jugador.ticket = false;
+
+    //guardo datos a machacar del asesino
+    let objetoaux = asesino.id_objeto;
+
+    //ASESINO
+    //Asigno nuevos datos del asesino que hereda del jugador asesinado, VICTIMA
+    asesino.id_victima = jugador.id_victima;
+    asesino.id_objeto = jugador.id_objeto;
+    asesino.ticket = false;
+    //Sumo muerte Actualizo nuevo objetivo
+    asesino.asesinatos++;
+
+    //recupero datos machacados del asesino a la victima. DATOS CON LOS QUE SE MATO. UN MUERTO TENDRA EN ID_VICTIMA A SU ASESINO ASI COMO EL OBJETO CON EL QUE LE MATARON
+    jugador.id_victima = asesino.id_jugador;
+    jugador.id_objeto = objetoaux;
+    jugador.eliminado = 1;
+
+    await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [jugador, id_partida, jugador.id_jugador,]);
+    await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [asesino, id_partida, asesino.id_jugador]);
+
+    //VERIFICAR SI SE ACABA LA PARTIDA BASANDONOS EN SUPERVIVIENTES
+    let supervivientes = await db.query("select * from partidasenjuego WHERE eliminado=false and id_partida=?", [id_partida]);
+    //console.log(supervivientes);
+    if (supervivientes.length == 1) {
+      await db.query("UPDATE partidas set status='finalizada' WHERE id=?", [id_partida,]);
+    }
+
+    res.redirect("/confirmacion");
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error: " + error.code);
+    res.redirect("/error",error);
+  }
+});
+
+router.get("/:id_partida/rejectkillde/:id_victima", async (req, res) => {
+  const { id_victima, id_partida } = req.params;
+  try {
+    await db.query("update partidasenjuego set ticket = false where id_partida=?  AND id_victima=?", [id_partida, id_victima])
+    res.redirect("/rechazo");
+  } catch (error) {
+    console.error(error.code);
+    req.flash("error", "Hubo algun error");
+    res.redirect("/error",error);
   }
 });
 //Ruta para RECHAZAR la solicitud de un asesinato.
@@ -610,11 +691,11 @@ router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, asy
   const { id_victima, id_partida } = req.params;
   try {
     await db.query("update partidasenjuego set ticket = false where id_partida=?  AND id_victima=?", [id_partida, id_victima])
-    res.redirect("/partidas/plantilla/" + id_partida);
+    res.redirect("/rechazo");
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error");
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 
@@ -633,7 +714,7 @@ router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
   } catch (error) {
     console.error(error.code);
     req.flash("error", "Hubo algun error: " + error.code);
-    res.redirect("/error");
+    res.redirect("/error",error);
   }
 });
 

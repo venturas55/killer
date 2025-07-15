@@ -61,6 +61,14 @@ router.get('/error', async (req, res) => {
     res.render('error');
 });
 
+router.get('/confirmacion', async (req, res) => {
+    res.render('confirmacion');
+});  
+
+router.get('/rechazo', async (req, res) => {
+    res.render('rechazo');
+});  
+
 router.get('/prueba', async (req, res) => {
     res.render('prueba');
 });
