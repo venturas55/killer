@@ -8,7 +8,6 @@
                 <table class="table table-dark table-striped">
                     <tr>
                         <th>Jugador</th>
-                        <th>Jugador</th>
                         <th>Objeto</th>
                         <th>Victima</th>
                         <th>Ticket</th>
@@ -21,16 +20,13 @@
                     {{#each partida}}
                     <tr class="table-active">
                         <td>
-                            <p> {{this.jugador_user}}</p>
-                        </td>
-                        <td> <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_jugador}}">
-                                <p> {{this.jugador_name}}</p>
+                           <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_jugador}}"> {{this.id_jugador}} {{this.jugador_user}} - {{this.jugador_name}}
                             </a></td>
                         <td> <a href="/partidas/{{../partidita.id_partida}}/ver_object/{{this.id_objeto}}">
                                 <p> {{this.objeto}}</p>
                             </a></td>
                         <td>
-                            <p> {{this.victima_user}}</p>
+                            <p> {{this.id_victima}} {{this.victima_user}}</p>
                         </td>
                         <td>
                             <p> {{this.ticket}}</p>
