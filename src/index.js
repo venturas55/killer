@@ -17,40 +17,41 @@ const app = express();
 import './lib/passport.js'; //para que se entere de la autentificacion que se ha crea do 
 
 //Settings
-app.set('port',process.env.PORT || 4000);
-app.set('views', join(__dirname,'views'));
+app.set('port', process.env.PORT || 4000);
+app.set('views', join(__dirname, 'views'));
 app.engine('.hbs', engine({  //con esto se configura el app.engine
     defaultLayout: 'main',
-    layoutDir: path.join(app.get('views'),'layouts'),
-    partialsDir: path.join(app.get('views'),'partials'),
+    layoutDir: path.join(app.get('views'), 'layouts'),
+    partialsDir: path.join(app.get('views'), 'partials'),
     extname: '.hbs',
     helpers: handlebars //no hay nada aun
 }));
-app.set('view engine','.hbs'); //Para utilizar el app.engine
+app.set('view engine', '.hbs'); //Para utilizar el app.engine
 
 
 //Middleware
 app.use(session({
     secret: 'mysesion',
     resave: false,
-    saveUninitialized:false,
+    saveUninitialized: false,
     store: new MySQLstore(config.database)
 }))
 app.use(flash());       // Para poder usar el middleware de enviar mensajes popups
 app.use(morgan('dev'));
-app.use(urlencoded({extended:false})); //aceptar los datos desde los formularios sin aceptar imagenes ni nada raro
+app.use(urlencoded({ extended: false })); //aceptar los datos desde los formularios sin aceptar imagenes ni nada raro
 app.use(json()); //Para enviar y recibir jsons.
 app.use(passport.initialize()); //iniciar passport
 app.use(passport.session());    //para que sepa donde guardar y como manejar los datos
 
 
 //Variables globales
-app.use((req,res,next) =>{
+app.use((req, res, next) => {
     app.locals.signupMessage = req.flash('signupMessage');
     app.locals.success = req.flash('success');
     app.locals.danger = req.flash('danger');
     app.locals.warning = req.flash('warning');
     app.locals.error = req.flash('error');
+    app.locals.message = req.flash('message');
     app.locals.user = req.user;
     next();
 });
@@ -67,21 +68,21 @@ import rutasProfile from "./routes/profile.js";
 import rutasComunicados from "./routes/comunicado.js";
 app.use(rutas);
 app.use(rutasAuth);
-app.use('/partidas',rutasPartidas);
+app.use('/partidas', rutasPartidas);
 app.use(rutasApi);
 app.use(rutasObjetos);
 app.use(rutasJugadores);
 app.use(rutasPayments);
 app.use(rutasProfile);
-app.use('/comunicados',rutasComunicados);
+app.use('/comunicados', rutasComunicados);
 
 
 //Public
-app.use(_static(join(__dirname,'public')));
+app.use(_static(join(__dirname, 'public')));
 /* app.use(
     express.static(path.join(__dirname, "../node_modules/bootstrap/dist/"))
   ); */
 //Starting
-app.listen(app.get('port'),()=>{
-    console.log("Running on http://localhost:"+ app.get('port'));
+app.listen(app.get('port'), () => {
+    console.log("Running on http://localhost:" + app.get('port'));
 })
