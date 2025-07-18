@@ -618,24 +618,25 @@ router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
       const error = "La partida ha terminadoo";
       res.redirect("/error", error);
     }
-    //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
-    //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
-    let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
-    //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
-    let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
-    //console.log("2")
-    //console.log(victima);
-
-    //Creo el asesinato
-    const eliminacion = {
-      id_partida,
-      'id_asesino': asesino.id_jugador,
-      'id_victima': id_jugador,
-      'id_objeto': asesino.id_objeto,
-    }
     //Inserto la muerte en la tabla eliminaciones
-    //TODO: si y solo si hay un ticket activo.
+    //TODO: si y solo si hay un ticket activo. HECHO!!
+    console.log("asesino ticket: ",asesino.ticket);
     if (asesino.ticket) {
+      //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
+      //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
+      let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
+      //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
+      let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
+      //console.log("2")
+      //console.log(victima);
+
+      //Creo el asesinato
+      const eliminacion = {
+        id_partida,
+        'id_asesino': asesino.id_jugador,
+        'id_victima': id_jugador,
+        'id_objeto': asesino.id_objeto,
+      }
       await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
       //ACTUALIZO VICTIMA=JUGADOR
       // Marco la victima muerta y su fecha.quito el ticket
@@ -661,6 +662,9 @@ router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
 
       await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [jugador, id_partida, jugador.id_jugador,]);
       await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [asesino, id_partida, asesino.id_jugador]);
+    } else {
+      req.flash("danger", "Hubo algun error. No hay ticket activo");
+      res.redirect("/confirmacion");
     }
 
 
@@ -671,7 +675,7 @@ router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
     if (supervivientes.length == 1) {
       await db.query("UPDATE partidas set status='finalizada' WHERE id=?", [id_partida,]);
     }
-
+    console.log("Supervivientes: ",supervivientes)
     res.redirect("/confirmacion");
   } catch (error) {
     console.error(error.code);
