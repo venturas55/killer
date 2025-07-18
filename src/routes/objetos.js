@@ -160,7 +160,8 @@ router.get("/partidas/:id_partida/add_existing_object", funciones.hasPermission,
   const { id_partida } = req.params;
 
   try {
-    const objetos = await db.query("Select * from objetos");
+    //const objetos = await db.query("Select * from objetos");
+    const objetos = await db.query("SELECT o.* FROM objetos o INNER JOIN (   SELECT nombre, MIN(id) AS id   FROM objetos   GROUP BY nombre ) AS sub ON o.id = sub.id WHERE TRIM(o.descripcion) != '' OR TRIM(o.pictureURL) != ''");
     console.log(objetos);
     res.render("objetos/add_existingObject", { objetos, id_partida });
   } catch (error) {
