@@ -1,4 +1,4 @@
 .env
 node_modules
-/img/imagenes
-/img/profiles
+/src/public/img/imagenes
+/src/public/img/profiles
