@@ -10,20 +10,18 @@
         {{/when}}
         {{#when supervivientes.length 'gt' 1}}
         {{!-- Si ha terminado por tiempo --}}
-        {{#when (tiempoHasta ../partida.0.fecha_fin) 'eq' 'finalizado'}}
-        <p>
-            La partida terminó el {{formatearSpHora ../partida.0.fecha_fin}}
-        </p>
+            {{#when (tiempoHasta ../partida.0.fecha_fin) 'eq' 'finalizado'}}
+            <p>
+                La partida terminó el {{formatearSpHora ../partida.0.fecha_fin}}
+            </p>
+            {{/when}}
+            {{#when (tiempoHasta ../partida.0.fecha_fin) 'noteq' 'finalizado'}}
+            {{!-- Si todavía queda tiempo --}}
+            <p>
+                Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos
+            </p>
+            {{/when}}
         {{/when}}
-        {{#when (tiempoHasta ../partida.0.fecha_fin) 'noteq' 'finalizado'}}
-        {{!-- Si todavía queda tiempo --}}
-        <p>
-            Quedan {{tiempoHasta ../partida.0.fecha_fin}} para acabar con todos
-        </p>
-        {{/when}}
-        {{/when}}
-
-
 
         <div class="col-12 mx-auto">
             <div class="cajita my-4"> {{!-- ASESINOS Y ARMAS--}}
@@ -66,11 +64,11 @@
                     <img src="/img/asesin.png" alt="asesin" class="float-end">
                     <div class="clearfix">
                         {{#if top_killers}}
-                        {{#each top_killers}}
-                        <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}}
-                            bajas
-                        </p>
-                        {{/each}}
+                            {{#each top_killers}}
+                            <p> <strong> #{{counter @index}} - {{this.jugador_user}}</strong> con {{this.asesinatos}}
+                                bajas
+                            </p>
+                            {{/each}}
                         {{else}}
                         <p>Todavia no han habido bajas!</p>
                         {{/if}}
@@ -102,24 +100,23 @@
                 {{/if}}
             </div>
             {{else}}
-            {{#when supervivientes.length 'gt' 1}}
-
-            {{#if ../objetivo}}
-            <div class="col-md-12 mx-auto mt-4">
-                <a class="btn btn-warning" data-bs-toggle="modal" href="#killModalToggle" role="button"> <i
-                        class="fa-solid fa-eye"></i> VER MI OBJETIVO</a>
-            </div>
-            {{else}}
-            <div class="col-md-12 mx-auto mt-4">
-                <p> Aunque eres administrador de la partida, no participas en ella</p>
-                <div class="d-flex justify-content-around my-4">
-                    <a href="/partidas/plantillaindividual/{{ ../../partida.0.id_partida}}">
-                        <button class="btn btn-style">VER PARTIDA</button>
-                    </a>
-                </div>
-            </div>
-            {{/if}}
-            {{/when}}
+                {{#when supervivientes.length 'gt' 1}}
+                    {{#if ../objetivo}}
+                    <div class="col-md-12 mx-auto mt-4">
+                        <a class="btn btn-warning" data-bs-toggle="modal" href="#killModalToggle" role="button"> <i
+                                class="fa-solid fa-eye"></i> VER MI OBJETIVO</a>
+                    </div>
+                    {{else}}
+                    <div class="col-md-12 mx-auto mt-4">
+                        <p> Aunque eres administrador de la partida, no participas en ella</p>
+                        <div class="d-flex justify-content-around my-4">
+                            <a href="/partidas/plantillaindividual/{{ ../../partida.0.id_partida}}">
+                                <button class="btn btn-style">VER PARTIDA</button>
+                            </a>
+                        </div>
+                    </div>
+                    {{/if}}
+                {{/when}}
             {{/if}}
 
 

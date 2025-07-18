@@ -2,105 +2,104 @@
 <div class="fondo">
     <div class="hazard-background">
     </div>
-
     <div class="container text-center">
         {{#if partidas}}
-        {{#each partidas}}
-        {{#enJuego this.status}}
-        <div class="col-md-8 mx-auto mb-3">
-            <a href="/partidas/plantilla/{{../this.id_partida}}">
-                <div class="cajita">
-                    <div class="float-start">
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
-                    <p>{{../this.descripcion}}</p>
-                    <p>Partida creada por  {{../this.usuario}}</p>
-                    <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
-                    <p>Status: en curso</p>
+            {{#each partidas}}
+                {{#enJuego this.status}}
+                <div class="col-md-8 mx-auto mb-3">
+                    <a href="/partidas/plantilla/{{../this.id_partida}}">
+                        <div class="cajita">
+                            <div class="float-start">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                            <p>{{../this.descripcion}}</p>
+                            <p>Partida creada por {{../this.usuario}}</p>
+                            <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                            <p>Status: en curso</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {{/enJuego}}
-        {{#enCreacion this.status}}
-        <div class="col-md-8 mx-auto mb-3">
-            <a href="/partidas/edit/{{../this.id_partida}}">
-                <div class="cajita">
-                    <div class="float-start">
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
-                    <p>{{../this.descripcion}}</p>
-                    <p>Partida creada por  {{../this.usuario}}</p>
-                    <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
-                    <p>Status: en creacion</p>
+                {{/enJuego}}
+                {{#enCreacion this.status}}
+                <div class="col-md-8 mx-auto mb-3">
+                    <a href="/partidas/edit/{{../this.id_partida}}">
+                        <div class="cajita">
+                            <div class="float-start">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                            <p>{{../this.descripcion}}</p>
+                            <p>Partida creada por {{../this.usuario}}</p>
+                            <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                            <p>Status: en creacion</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {{/enCreacion}}
-        {{#finalizada this.status}}
-        <div class="col-md-8 mx-auto mb-3">
-            <a href="/partidas/plantilla/{{../this.id_partida}}">
-                <div class="cajita cajita_disabled">
-                    <div class="float-start">
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
-                    <p>{{../this.descripcion}}</p>
-                    <p>Partida creada por  {{../this.usuario}}</p>
-                    <p>Estuvo activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
-                    <p>Status: finalizada!</p>
+                {{/enCreacion}}
+                {{#finalizada this.status}}
+                <div class="col-md-8 mx-auto mb-3">
+                    <a href="/partidas/plantilla/{{../this.id_partida}}">
+                        <div class="cajita cajita_disabled">
+                            <div class="float-start">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                            <p>{{../this.descripcion}}</p>
+                            <p>Partida creada por {{../this.usuario}}</p>
+                            <p>Estuvo activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                            <p>Status: finalizada!</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {{/finalizada}}
-        {{/each}}
+                {{/finalizada}}
+            {{/each}}
         {{/if}}
     </div>
 
     <div class="container text-center">
         {{#if partidasDondeParticipo}}
-        {{#each partidasDondeParticipo}}
-        {{#enJuego this.status}}
-        <div class="col-md-8 mx-auto mb-3">
-            <a href="/partidas/plantilla/{{../this.id_partida}}">
-                <div class="cajita">
-                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
-                    <p>{{../this.descripcion}}</p>
-                    <p>Partida creada por  {{../this.usuario}}</p>
-                    <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
-                    <p>Status: en curso</p>
+            {{#each partidasDondeParticipo}}
+                {{#enJuego this.status}}
+                <div class="col-md-8 mx-auto mb-3">
+                    <a href="/partidas/plantilla/{{../this.id_partida}}">
+                        <div class="cajita">
+                            <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                            <p>{{../this.descripcion}}</p>
+                            <p>Partida creada por {{../this.usuario}}</p>
+                            <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                            <p>Status: en curso</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {{/enJuego}}
-        {{#enCreacion this.status}}
-        <div class="col-md-8 mx-auto mb-3">
-            <a href="/partidas/edit/{{../this.id_partida}}">
-                <div class="cajita">
-                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
-                    <p>{{../this.descripcion}}</p>
-                    <p>Partida creada por  {{../this.usuario}}</p>
-                    <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
-                    <p>Status: en creacion</p>
+                {{/enJuego}}
+                {{#enCreacion this.status}}
+                <div class="col-md-8 mx-auto mb-3">
+                    <a href="/partidas/edit/{{../this.id_partida}}">
+                        <div class="cajita">
+                            <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                            <p>{{../this.descripcion}}</p>
+                            <p>Partida creada por {{../this.usuario}}</p>
+                            <p>Activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                            <p>Status: en creacion</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {{/enCreacion}}
-        {{#finalizada this.status}}
-        <div class="col-md-8 mx-auto mb-3">
-            <a href="/partidas/plantilla/{{../this.id_partida}}">
-                <div class="cajita cajita_disabled">
-                    <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
-                    <p>{{../this.descripcion}}</p>
-                    <p>Partida creada por  {{../this.usuario}}</p>
-                    <p>Estuvo activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
-                    <p>Status: finalizada!</p>
+                {{/enCreacion}}
+                {{#finalizada this.status}}
+                <div class="col-md-8 mx-auto mb-3">
+                    <a href="/partidas/plantilla/{{../this.id_partida}}">
+                        <div class="cajita cajita_disabled">
+                            <h4>{{../this.id_partida}}-{{../this.titulo}}</h4>
+                            <p>{{../this.descripcion}}</p>
+                            <p>Partida creada por {{../this.usuario}}</p>
+                            <p>Estuvo activa entre {{formatearSp ../this.fecha_inicio}} - {{formatearSp ../this.fecha_fin}}</p>
+                            <p>Status: finalizada!</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {{/finalizada}}
-        {{/each}}
+                {{/finalizada}}
+            {{/each}}
         {{/if}}
     </div>
 
@@ -119,6 +118,11 @@
                 <a href="/partidas/add" class="btn btn-style"> <i class="fa fa-plus-circle" aria-hidden="true"></i>
                     <p>CREAR NUEVA PARTIDA</p>
                 </a>
+                {{#when user.privilegio 'eq' "admin"}}
+                <a href="/partidas/listartodas" class="btn btn-style">
+                    VER TODAS
+                </a>
+                {{/when}}
             </div>
     </div>
 </div>
