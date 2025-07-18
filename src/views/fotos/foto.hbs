@@ -13,9 +13,17 @@
         <div class="card-body text-center px-4 bg-black">
           <hr>
           {{#if jugador.pictureURL}}
-          <img src="/img/profiles/{{jugador.pictureURL}}"
-            alt="Foto {{#if eliminado}}de la víctima{{else}}del killer{{/if}}"
-            class="card-img-top img-fluid rounded {{#if eliminado}}grayscale{{/if}}">
+          {{#if eliminado}} <div class="muerte-container p-2"> {{/if}}
+            <img src="/img/profiles/{{jugador.pictureURL}}"
+              alt="Foto {{#if eliminado}}de la víctima{{else}}del killer{{/if}}"
+              class="card-img-top img-fluid rounded {{#if eliminado}} muerte-img darkened{{/if}}">
+            {{#if eliminado}}
+            <div class="gota"></div>
+            <div class="gota"></div>
+            <div class="gota"></div>
+            <div class="gota"></div>
+            <div class="gota"></div>
+          </div> {{/if}}
           {{else}}
           <img src="/img/profiles/zodiac-killer.jpg"
             alt="Foto {{#if eliminado}}de la víctima{{else}}del killer{{/if}} por defecto"
