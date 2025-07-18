@@ -2,39 +2,84 @@
     <div class="row">
         <div class="col-md-12 ">
             <h1>Datos de la partida {{ partidita.titulo }} - {{ partidita.descripcion }}</h1>
-                <div>
-                    <h2 class="text-center"> Listado de la Partida</h2>
-                    {{#if partida}}
-                    <table class="table table-dark table-striped">
-                        <tr>
-                            <th>Asesino</th>
-                            <th>Objeto</th>
-                            <th>Ticket</th>
-                            <th>Muerte</th>
-                            <th>Bajas</th>
-                            <th>Proxima victima</th>
+            <div>
+                <h2 class="text-center"> Listado de la Partida</h2>
+                {{#if partida}}
+                <table class="table table-dark table-striped">
+                    <tr>
+                        <th>Jugador</th>
+                        <th>Jugador</th>
+                        <th>Objeto</th>
+                        <th>Victima</th>
+                        <th>Ticket</th>
+                        <th>Muerte</th>
+                        <th>Bajas</th>
+                        <th>Proxima victima</th>
 
-                            {{!-- <th>Options</th> --}}
-                        </tr>
-                        {{#each partida}}
-                        <tr class="table-active">
-                            <td>  <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_jugador}}"> <p> {{this.jugador_name}}</p> </a></td>
-                            <td> <a href="/partidas/{{../partidita.id_partida}}/ver_object/{{this.id_objeto}}"><p>  {{this.objeto}}</p></a></td>
-                            <td><p> {{this.ticket}}</p></td>
+                        {{!-- <th>Options</th> --}}
+                    </tr>
+                    {{#each partida}}
+                    <tr class="table-active">
+                        <td>
+                            <p> {{this.jugador_user}}</p>
+                        </td>
+                        <td> <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_jugador}}">
+                                <p> {{this.jugador_name}}</p>
+                            </a></td>
+                        <td> <a href="/partidas/{{../partidita.id_partida}}/ver_object/{{this.id_objeto}}">
+                                <p> {{this.objeto}}</p>
+                            </a></td>
+                        <td>
+                            <p> {{this.victima_user}}</p>
+                        </td>
+                        <td>
+                            <p> {{this.ticket}}</p>
+                        </td>
 
-                            {{#if this.eliminado}}
-                            <td><p> {{ formatearSpHora this.fecha_asesinato}}</p></td>
+                        {{#if this.eliminado}}
+                        <td>
+                            <p> {{ formatearSpHora this.fecha_asesinato}}</p>
+                        </td>
 
-                            {{else}}
-                            <td><p> Sigue vivo</p></td>
-                            {{/if}}
-                            <td><p> {{this.asesinatos}}</p></td>
-                            <td> <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_victima}}"> <p> {{this.victima_name}}</p></a> </td>
-                        </tr>
-                        {{/each}}
-                    </table>
-                    {{/if}}
-                </div>
+                        {{else}}
+                        <td>
+                            <p> Sigue vivo</p>
+                        </td>
+                        {{/if}}
+                        <td>
+                            <p> {{this.asesinatos}}</p>
+                        </td>
+                        <td> <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_victima}}">
+                                <p> {{this.victima_name}}</p>
+                            </a> </td>
+                    </tr>
+                    {{/each}}
+                </table>
+                {{/if}}
+            </div>
+
+            <h2>
+                ELIMINACIONES
+            </h2>
+            {{#if partida}}
+            <table class="table table-dark table-striped">
+                <tr>
+        
+                    <th>Eliminacion</th>
+                    
+
+                    {{!-- <th>Options</th> --}}
+                </tr>
+                {{#each eliminaciones}}
+                <tr class="table-active">
+                    <td>
+                        <p> #{{this.id_eliminacion}} -  {{this.id_asesino}} {{this.asesino_user}}- {{this.asesino_name}}  mató con {{this.objeto}} a {{this.victima_user}}-{{this.victima_name}}
+                    el {{formatearSpHora this.fecha_eliminacion}}</p>
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+            {{/if}}
         </div>
     </div>
 </div>

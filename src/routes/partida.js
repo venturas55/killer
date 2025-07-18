@@ -112,8 +112,9 @@ router.get("/plantillaindividual/:id_partida", funciones.isAuthenticated, funcio
   //const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? AND pej.eliminado>=1", [id_partida,]);
   const partida = await db.query(queries.queryPartidasActivas + " WHERE pej.id_partida=? ORDER BY pej.asesinatos desc", [id_partida,]);
   console.log(partida);
+  const eliminaciones = await db.query(queries.queryEliminaciones + " WHERE e.id_partida=? ORDER BY e.fecha_eliminacion desc", [id_partida,]);
   //console.log(partida[0]);
-  res.render("partidas/plantillaindividual", { partida, partidita: partida[0], });
+  res.render("partidas/plantillaindividual", { partida, partidita: partida[0], eliminaciones});
 });
 
 //Para mostrar listado de partidas en las que esta incluido el jugador tanto si participa como si la ha creado (Un usuario al crear partida no se incluye por defecto como jugador)
