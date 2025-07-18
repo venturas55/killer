@@ -55,7 +55,7 @@ router.post("/profile/delete/:id", funciones.isAuthenticated, async (req, res, n
         res.redirect('/');
     } catch (error) {
         console.error(error);
-        req.flash("error", "Ocurrió un error al eliminar el usuario");
+        req.flash("danger", "Ocurrió un error al eliminar el usuario");
         res.redirect('/profile');
     }
 });

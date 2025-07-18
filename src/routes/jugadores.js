@@ -173,12 +173,12 @@ router.get("/jugador/:id_partida/deleteplayer/:id_jugador", funciones.hasPermiss
       res.redirect("/partidas/edit/" + id_partida);
 
     } else {
-      req.flash("error", "Solo se pueden eliminar jugadores durante la creación de la partida");
+      req.flash("danger", "Solo se pueden eliminar jugadores durante la creación de la partida");
       res.redirect("/partidas/plantilla/" + id_partida);
     }
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error");
   }
 });
@@ -220,7 +220,7 @@ router.get("/partidas/:id_partida/add_player", funciones.hasPermission, async (r
     res.render("partidas/add_player", { usuarios, id_partida });
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error");
   }
 });
@@ -242,19 +242,19 @@ router.post("/partidas/:id_partida/add_player", funciones.hasPermission, async (
     switch (error.code) {
       case "ER_DUP_ENTRY":
         console.log("Error ya estas agregado");
-        req.flash("error", "El jugador ya esta agregado.");
+        req.flash("danger", "El jugador ya esta agregado.");
         break;
       case "ER_BAD_NULL_ERROR":
-        req.flash("error", "El campo NIF es obligatorio");
+        req.flash("danger", "El campo NIF es obligatorio");
         break;
       case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
-        req.flash("error", "Hay un campo con valor incorrecto");
+        req.flash("danger", "Hay un campo con valor incorrecto");
         break;
       /* 
             default:
-              req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
+              req.flash("danger", "Hubo algun error al intentar añadir el jugador"); */
     }
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error");
   }
 

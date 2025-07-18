@@ -21,7 +21,7 @@ router.get("/list/:id_partida", funciones.isAuthenticated, async (req, res) => {
         }
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
@@ -32,7 +32,7 @@ router.get("/add/:id_partida", funciones.hasPermission, async (req, res) => {
         res.render("comunicado/add", id_partida);
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
@@ -52,7 +52,7 @@ router.post("/add", funciones.hasPermission, async (req, res) => {
     } catch (error) {
         console.error(error.code);
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
@@ -64,7 +64,7 @@ router.get("/edit/:id", funciones.hasPermission, async (req, res) => {
         res.render("comunicado/edit", { comunicado });
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
@@ -85,7 +85,7 @@ router.post("/edit", funciones.hasPermission, async (req, res) => {
         res.redirect("/comunicados/list/"+partida.id_partida);
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
@@ -101,7 +101,7 @@ router.post("/del", funciones.hasPermission, async (req, res) => {
         res.redirect("/comunicados/list/"+partida.id_partida);
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });

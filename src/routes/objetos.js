@@ -75,7 +75,7 @@ router.post("/partidas/:id_partida/add_object", funciones.hasPermission, uploadF
         res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
@@ -98,7 +98,7 @@ router.post("/partidas/:id_partida/edit_object/:id_object", funciones.hasPermiss
         res.redirect("/partidas/edit/"+id_partida);
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
@@ -121,7 +121,7 @@ router.get("/partidas/editObjects/:id_partida", funciones.isAuthenticated, async
     res.render("partidas/edit_objects", { datospartida, objetos, esCreador });
   } catch (error) {
     console.error(error);
-    req.flash("error", "Hubo algun error",error);
+    req.flash("danger", "Hubo algun error",error);
     res.redirect("/error");
   }
 });
@@ -141,12 +141,12 @@ router.get("/partidas/:id_partida/deleteobject/:id_objecto", funciones.hasPermis
       console.log("borrado objeto");
       res.redirect("/partidas/edit/" + id_partida);
     } else {
-      req.flash("error", "Solo se pueden eliminar jugadores durante la creación de la partida");
+      req.flash("danger", "Solo se pueden eliminar jugadores durante la creación de la partida");
       res.redirect("/partidas/edit/" + id_partida);
     }
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error:",error);
+    req.flash("danger", "Hubo algun error:",error);
     res.redirect("/error");
   }
 });
@@ -165,7 +165,7 @@ router.get("/partidas/:id_partida/add_existing_object", funciones.hasPermission,
     res.render("objetos/add_existingObject", { objetos, id_partida });
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error");
   }
 
@@ -188,7 +188,7 @@ router.post("/partidas/:id_partida/add_existing_object", funciones.hasPermission
         res.redirect("/partidas/edit/" + id_partida); //te redirige una vez insertado el item
     } catch (error) {
         console.error(error.code);
-        req.flash("error", "Hubo algun error");
+        req.flash("danger", "Hubo algun error");
         res.redirect("/error");
     }
 });
