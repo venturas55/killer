@@ -55,16 +55,16 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
     console.error(error.code);
     switch (error.code) {
       case "ER_BAD_NULL_ERROR":
-        req.flash("error", "El campo  es obligatorio");
+        req.flash("danger", "El campo  es obligatorio");
         break;
       case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
-        req.flash("error", "Hay un campo con valor incorrecto");
+        req.flash("danger", "Hay un campo con valor incorrecto");
         break;
 
       default:
-        req.flash("error", "Hubo algun error al intentar añadir el jugador");
+        req.flash("danger", "Hubo algun error al intentar añadir el jugador");
     }
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
 
     res.redirect("/partidas/listar");
   }
@@ -87,7 +87,7 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
     res.render("partidas/listarotras", { partidas });
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error",error);
   }
 }); */
@@ -101,7 +101,7 @@ router.post("/add", funciones.isAuthenticated, async (req, res) => {
     res.render('partidas/listar', { partidas, });
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error",error);
   }
 }); */
@@ -173,7 +173,7 @@ router.get('/listartodas', funciones.isAdmin, async (req, res) => {
     res.render('partidas/listar', { partidasDondeParticipo });
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -194,7 +194,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     );
 
     if (partida.length === 0) {
-      req.flash("error", "No se encontró la partida.");
+      req.flash("danger", "No se encontró la partida.");
       return res.redirect("/error", error);
     }
 
@@ -296,7 +296,7 @@ router.get("/plantilla/:id_partida", funciones.isAuthenticated, async (req, res)
     });
   } catch (error) {
     console.error(">Un error:", error);
-    req.flash("error", "Hubo algún error");
+    req.flash("danger", "Hubo algún error");
     res.redirect("/error", error);
   }
 });
@@ -320,19 +320,19 @@ router.post("/join", funciones.isAuthenticated, async (req, res) => {
     switch (error.code) {
       case "ER_DUP_ENTRY":
         console.log("Error ya estas agregado");
-        req.flash("error", "El jugador ya esta agregado.");
+        req.flash("danger", "El jugador ya esta agregado.");
         break;
       case "ER_BAD_NULL_ERROR":
-        req.flash("error", "Hay un campo que es obligatorio");
+        req.flash("danger", "Hay un campo que es obligatorio");
         break;
       case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
-        req.flash("error", "Hay un campo con valor incorrecto");
+        req.flash("danger", "Hay un campo con valor incorrecto");
         break;
       /* 
             default:
-              req.flash("error", "Hubo algun error al intentar añadir el jugador"); */
+              req.flash("danger", "Hubo algun error al intentar añadir el jugador"); */
     }
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -360,7 +360,7 @@ router.get("/edit/:id_partida", funciones.isAuthenticated, async (req, res) => {
     res.render("partidas/edit", { datospartida, objetos, jugadores, partida, esCreador });
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -378,7 +378,7 @@ router.get("/editgame/:id_partida", funciones.hasPermission, async (req, res) =>
     res.render("partidas/edit_game", { partida, });
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -402,16 +402,16 @@ router.post("/editgame/:id_partida", funciones.hasPermission, async (req, res) =
     console.log("error: ", error)
     switch (error.code) {
       case "ER_BAD_NULL_ERROR":
-        req.flash("error", "El campo  es obligatorio");
+        req.flash("danger", "El campo  es obligatorio");
         break;
       case "ER_TRUNCATED_WRONG_VALUE_FOR_FIELD":
-        req.flash("error", "Hay un campo con valor incorrecto");
+        req.flash("danger", "Hay un campo con valor incorrecto");
         break;
 
       default:
-        req.flash("error", "Hubo algun error al intentar añadir el jugador");
+        req.flash("danger", "Hubo algun error al intentar añadir el jugador");
     }
-    req.flash("error", "Hubo algun error:\n", error);
+    req.flash("danger", "Hubo algun error:\n", error);
     res.redirect("/partidas/listar");
   }
 
@@ -443,7 +443,7 @@ router.get("/start/:id_partida", funciones.hasPermission, async (req, res) => {
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -454,7 +454,7 @@ router.get("/pause/:id_partida", funciones.hasPermission, async (req, res) => {
     res.redirect("/partidas/edit/" + id_partida);
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -473,7 +473,7 @@ router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async
         res.redirect("/partidas/plantilla/" + id_partida); */
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -491,7 +491,7 @@ router.get("/:id_partida/borrarasesinar/:id_victima", funciones.isAuthenticated,
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -504,11 +504,11 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
     let partida = (await db.query("select * from partidas WHERE  id=?", [id_partida]))[0];
     console.log("status: ", partida);
     if (partida.status != 'enjuego') {
-      req.flash("error", "La partida no está en juego");
+      req.flash("danger", "La partida no está en juego");
       res.redirect("/partidas/plantilla/" + id_partida);
     }
     if (partida.fecha_fin < new Date()) {
-      req.flash("error", "La partida ha terminado");
+      req.flash("danger", "La partida ha terminado");
       res.redirect("/partidas/plantilla/" + id_partida);
     }
     //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
@@ -600,7 +600,7 @@ router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) =>
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error: " + error.code);
+    req.flash("danger", "Hubo algun error: " + error.code);
     res.redirect("/error", error);
   }
 });
@@ -609,12 +609,12 @@ router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
   try {
     let partida = (await db.query("select * from partidas WHERE  id=?", [id_partida]))[0];
     if (partida.status != 'enjuego') {
-      req.flash("error", "La partida no está en juego");
+      req.flash("danger", "La partida no está en juego");
       const error = "La partida no está en juego";
       res.redirect("/error", error);
     }
     if (partida.fecha_fin < new Date()) {
-      req.flash("error", "La partida ha terminado");
+      req.flash("danger", "La partida ha terminado");
       const error = "La partida ha terminadoo";
       res.redirect("/error", error);
     }
@@ -675,7 +675,7 @@ router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
     res.redirect("/confirmacion");
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error: " + error.code);
+    req.flash("danger", "Hubo algun error: " + error.code);
     res.redirect("/error", error);
   }
 });
@@ -687,7 +687,7 @@ router.get("/:id_partida/rejectkillde/:id_victima", async (req, res) => {
     res.redirect("/rechazo");
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -699,7 +699,7 @@ router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, asy
     res.redirect("/rechazo");
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error");
+    req.flash("danger", "Hubo algun error");
     res.redirect("/error", error);
   }
 });
@@ -718,7 +718,7 @@ router.get("/delete/:id_partida", funciones.hasPermission, async (req, res) => {
     res.redirect("/partidas/listar");
   } catch (error) {
     console.error(error.code);
-    req.flash("error", "Hubo algun error: " + error.code);
+    req.flash("danger", "Hubo algun error: " + error.code);
     res.redirect("/error", error);
   }
 });
