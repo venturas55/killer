@@ -20,8 +20,11 @@
                     {{#each partida}}
                     <tr class="table-active">
                         <td>
-                           <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_jugador}}"> {{this.id_jugador}} {{this.jugador_user}} - {{this.jugador_name}}
-                            </a></td>
+                            <a href="/jugador/foto/{{../partidita.id_partida}}/{{this.id_jugador}}">
+                                <p> {{this.id_jugador}} {{this.jugador_user}} - {{this.jugador_name}}
+                                </p>
+                            </a>
+                        </td>
                         <td> <a href="/partidas/{{../partidita.id_partida}}/ver_object/{{this.id_objeto}}">
                                 <p> {{this.objeto}}</p>
                             </a></td>
@@ -60,17 +63,18 @@
             {{#if partida}}
             <table class="table table-dark table-striped">
                 <tr>
-        
+
                     <th>Eliminacion</th>
-                    
+
 
                     {{!-- <th>Options</th> --}}
                 </tr>
                 {{#each eliminaciones}}
                 <tr class="table-active">
                     <td>
-                        <p> #{{this.id_eliminacion}} -  {{this.id_asesino}} {{this.asesino_user}}- {{this.asesino_name}}  mató con {{this.objeto}} a {{this.victima_user}}-{{this.victima_name}}
-                    el {{formatearSpHora this.fecha_eliminacion}}</p>
+                        <p> #{{this.id_eliminacion}} - {{this.id_asesino}} {{this.asesino_user}}- {{this.asesino_name}}
+                            mató con {{this.objeto}} a {{this.victima_user}}-{{this.victima_name}}
+                            el {{formatearSpHora this.fecha_eliminacion}}</p>
                     </td>
                 </tr>
                 {{/each}}
