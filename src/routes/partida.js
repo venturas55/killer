@@ -621,7 +621,7 @@ router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
     //Inserto la muerte en la tabla eliminaciones
     //TODO: si y solo si hay un ticket activo. HECHO!!
     //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
-    let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
+    let [asesino] = await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]);
     console.log("asesino ticket: ", asesino);
     if (asesino.ticket) {
       //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
