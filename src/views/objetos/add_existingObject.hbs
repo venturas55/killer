@@ -17,23 +17,36 @@
 
 
                     <form action="/partidas/{{id_partida}}/add_existing_object" method="POST" id="objectForm">
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="nombre" id="nombreInput" placeholder="Nombre"
+                        <div class="inputBox">
+                            <input class="w-100 text-black" type="text" name="nombre" id="nombreInput" placeholder="Nombre"
                                 readonly />
+                            <span class="bg-white text-black">Item</span>
                         </div>
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="descripcion" id="descripcionInput"
+                        <div class="inputBox my-4">
+                            <input class="w-100 text-black" type="text" name="descripcion" id="descripcionInput"
                                 placeholder="Descripcion" readonly />
+                            <span class="bg-white text-black">Descripción</span>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group">
                             <input type="hidden" name="tipo" value="objeto" />
                         </div>
-                        <input type="hidden" name="pictureURL" value="{{objeto.pictureURL}}" id="pictureURLInput"/>
-                        <img src="/img/imagenes/{{objeto.pictureURL}}" class="w-100 m-2" alt="No carga foto" id="pictureURLPicture" />
-
+                        <input type="hidden" name="pictureURL" value="{{objeto.pictureURL}}" id="pictureURLInput" />
+                        {{#if objeto.pictureURL}}
+                        <img src="/img/imagenes/{{objeto.pictureURL}}" class="w-100 m-2" alt="Sin imagen"
+                            id="pictureURLPicture" />
+                        {{else}}
+                        <div class="d-flex justify-content-around">
+                            <p class="text-muted"> Imagen no disponible</p>
+                        </div>
+                        {{/if}}
                         <div class="d-flex justify-content-around m-4">
                             <button class="btn btn-style btn-block">AÑADIR</button>
+
                         </div>
+                        <div class="d-flex justify-content-around">
+                            <p class="text-muted">Despues se puede modificar</p>
+                        </div>
+
                     </form>
                 </div>
             </div>
@@ -60,8 +73,8 @@
             // Update image preview
             //console.log(selectedOption.dataset);
             if (selectedOption.dataset.pictureurl) {
-                pictureURLPicture.src = "/img/imagenes/"+selectedOption.dataset.pictureurl;
-                pictureURLPicture.alt = "/img/imagenes/"+selectedOption.dataset.pictureurl;
+                pictureURLPicture.src = "/img/imagenes/" + selectedOption.dataset.pictureurl;
+                pictureURLPicture.alt = "/img/imagenes/" + selectedOption.dataset.pictureurl;
             } else {
                 pictureURLPicture.src = '';
             }
