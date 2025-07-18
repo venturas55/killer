@@ -1,6 +1,9 @@
 drop database killer;
+
 create database killer;
+
 use killer;
+
 DROP TABLE IF EXISTS sessions;
 
 DROP TABLE IF EXISTS partidajugadores;
@@ -32,7 +35,7 @@ CREATE TABLE `partidas` (
   `fecha_inicio` TIMESTAMP,
   `fecha_fin` TIMESTAMP,
   `id_creador` int(11),
-  `status` enum ('encreacion', 'enpausa', 'enjuego','finalizada') default 'encreacion',
+  `status` enum ('encreacion', 'enpausa', 'enjuego', 'finalizada') default 'encreacion',
   FOREIGN KEY (id_creador) REFERENCES usuarios(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de info de partidas';
 
@@ -93,6 +96,7 @@ CREATE TABLE `tokens` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de tokens';
 
 drop table comunicados;
+
 CREATE TABLE `comunicados` (
   `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `titulo` varchar(50) NOT NULL,
@@ -102,14 +106,24 @@ CREATE TABLE `comunicados` (
   FOREIGN KEY (id_partida) REFERENCES partidas(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de comunicados';
 
-ALTER TABLE `usuarios`
-  ADD COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
-  ADD COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
+ALTER TABLE
+  `usuarios`
+ADD
+  COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
+ADD
+  COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
 
+ALTER TABLE
+  `partidas`
+ADD
+  COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
+ADD
+  COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
 
-ALTER TABLE `partidas`
-  ADD COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
-  ADD COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
+ALTER TABLE
+  eliminaciones
+ADD
+  UNIQUE (id_partida, id_victima);
 
 INSERT INTO
   `usuarios` (
