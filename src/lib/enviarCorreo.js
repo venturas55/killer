@@ -91,8 +91,8 @@ export function enviarCorreo(req, res, destinatario, id_partida) {
     }
   });
 
-  const enlaceAccept = `http://${req.headers.host}/partidas/${id_partida}/muertede/${destinatario.id}`;
-  const enlaceReject = `http://${req.headers.host}/partidas/${id_partida}/rejectkillde/${destinatario.id}`;
+  const enlaceAccept = `http://${req.headers.host}/partidas/${id_partida}/muerte/${destinatario.id}`;
+  const enlaceReject = `http://${req.headers.host}/partidas/${id_partida}/rejectkill/${destinatario.id}`;
 
   const html = `
                 <!DOCTYPE html>

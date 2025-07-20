@@ -497,215 +497,130 @@ router.get("/:id_partida/borrarasesinar/:id_victima", funciones.isAuthenticated,
 });
 
 //Ruta para CONFIRMAR la solicitud de un asesinato. ES UNA MUERTE. JUGADOR ES QUIEN MUERE!!! ES DECIR VICTIMA.
-router.get("/:id_partida/muerte", funciones.isAuthenticated, async (req, res) => {
-  const { id_partida } = req.params;
-  var id_jugador = req.user.id;
+router.get("/:id_partida/muerte/:id_jugador?", async (req, res) => {
+  const { id_partida, id_jugador: paramIdJugador } = req.params;
+
+  // Si hay sesión iniciada y no hay id_jugador en la ruta, usamos el de sesión
+  const isLoggedIn = req.isAuthenticated && req.isAuthenticated();
+  const id_jugador = isLoggedIn && !paramIdJugador ? req.user.id : paramIdJugador;
+
+  if (!id_jugador) {
+    req.flash("danger", "No se ha podido identificar al jugador");
+    return res.redirect("/error");
+  }
+
   try {
-    let partida = (await db.query("select * from partidas WHERE  id=?", [id_partida]))[0];
-    console.log("status: ", partida);
-    if (partida.status != 'enjuego') {
+    let partida = (await db.query("SELECT * FROM partidas WHERE id=?", [id_partida]))[0];
+
+    //Si no esta en juego la partida se devuelve
+    if (!partida || partida.status != 'enjuego') {
       req.flash("danger", "La partida no está en juego");
-      res.redirect("/partidas/plantilla/" + id_partida);
+      return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/error");
     }
+    //Si ha finalizado la fecha fin tambien se trunca
     if (partida.fecha_fin < new Date()) {
       req.flash("danger", "La partida ha terminado");
-      res.redirect("/partidas/plantilla/" + id_partida);
+      return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/error");
     }
-    //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
-    //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
-    let asesino = (await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]))[0];
-    //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
-    let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
-    //console.log("2")
-    //console.log(victima);
+    //TODO: si algun otro jugador tiene un ticket de que le ha matado este jugador
+    //No se puede confirmar muerte si otro Jugador tiene una muerte pendiente por confirmar de éste.
+    //QUE HACER CON EL TICKET?? Ahora mismo creo que no pasaria nada,Se borraria el ticket y se asinaria al siguiente.
+/*     let [ticket] = await db.query(
+      "SELECT * FROM partidasenjuego WHERE id_jugador=? AND id_partida=? AND ticket=1" ,
+      [id_jugador, id_partida]
+    ); */
+    //FIN
 
-    //Creo el asesinato
+    let [asesino] = await db.query(
+      "SELECT * FROM partidasenjuego WHERE id_victima=? AND id_partida=?",
+      [id_jugador, id_partida]
+    );
+
+    if (!asesino || !asesino.ticket) {
+      req.flash("danger", "No hay ticket activo");
+      return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/confirmacion");
+    }
+
+    let jugador = (await db.query(
+      "SELECT * FROM partidasenjuego WHERE id_jugador=? AND id_partida=?",
+      [id_jugador, id_partida]
+    ))[0];
+
     const eliminacion = {
       id_partida,
-      'id_asesino': asesino.id_jugador,
-      'id_victima': id_jugador,
-      'id_objeto': asesino.id_objeto,
-    }
-    //Inserto la muerte en la tabla eliminaciones
-    await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
+      id_asesino: asesino.id_jugador,
+      id_victima: id_jugador,
+      id_objeto: asesino.id_objeto,
+    };
 
-    //ACTUALIZO VICTIMA=JUGADOR
-    // Marco la victima muerta y su fecha.quito el ticket
+    await db.query("INSERT INTO eliminaciones SET ?", [eliminacion]);
+
+    // Actualiza jugador asesinado
     jugador.eliminado = true;
     jugador.fecha_asesinato = new Date();
     jugador.ticket = false;
 
-    // Check if this elimination results in only one player remaining
-    const remainingPlayers = await db.query(
-      "SELECT COUNT(*) as remaining FROM partidasenjuego WHERE id_partida=? AND eliminado=0",
-      [id_partida]
-    );
+    // Guarda datos antiguos del asesino
+    const objetoaux = asesino.id_objeto;
 
-    if (remainingPlayers[0].remaining === 1) {
-      // Update partida status to finalizada
-      await db.query(
-        "UPDATE partidas SET status='finalizada' WHERE id=?",
-        [id_partida]
-      );
-      // Get the winner
-      const winner = await db.query(
-        "SELECT id_jugador FROM partidasenjuego WHERE id_partida=? AND eliminado=0",
-        [id_partida]
-      );
-      if (winner[0]?.id_jugador === id_jugador) {
-        // Current player is the winner
-        req.flash("success", "¡Enhorabuena! Has ganado la partida");
-      } else {
-        // Someone else is the winner
-        const winnerName = await db.query(
-          "SELECT jugador_user FROM usuarios WHERE id=?",
-          [winner[0].id_jugador]
-        );
-        req.flash("info", `La partida ha terminado. El ganador es ${winnerName[0]?.jugador_user}`);
-      }
-    }
-
-
-    //guardo datos a machacar del asesino
-    let objetoaux = asesino.id_objeto;
-
-    //ASESINO
-    //Asigno nuevos datos del asesino que hereda del jugador asesinado, VICTIMA
     asesino.id_victima = jugador.id_victima;
     asesino.id_objeto = jugador.id_objeto;
     asesino.ticket = false;
-    //Sumo muerte Actualizo nuevo objetivo
     asesino.asesinatos++;
 
-    //recupero datos machacados del asesino a la victima. DATOS CON LOS QUE SE MATO. UN MUERTO TENDRA EN ID_VICTIMA A SU ASESINO ASI COMO EL OBJETO CON EL QUE LE MATARON
     jugador.id_victima = asesino.id_jugador;
     jugador.id_objeto = objetoaux;
     jugador.eliminado = 1;
 
+    await db.query(
+      "UPDATE partidasenjuego SET ? WHERE id_partida=? AND id_jugador=?",
+      [jugador, id_partida, jugador.id_jugador]
+    );
+    await db.query(
+      "UPDATE partidasenjuego SET ? WHERE id_partida=? AND id_jugador=?",
+      [asesino, id_partida, asesino.id_jugador]
+    );
 
-    //await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
-
-    console.log("4")
-    await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [jugador, id_partida, jugador.id_jugador,]);
-
-    await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [asesino, id_partida, asesino.id_jugador]);
-
-    //VERIFICAR SI SE ACABA LA PARTIDA BASANDONOS EN SUPERVIVIENTES
-    let supervivientes = await db.query("select * from partidasenjuego WHERE eliminado=false and id_partida=?", [id_partida]);
-    //console.log(supervivientes);
-    if (supervivientes.length == 1) {
-      await db.query("UPDATE partidas set status='finalizada' WHERE id=?", [id_partida,]);
-    }
-
-    res.redirect("/partidas/plantilla/" + id_partida);
-  } catch (error) {
-    console.error(error.code);
-    req.flash("danger", "Hubo algun error: " + error.code);
-    res.redirect("/error", error);
-  }
-});
-router.get("/:id_partida/muertede/:id_jugador", async (req, res) => {
-  const { id_partida, id_jugador } = req.params;
-  try {
-    let partida = (await db.query("select * from partidas WHERE  id=?", [id_partida]))[0];
-    if (partida.status != 'enjuego') {
-      req.flash("danger", "La partida no está en juego");
-      const error = "La partida no está en juego";
-      res.redirect("/error", error);
-    }
-    if (partida.fecha_fin < new Date()) {
-      req.flash("danger", "La partida ha terminado");
-      const error = "La partida ha terminadoo";
-      res.redirect("/error", error);
-    }
-    //Inserto la muerte en la tabla eliminaciones
-    //TODO: si y solo si hay un ticket activo. HECHO!!
-    //GUARDO DATOS DEL ASESINO DEL JUGADOR Guarda en id_jugador al ASESINO y en id_victima a JUGADOR
-    let [asesino] = await db.query("select * from partidasenjuego WHERE id_victima=? and id_partida=?", [id_jugador, id_partida]);
-    console.log("asesino ticket: ", asesino);
-    if (asesino.ticket) {
-      //otro jugador asesino envió ticket a victima, se almacena en ticket del asesino. EN LA TABLA PARTIDASENJUEGO.
-
-      //Guarda DATOS DE PARTIDA DEL ASESINO. En id_jugador al JUGADOR y en id_victima a la futura VICTIMA QUE HEREDARÁ el asesino.
-      let jugador = (await db.query("select * from partidasenjuego WHERE id_jugador=? and id_partida=?", [id_jugador, id_partida]))[0];
-      //console.log("2")
-      //console.log(victima);
-
-      //Creo el asesinato
-      const eliminacion = {
-        id_partida,
-        'id_asesino': asesino.id_jugador,
-        'id_victima': id_jugador,
-        'id_objeto': asesino.id_objeto,
+    // Verifica si queda un único superviviente
+    const supervivientes = await db.query(
+      "SELECT * FROM partidasenjuego WHERE eliminado=0 AND id_partida=?",
+      [id_partida]
+    );
+    if (supervivientes.length === 1) {
+      await db.query("UPDATE partidas SET status='finalizada' WHERE id=?", [id_partida]);
+      if (supervivientes[0].id_jugador === id_jugador) {
+        req.flash("success", "¡Enhorabuena! Has ganado la partida");
+      } else {
+        const [ganador] = await db.query(
+          "SELECT jugador_user FROM usuarios WHERE id=?",
+          [supervivientes[0].id_jugador]
+        );
+        req.flash("info", `La partida ha terminado. El ganador es ${ganador.jugador_user}`);
       }
-      await db.query("INSERT INTO eliminaciones set ?", [eliminacion]);
-      //ACTUALIZO VICTIMA=JUGADOR
-      // Marco la victima muerta y su fecha.quito el ticket
-      jugador.eliminado = true;
-      jugador.fecha_asesinato = new Date();
-      jugador.ticket = false;
-
-      //guardo datos a machacar del asesino
-      let objetoaux = asesino.id_objeto;
-
-      //ASESINO
-      //Asigno nuevos datos del asesino que hereda del jugador asesinado, VICTIMA
-      asesino.id_victima = jugador.id_victima;
-      asesino.id_objeto = jugador.id_objeto;
-      asesino.ticket = false;
-      //Sumo muerte Actualizo nuevo objetivo
-      asesino.asesinatos++;
-
-      //recupero datos machacados del asesino a la victima. DATOS CON LOS QUE SE MATO. UN MUERTO TENDRA EN ID_VICTIMA A SU ASESINO ASI COMO EL OBJETO CON EL QUE LE MATARON
-      jugador.id_victima = asesino.id_jugador;
-      jugador.id_objeto = objetoaux;
-      jugador.eliminado = 1;
-
-      await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [jugador, id_partida, jugador.id_jugador,]);
-      await db.query("UPDATE partidasenjuego set ? WHERE id_partida=? AND id_jugador=?", [asesino, id_partida, asesino.id_jugador]);
-    } else {
-      req.flash("danger", "Hubo algun error. No hay ticket activo");
-      res.redirect("/confirmacion");
     }
 
+    return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/confirmacion");
 
-
-    //VERIFICAR SI SE ACABA LA PARTIDA BASANDONOS EN SUPERVIVIENTES
-    let supervivientes = await db.query("select * from partidasenjuego WHERE eliminado=false and id_partida=?", [id_partida]);
-    //console.log(supervivientes);
-    if (supervivientes.length == 1) {
-      await db.query("UPDATE partidas set status='finalizada' WHERE id=?", [id_partida,]);
-    }
-    console.log("Supervivientes: ", supervivientes)
-    res.redirect("/confirmacion");
   } catch (error) {
-    console.error(error.code);
-    req.flash("danger", "Hubo algun error: " + error.code);
-    res.redirect("/error", error);
+    console.error("ERROR:", error);
+    req.flash("danger", "Hubo un error: " + error.code || error.message);
+    return res.redirect("/error");
   }
 });
 
-router.get("/:id_partida/rejectkillde/:id_victima", async (req, res) => {
+router.get("/:id_partida/rejectkill/:id_victima", async (req, res) => {
   const { id_victima, id_partida } = req.params;
   try {
-    await db.query("update partidasenjuego set ticket = false where id_partida=?  AND id_victima=?", [id_partida, id_victima])
-    res.redirect("/rechazo");
+    await db.query(
+      "UPDATE partidasenjuego SET ticket = false WHERE id_partida = ? AND id_victima = ?",
+      [id_partida, id_victima]
+    );
+    const isLoggedIn = req.isAuthenticated && req.isAuthenticated();
+    return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/rechazo");
   } catch (error) {
     console.error(error.code);
-    req.flash("danger", "Hubo algun error");
-    res.redirect("/error", error);
-  }
-});
-//Ruta para RECHAZAR la solicitud de un asesinato.
-router.get("/:id_partida/rejectkill/:id_victima", funciones.isAuthenticated, async (req, res) => {
-  const { id_victima, id_partida } = req.params;
-  try {
-    await db.query("update partidasenjuego set ticket = false where id_partida=?  AND id_victima=?", [id_partida, id_victima])
-    res.redirect("/rechazo");
-  } catch (error) {
-    console.error(error.code);
-    req.flash("danger", "Hubo algun error");
-    res.redirect("/error", error);
+    req.flash("danger", "Hubo algún error");
+    res.redirect("/error");
   }
 });
 
