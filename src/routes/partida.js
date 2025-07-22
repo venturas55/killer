@@ -469,8 +469,9 @@ router.get("/:id_partida/asesinar/:id_victima", funciones.isAuthenticated, async
     await db.query("update partidasenjuego set ticket = true where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
     const [destinatario] = await db.query("select * from usuarios where id=?", id_victima);
     enviarCorreo(req, res, destinatario, id_partida);
-    /*     req.flash("success", "Aviso de asesinato enviado");
-        res.redirect("/partidas/plantilla/" + id_partida); */
+    funciones.writeLog("PARTIDA: "+id_partida+ " ==> "+ req.user.id + " notifica asesinato de " + id_victima);
+    req.flash("success", "Aviso de asesinato enviado");
+    res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
     console.error(error.code);
     req.flash("danger", "Hubo algun error");
@@ -487,6 +488,7 @@ router.get("/:id_partida/borrarasesinar/:id_victima", funciones.isAuthenticated,
 
   try {
     await db.query("update partidasenjuego set ticket = false where id_partida=? AND id_jugador=? AND id_victima=?", [id_partida, req.user.id, id_victima])
+    funciones.writeLog("PARTIDA: "+id_partida+ " ==> "+ req.user.id + " cancela notificacion de asesinato de " + id_victima);
     req.flash("success", "Aviso de asesinato borrado");
     res.redirect("/partidas/plantilla/" + id_partida);
   } catch (error) {
@@ -525,10 +527,10 @@ router.get("/:id_partida/muerte/:id_jugador?", async (req, res) => {
     //TODO: si algun otro jugador tiene un ticket de que le ha matado este jugador
     //No se puede confirmar muerte si otro Jugador tiene una muerte pendiente por confirmar de éste.
     //QUE HACER CON EL TICKET?? Ahora mismo creo que no pasaria nada,Se borraria el ticket y se asinaria al siguiente.
-/*     let [ticket] = await db.query(
-      "SELECT * FROM partidasenjuego WHERE id_jugador=? AND id_partida=? AND ticket=1" ,
-      [id_jugador, id_partida]
-    ); */
+    /*     let [ticket] = await db.query(
+          "SELECT * FROM partidasenjuego WHERE id_jugador=? AND id_partida=? AND ticket=1" ,
+          [id_jugador, id_partida]
+        ); */
     //FIN
 
     let [asesino] = await db.query(
@@ -538,7 +540,7 @@ router.get("/:id_partida/muerte/:id_jugador?", async (req, res) => {
 
     if (!asesino || !asesino.ticket) {
       req.flash("danger", "No hay ticket activo");
-      return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/confirmacion");
+      return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/error");
     }
 
     let jugador = (await db.query(
@@ -563,8 +565,11 @@ router.get("/:id_partida/muerte/:id_jugador?", async (req, res) => {
     // Guarda datos antiguos del asesino
     const objetoaux = asesino.id_objeto;
 
+    //asigno la victima del muerto al asesino
     asesino.id_victima = jugador.id_victima;
+    //asigno el objeto del muerto al asesino
     asesino.id_objeto = jugador.id_objeto;
+    //Reseteo ticket y sumo muerte
     asesino.ticket = false;
     asesino.asesinatos++;
 
@@ -586,6 +591,7 @@ router.get("/:id_partida/muerte/:id_jugador?", async (req, res) => {
       "SELECT * FROM partidasenjuego WHERE eliminado=0 AND id_partida=?",
       [id_partida]
     );
+    funciones.writeLog("PARTIDA: "+id_partida+ " ==> "+ id_jugador + " acepta que fue asesinado por " + asesino.id_jugador);
     if (supervivientes.length === 1) {
       await db.query("UPDATE partidas SET status='finalizada' WHERE id=?", [id_partida]);
       if (supervivientes[0].id_jugador === id_jugador) {

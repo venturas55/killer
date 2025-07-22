@@ -2,3 +2,4 @@
 node_modules
 /src/public/img/imagenes
 /src/public/img/profiles
+/src/logs.txt

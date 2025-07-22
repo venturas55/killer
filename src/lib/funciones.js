@@ -5,6 +5,10 @@ import db from "../database.js";
 import queries from "../routes/queries.js";
 import mysqldump from 'mysqldump';
 import { stringify } from 'querystring';
+import * as url from "url";
+import * as fs from "fs";
+import * as path from "path";
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const funciones = {};
 
 function createdDate(file) {
@@ -177,8 +181,6 @@ funciones.S5 = async () => {
     let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return characters.charAt(Math.floor(Math.random() * characters.length)) + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     //const guid = () => (S5()).toUpperCase();
-
-
 }
 
 funciones.getCode = () => {
@@ -191,6 +193,16 @@ funciones.getCode = () => {
         counter += 1;
     }
     return result;
+}
+
+// Función para registrar log
+funciones.writeLog = (message)=> {
+  const logPath = path.join(__dirname, "..",'logs.txt');
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] - ${message}\n`;
+  fs.appendFile(logPath, logMessage, (err) => {
+    if (err) console.error('Error al escribir el log:', err);
+  });
 }
 
 export default funciones;

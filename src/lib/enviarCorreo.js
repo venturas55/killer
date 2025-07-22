@@ -151,13 +151,19 @@ export function enviarCorreo(req, res, destinatario, id_partida) {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error("Error:", error);
-      req.flash("danger", "Error al enviar el eMail");
-      res.redirect("back"); // Redirige a la misma página
-    } else {
-      console.log('Email sent: ' + info.response);
-      req.flash("success", `Se ha enviado una notificacion a la victima  ${destinatario.full_name} ${destinatario.email}.`);
-      res.redirect("back"); // Redirige a la misma página
+      const isRecipientError = error.responseCode === 450 && error.response?.includes('Recipient address rejected');
+
+      if (isRecipientError) {
+        console.warn("❗Correo no enviado: destinatario inválido (dominio no resuelto):", destinatario.email);
+        req.flash("warning", `No se pudo enviar el correo porque el destinatario (${destinatario.email}) no es válido.`);
+      } else {
+        console.error("❌ Error al enviar el correo:", error);
+        req.flash("danger", "Error inesperado al enviar el eMail.");
+      }
+      return res.redirect("back");
     }
+    console.log('📬 Email enviado:', info.response);
+    req.flash("success", `Se ha enviado una notificación a la víctima ${destinatario.full_name} (${destinatario.email}).`);
+    res.redirect("back");
   });
 }

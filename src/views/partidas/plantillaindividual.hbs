@@ -72,8 +72,8 @@
                 {{#each eliminaciones}}
                 <tr class="table-active">
                     <td>
-                        <p> #{{this.id_eliminacion}} - {{this.id_asesino}} {{this.asesino_user}}- {{this.asesino_name}}
-                            mató con {{this.objeto}} a {{this.victima_user}}-{{this.victima_name}}
+                        <p> #{{this.id_eliminacion}} ==> {{this.id_asesino}}-{{this.asesino_user}} {{this.asesino_name}}
+                            mató con {{this.objeto}} a  {{this.id_victima}}-{{this.victima_user}} {{this.victima_name}}
                             el {{formatearSpHora this.fecha_eliminacion}}</p>
                     </td>
                 </tr>
