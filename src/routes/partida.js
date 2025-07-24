@@ -505,6 +505,11 @@ router.get("/:id_partida/muerte/:id_jugador?", async (req, res) => {
   // Si hay sesión iniciada y no hay id_jugador en la ruta, usamos el de sesión
   const isLoggedIn = req.isAuthenticated && req.isAuthenticated();
   const id_jugador = isLoggedIn && !paramIdJugador ? req.user.id : paramIdJugador;
+  if (isLoggedIn) {
+    funciones.writeLog("PARTIDA: " + id_partida + " ==> " + id_jugador + " usa la app para aceptar que fue asesinado");
+  } else {
+    funciones.writeLog("PARTIDA: " + id_partida + " ==> " + id_jugador + " usa link correo para aceptar que fue asesinado");
+  }
 
   if (!id_jugador) {
     req.flash("danger", "No se ha podido identificar al jugador");
@@ -531,8 +536,8 @@ router.get("/:id_partida/muerte/:id_jugador?", async (req, res) => {
       "SELECT * FROM partidasenjuego WHERE id_jugador=? AND id_partida=? AND ticket=1",
       [id_jugador, id_partida]
     );
-    console.log("ticket",ticket);
-    console.log("ticket",ticket.length);
+    console.log("ticket", ticket);
+    console.log("ticket", ticket.length);
     if (ticket.length > 0) {
       req.flash("danger", "No puedes aceptar tu muerte. Otro jugador tiene una muerte pendiente en la que tú eres el asesino. Cancela ese ticket o espera a que se resuelva.");
       return res.redirect(isLoggedIn ? `/partidas/plantilla/${id_partida}` : "/error");
