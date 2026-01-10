@@ -1,8 +1,8 @@
-const mysql = require('mysql');
-const { promisify } = require('util');
-const { database } = require('./config'); //traigo el database desde el archivo
-const { stringify } = require('querystring');
-const pool = mysql.createPool(database);
+import { createPool } from 'mysql';
+import { promisify } from 'util';
+import { config } from './config.js'; //traigo el database desde el archivo
+import { stringify } from 'querystring';
+const pool = createPool(config.database);
 
 pool.getConnection((err, connection) => {
     if (err) {
@@ -18,7 +18,7 @@ pool.getConnection((err, connection) => {
 /*    return 'ECONNREFUSED'; */
         }
         if (err.code === 'ER_ACCESS_DENIED_ERROR') {
-            console.error('ACCESO denegado\n'+ stringify( database));
+            console.error('ACCESO denegado\n'+ stringify( config.database));
         }
     } else if (connection) {
         connection.release(); //con esto empieza la conexion
@@ -32,5 +32,5 @@ pool.getConnection((err, connection) => {
 //promisify pool queries. Convierte codigo de callbacks a codigo de promesas
 pool.query = promisify(pool.query); //cada vez que haga una consulta, se podrán usar promesas.
 
-module.exports = pool;
+export default pool;
 

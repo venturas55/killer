@@ -1,27 +1,49 @@
-<!-- CUERPO -->
-<div class="container-fluid mb-4">
-  <div class="hazard-background">
-  </div>
-  <div class="row  justify-content-center">
-    {{#if eliminado}}
-    <h4>FOTO DE LA VICTIMA</h4>
-    {{else}}
-    <h4>FOTO DEL KILLER</h4>
-    {{/if}}
-  </div>
+<div class="container py-5">
   <div class="row justify-content-center">
-    <div class="card m-1" style="max-width: 80%;">
-      <p> {{jugador.full_name}} - {{jugador.usuario}} </p>
-      {{#if eliminado}}
-      <img id="imagenDead" src="/img/imagenes/{{jugador.imagenDead}}" alt="Foto eliminado">
-      {{else}}
-      <img id="imagenAlive" src="/img/imagenes/{{jugador.imagenAlive}}" alt="Foto vivo">
-      {{/if}}
+    <div class="col-lg-6 col-md-8">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-center rounded-top-4">
+          FOTO {{#if eliminado}} DE LA VÍCTIMA {{else}} DEL KILLER {{/if}}
+          <p class="text-white mb-4">
+            {{jugador.full_name}} - {{jugador.usuario}}
+          </p>
+         <p class="text-muted mt-3 mb-1">  {{jugador.email}} </p>
+
+        </div>
+        <div class="card-body text-center px-4 bg-black">
+          <hr>
+          {{#if jugador.pictureURL}}
+          {{#if eliminado}} <div class="muerte-container p-2"> {{/if}}
+            <img src="/img/profiles/{{jugador.pictureURL}}"
+              alt="Foto {{#if eliminado}}de la víctima{{else}}del killer{{/if}}"
+              class="card-img-top img-fluid rounded {{#if eliminado}} muerte-img darkened{{/if}}">
+            {{#if eliminado}}
+            <div class="gota"></div>
+            <div class="gota"></div>
+            <div class="gota"></div>
+            <div class="gota"></div>
+            <div class="gota"></div>
+          </div> {{/if}}
+          {{else}}
+          <img src="/img/profiles/zodiac-killer.jpg"
+            alt="Foto {{#if eliminado}}de la víctima{{else}}del killer{{/if}} por defecto"
+            class="card-img-top img-fluid rounded">
+          {{/if}}
+          <hr>
+          <p class="text-muted mt-3 mb-1">Descripción</p>
+          {{#if jugador.pictureURL}}
+          <h3 class="text-white">{{objeto.descripcion}}</h3>
+          {{else}}
+          <h3 class="text-white">Retrato robot. En persona puede diferir bastante</h3>
+          {{/if}}
+
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <a class="btn btn-warning m-4" style="max-width: 80%;" href="javascript:void(0)"
+          onclick="history.back();">Volver</a>
+      </div>
+      {{>logo}}
     </div>
-  </div>
-  <div class="row justify-content-center">
-    <a class="btn btn-warning" href="javascript:void(0)" onclick="history.back();">Volver</a>
-  </div>
-  <div class="hazard-background">
   </div>
 </div>

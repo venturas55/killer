@@ -1,0 +1,28 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-center rounded-top-4">
+                    <h4 class="mb-1">Detalles del Objeto ID: {{objeto.id}}</h4>
+                    <h2 class="mb-0 fw-light"> {{objeto.nombre}}</h2>
+                </div>
+                <div class="card-body text-center px-4 bg-black">
+                    <hr>
+                    {{#if objeto.pictureURL}}
+                    <img src="/img/imagenes/{{objeto.pictureURL}}" class="w-100 m-2" alt="No carga foto" />
+                    {{else}}
+                    <img src="/img/objeto.png" class="w-100 m-2" alt="No hay foto" />
+                    {{/if}}
+                    <hr>
+                    <p class="text-muted mt-3 mb-1">Descripción</p>
+                    <h3 class="text-white">{{objeto.descripcion}}</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <a class="btn btn-warning m-4" style="max-width: 80%;" href="javascript:void(0)"
+                    onclick="history.back();">Volver</a>
+            </div>
+            {{>logo}}
+        </div>
+    </div>
+</div>

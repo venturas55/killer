@@ -1,0 +1,82 @@
+<!-- Modal ASESINAR - ======== modalObjetivo ===== -->
+{{!-- MODAL --}}
+<div class="modal fade" id="killModalToggle" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="killModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="killModalToggleLabel">MI OBJETIVO</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ">
+                <div class="m-1 ">
+                    <p>Tu objetivo es <a href="/jugador/foto/{{partida.0.id_partida}}/{{objetivo.id_victima}}" class="text-danger"><strong> {{objetivo.victima_name}}</strong></a>
+                        entregandole en mano  <a href="/partidas/{{partida.0.id_partida}}/ver_object/{{objetivo.id_objeto}}" class="text-danger"><strong>{{objetivo.objeto}} </strong></a>
+                    </p>
+                    {{#if ticketenviado}}
+                    <hr>
+                    <p>Ya has enviado una notificación de asesinato a la victima. </p>
+                    <p>Solo queda esperar a que la valide.</p>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="modal-footer d-flex flex-column align-content-center">
+                {{#if ticketenviado}}
+                <button class="btn btn-warning" data-bs-target="#killModalToggle3" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">BORRAR NOTIFICACION</button>
+                {{else}}
+                <button class="btn btn-warning" data-bs-target="#killModalToggle2" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">MATARL@</button>
+                {{/if}}
+                <button class="btn btn-warning" data-bs-target="#killModalToggle"
+                    data-bs-toggle="modal">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="killModalToggle2" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="killModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="killModalToggleLabel2">Confirmación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seguro que has logrado eliminarlo???</p>
+                <p>Le llegará un aviso a la victima, que tendrá que confirmar</p>
+            </div>
+            <div class="modal-footer d-flex flex-column align-content-center">
+                <a href="/partidas/{{objetivo.id_partida}}/asesinar/{{objetivo.id_victima}}" class="btn btn-danger">SI, LO HE
+                    MATALO</a>
+
+                <button class="btn btn-warning" data-bs-target="#killModalToggle2"
+                    data-bs-toggle="modal">ESTABA DE BROMA</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="killModalToggle3" data-bs-backdrop="false" aria-hidden="true"
+    aria-labelledby="killModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-100 cajita">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="killModalToggleLabel3">Confirmación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seguro que quieres cancelar el aviso enviado???</p>
+                <p></p>
+            </div>
+            <div class="modal-footer d-flex flex-column align-content-center">
+                <a href="/partidas/{{objetivo.id_partida}}/borrarasesinar/{{objetivo.id_victima}}"
+                    class="btn btn-danger">SI,
+                    CANCELAR</a>
+
+                <button class="btn btn-warning" data-bs-target="#killModalToggle3" data-bs-toggle="modal">NO, DEJAR
+                    AVISO</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,16 +1,42 @@
-require('dotenv').config();
- const PORT = process.env.PORT || 4000;
- const DB_HOST = process.env.DB_HOST || 'localhost';
- const DB_USER = process.env.DB_USER || 'usuario';
- const DB_PASS = process.env.DB_PASS || 'contrasena';
- const DB_NAME = process.env.DB_NAME || 'dbname';
- const DB_PORT = process.env.DB_PORT || 3306;
+import 'dotenv/config'
 
- module.exports = {
-     database: {
-         host: DB_HOST,
-         user: DB_USER,
-         password: DB_PASS,
-         database: DB_NAME,
-     }
- }
+const {
+    PORT = 4000,
+    DB_HOST = "localhost",
+    DB_USER = "usuario",
+    DB_PASS = "contrasena",
+    DB_NAME = "dbname",
+    DB_PORT = 3306,
+    EMAIL_SERVICE = "ovh",
+    EMAIL_HOST = "smtp.mail.ovh.net",
+    EMAIL_PORT = "465",
+    EMAIL_SECURITY = "TRUE",
+    EMAIL_ACCOUNT = "email@adress.es",
+    EMAIL_PASS = "your pass",
+    EMAIL_AUTH_NEEDED = "true"
+
+} = process.env;
+
+const database = {
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASS,
+    database: DB_NAME,
+}
+
+export const config = {
+    database,
+    PORT,
+    DB_HOST,
+    DB_USER,
+    DB_PASS,
+    DB_NAME,
+    DB_PORT,
+    EMAIL_SERVICE,
+    EMAIL_HOST,
+    EMAIL_PORT,
+    EMAIL_SECURITY,
+    EMAIL_ACCOUNT,
+    EMAIL_AUTH_NEEDED,
+    EMAIL_PASS,
+};

@@ -1,54 +1,77 @@
-const express = require('express');
-const router = express.Router();
-const db = require("../database"); //db hace referencia a la BBDD
-const queries = require("./queries");
-
-const funciones = require('../lib/funciones');
+import { Router } from 'express';
+const router = Router();
+import { createTransport } from 'nodemailer';
+import funciones from '../lib/funciones.js';
 
 router.get('/', async (req, res) => {
     res.render('index');
+});  
+
+router.get('/soporte', funciones.isAuthenticated,(req, res) => {
+    res.render('soporte',{user:req.user});
 });
+router.post('/sendSugerencia', funciones.isAuthenticated,(req, res) => {
+    const {titulo,descripcion} = req.body;
+    req.user;
+    const nombre = req.user.full_name;
+    const usuario = req.user.usuario;
+    const email = req.user.email;
 
 
+    const transporter = createTransport({
+        service: 'ovh',
+        host: "smtp.mail.ovh.net",
+        secure: true,
+        port: 465,
 
-router.get('/pagina_aux1', (req, res) => {
-    res.render('pagina_aux1');
-});
+        auth: {
+            user: process.env.EMAIL_ACCOUNT,
+            pass: process.env.EMAIL_PASS,
+        }
+    });
 
-router.get('/pagina_aux2', (req, res) => {
-    res.render('pagina_aux2');
-});
+    var mailOptions = {
+        from: "KILLER GAME",
+        to: process.env.EMAIL_ACCOUNT,
+        subject: 'SUGERENCIA DE KILLER: '+ titulo,
+        text: "Tienes un correo de ' "+ nombre + " ' que es usuario de tu aplicacion KILLER con el nombre de usuario: '"+usuario + " '.\n\n "+
+        "A continuación se detalla el problema que te translada \n\n"
+        + descripcion  +"\n\n"+
+        "Su email es : "+ email
+    };
+    //console.log(mailOptions);
 
-router.get('/profile', funciones.isAuthenticated, async (req, res) => {
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error("Error:");
+            console.log(error);
+            req.flash("danger", "Error al enviar la sugerencia")
+            res.redirect("/error");
 
-    res.render('profile');
+        } else {
+            console.log('Email sent: ' + info.response);
+            req.flash("success", "Se ha enviado la sugerencia");
+            res.redirect("/");
+        }
+    });
+    res.redirect('/');
 });
 
 router.get('/error', async (req, res) => {
     res.render('error');
 });
 
-router.get('/profile/edit', funciones.isAuthenticated, (req, res) => {
-    res.render('profileEdit');
-});
-router.post('/profile/edit/', funciones.isAuthenticated, async (req, res) => {
-    const newUser = {
-        usuario: req.body.usuario,
-        contrasena: req.body.contrasena,
-        email: req.body.email,
-        full_name: req.body.fullname,
-        privilegio: "san",
-    };
-    //newUser.contrasena = await funciones.encryptPass(password);
-    console.log("guardando en la BBDD");
-    //console.log(user);
-    res.render('profile');
-});
+router.get('/confirmacion', async (req, res) => {
+    res.render('confirmacion');
+});  
+
+router.get('/rechazo', async (req, res) => {
+    res.render('rechazo');
+});  
 
 router.get('/prueba', async (req, res) => {
-
     res.render('prueba');
 });
 
 
-module.exports = router;
+export default router;

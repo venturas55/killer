@@ -1,27 +1,34 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="d-flex flex-row justify-content-between w-75">
+    <div class="ms-2 navbar-brand">
+      <a href="/partidas/listar">
+        <img class=" avatar-s" src="/img/poli.svg" alt="svg"></a>
+    </div>
 
-  <div class="mx-4 navbar-brand">
-    <a target="_blank" href="https://www.escoladestiu.upv.es/">
-      <img class=" avatar-s" src="/img/imagenes/poli.svg" alt="svg"></a>
+    <div class="">
+      {{#if user}}
+      {{>avatar}}
+      {{/if}}
+    </div>
   </div>
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+
+  <button class="me-2 navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse w-25 ms-5 " id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
       {{#if user}}
       <li class="nav-item">
-        <a href="/partidas/listedit" class="nav-link" tabindex="-1" aria-disabled="true">CREAR PARTIDAS</a>
-      </li>
-      <li class="nav-item">
         <a href="/partidas/listar" class="nav-link" tabindex="-1" aria-disabled="true">PARTIDAS</a>
       </li>
-
-{{!--       <li class="nav-item">
-        <a class="nav-link" href="/logout " tabindex="-1" aria-disabled="true">Logout</a>
-      </li> --}}
-
+      <li class="nav-item">
+        <a class="nav-link" tabindex="-1" aria-disabled="true" data-bs-toggle="modal"
+          href="#instruccionesModalToggle">INSTRUCCIONES</a>
+      </li>
+            <li class="nav-item">
+       <a href="/logout" class="nav-link" tabindex="-1" aria-disabled="true">LOGOUT</a>
+      </li>
       {{else}}
 
       <li class="nav-item">
@@ -31,14 +38,10 @@
         <a class="nav-link" href="/signup" tabindex="-1" aria-disabled="true">Sign up</a>
       </li>
       {{/if}}
+      <li class="nav-item">
+        <a href="/soporte" class="nav-link" tabindex="-1" aria-disabled="true">SOPORTE</a>
+      </li>
     </ul>
-
-  </div>
-  <div class="mx-4 navbar-brand">
-  {{#if user}}
-  {{>avatar}}
-  {{/if}}
-
   </div>
 
 </nav>

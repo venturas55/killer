@@ -1,20 +1,24 @@
 <!-- CUERPO -->
-<div class="container-fluid">
-  <div class="hazard-background">
-  </div>
-  <div class="row  justify-content-center">
-    <h4>FOTO DEL OBJETO</h4>
-  </div>
-  <div class="row justify-content-center">
-    <div class="card m-1" style="max-width: 40%;">
-      <p> {{objeto.nombre}} - {{objeto.descripcion}} </p>
-      <img id="imagenAlive" src="/img/imagenes/{{objeto.pictureURL}}" alt="Foto objeto">
-    </div>
+<div class="container py-4">
+  <div class="hazard-background mb-3"></div>
 
+  <div class="row justify-content-center text-center">
+    <div class="col-12 col-md-6">
+      <h2 class="mb-4">Foto del Objeto</h2>
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <p class="card-text">
+            {{objeto.nombre}} - {{objeto.descripcion}}
+          </p>
+        </div>
+        <img id="imagenAlive" src="/img/imagenes/{{objeto.pictureURL}}" alt="Foto de {{objeto.nombre}}"
+          class="img-fluid rounded-bottom">
+      </div>
+      <a href="javascript:void(0)" onclick="history.back();" class="btn btn-warning btn-lg">
+        Volver
+      </a>
+    </div>
   </div>
-<div class="row justify-content-center">
-    <a class="btn btn-warning m-4" href="javascript:void(0)" onclick="history.back();">Volver</a>
-  </div>
-  <div class="hazard-background">
-  </div>
+
+  <div class="hazard-background mt-3"></div>
 </div>

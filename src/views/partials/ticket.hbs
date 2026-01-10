@@ -1,0 +1,11 @@
+{{#if ticket}}
+<div class="row">
+    <div class="col-md-12 mx-auto cajita">
+        <p> <span> <strong>'{{ticket.jugador_name}}'</strong> ha reportado que te ha matado con <strong>
+                    '{{ticket.objeto}}' </strong> . Es verdad?</span></p>
+        <a href="/partidas/{{ticket.id_partida}}/muerte" class="btn btn-warning">Aceptar</a>
+        <a href="/partidas/{{ticket.id_partida}}/rejectkill/{{ticket.id_victima}}" class="btn btn-warning">
+            Denegar</a>
+    </div>
+</div>
+{{/if}}

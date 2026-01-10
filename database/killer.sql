@@ -1,6 +1,9 @@
-drop database killer2;
-create database killer2;
-use killer2;
+drop database killer;
+
+create database killer;
+
+use killer;
+
 DROP TABLE IF EXISTS sessions;
 
 DROP TABLE IF EXISTS partidajugadores;
@@ -19,7 +22,7 @@ CREATE TABLE `usuarios` (
   `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `usuario` varchar(50) NOT NULL,
   `contrasena` varchar(250) NOT NULL,
-  `email` varchar(200) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL UNIQUE,
   `full_name` varchar(200) DEFAULT NULL,
   `privilegio` varchar(30) DEFAULT NULL,
   `pictureURL` varchar(100) CHARACTER SET utf16 COLLATE utf16_spanish2_ci DEFAULT NULL
@@ -32,7 +35,7 @@ CREATE TABLE `partidas` (
   `fecha_inicio` TIMESTAMP,
   `fecha_fin` TIMESTAMP,
   `id_creador` int(11),
-  `status` enum ('encreacion', 'enpausa', 'enjuego','enedicion') default 'encreacion',
+  `status` enum ('encreacion', 'enpausa', 'enjuego', 'finalizada') default 'encreacion',
   FOREIGN KEY (id_creador) REFERENCES usuarios(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de info de partidas';
 
@@ -65,7 +68,7 @@ CREATE TABLE `partidasenjuego` (
   `asesinatos` int(11) DEFAULT 0,
   `ticket` boolean DEFAULT 0,
   `eliminado` boolean DEFAULT 0,
-  `fecha_asesinato` TIMESTAMP DEFAULT 0,
+  `fecha_asesinato` TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   FOREIGN KEY (id_partida) REFERENCES partidas(id),
   FOREIGN KEY (id_objeto) REFERENCES objetos(id),
   FOREIGN KEY (id_jugador) REFERENCES usuarios(id),
@@ -78,19 +81,49 @@ CREATE TABLE eliminaciones (
   id_asesino int(11),
   id_victima int(11),
   id_objeto int(11),
-  fecha_eliminacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_eliminacion TIMESTAMP DEFAULT current_timestamp(),
   FOREIGN KEY (id_partida) REFERENCES partidas(id),
   FOREIGN KEY (id_asesino) REFERENCES usuarios(id),
   FOREIGN KEY (id_victima) REFERENCES usuarios(id),
   FOREIGN KEY (id_objeto) REFERENCES objetos(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de eliminaciones en juego';
 
-CREATE TABLE solicitudes (
-  id_partida varchar(5) NOT NULL,
-  id_jugador int(11) NOT NULL,
-  FOREIGN KEY (id_partida) REFERENCES partidas(id),
-  FOREIGN KEY (id_jugador) REFERENCES usuarios(id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de solicituddes en juego';
+CREATE TABLE `tokens` (
+  `user_id` int(11) NOT NULL,
+  `hashedtoken` varchar(200) PRIMARY KEY,
+  `expires` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de tokens';
+
+drop table comunicados;
+
+CREATE TABLE `comunicados` (
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  `titulo` varchar(50) NOT NULL,
+  `descripcion` varchar(250) DEFAULT NULL,
+  `id_partida` varchar(5),
+  `fecha` TIMESTAMP DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  FOREIGN KEY (id_partida) REFERENCES partidas(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = 'tabla de comunicados';
+
+ALTER TABLE
+  `usuarios`
+ADD
+  COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
+ADD
+  COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
+
+ALTER TABLE
+  `partidas`
+ADD
+  COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
+ADD
+  COLUMN `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última modificación';
+
+ALTER TABLE
+  eliminaciones
+ADD
+  UNIQUE (id_partida, id_victima);
 
 INSERT INTO
   `usuarios` (

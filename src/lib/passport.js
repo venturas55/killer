@@ -1,8 +1,8 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
 
-const pool = require("../database");
-const funciones = require("../lib/funciones");
+import db from "../database.js";
+import funciones from "../lib/funciones.js";
 
 passport.use(
     "local.signin",
@@ -14,20 +14,20 @@ passport.use(
             passReqToCallback: true,
         },
         async (req, username, password, done) => {
-            const rows = await pool.query("SELECT * FROM usuarios WHERE usuario= ?", [username]);
-           
+            const rows = await db.query("SELECT * FROM usuarios WHERE usuario= ?", [username]);
+
             if (rows.length > 0) {
                 const user = rows[0];
-                console.log(user);
-                var prueba = await funciones.encryptPass(user.contrasena);
-                console.log("Pass "+prueba);
-                const validPassword = await funciones.verifyPassword(password,user.contrasena);
+                //console.log(user);
+                //var prueba = funciones.encryptPass(user.contrasena);
+                //console.log("Pass "+prueba);
+                const validPassword = await funciones.verifyPassword(password, user.contrasena);
                 if (validPassword)
                     done(null, user, req.flash('success', "Welcome " + user.usuario));
                 else
-                    done(null, false, req.flash('message', "El password introducido es incorrecto"));
+                    done(null, false, req.flash('warning', "El password introducido es incorrecto"));
             } else {
-                return done(null, false, req.flash('message', "Ese usuario no existe"));
+                return done(null, false, req.flash('warning', "Ese usuario no existe"));
             }
         }
     )
@@ -42,26 +42,25 @@ passport.use(
             passReqToCallback: true,
         },
         async (req, username, password, done) => {
-
-
             //const { cuerpo } = req.body;
             const newUser = {
-                usuario:    username,
+                usuario: username,
                 contrasena: password,
-                email:      req.body.email,
-                full_name:  req.body.fullname,
+                email: req.body.email,
+                full_name: req.body.fullname,
                 privilegio: "none",
             };
             newUser.contrasena = await funciones.encryptPass(password);
-            const yaExiste = await pool.query("SELECT * FROM usuarios WHERE usuario=?", newUser.usuario);
-            if(yaExiste[0]){
+            const yaExiste = await db.query("SELECT * FROM usuarios WHERE usuario=?", newUser.usuario);
+            if (yaExiste[0]) {
                 console.log(yaExiste[0].usuario);
                 console.log("Ya existe");
-                return done(null,false,req.flash('message','El usuario ya existe! Puebe con otro nombre de usuario.'));
+                return done(null, false, req.flash('danger', 'El usuario ya existe! Puebe con otro.'));
             }
-            else{
+            else {
                 console.log("No existe");
-                const result = await pool.query("INSERT INTO usuarios SET ?", [newUser]);
+                console.log("newUser");
+                const result = await db.query("INSERT INTO usuarios SET ?", [newUser]);
                 newUser.id = result.insertId;
                 console.log(result);
                 return done(null, newUser);
@@ -70,14 +69,15 @@ passport.use(
     )
 );
 
-//comprobar esto
 passport.serializeUser((user, done) => {
-    done(null, user.usuario);
+    done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-    const rows = await pool.query("SELECT * FROM usuarios WHERE usuario= ?", [
-        id,
-    ]);
-    done(null, rows[0]);
+    try {
+        const [user] = await db.query("SELECT * FROM usuarios WHERE id = ?", [id]);
+        done(null, user);
+    } catch (error) {
+        done(error, null);
+    }
 });

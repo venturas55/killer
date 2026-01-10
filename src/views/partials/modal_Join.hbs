@@ -1,0 +1,27 @@
+<!-- Modal JOIN - ======== modalObjetivo =====-->
+{{!-- MODAL --}}
+<div class="modal fade" id="joinModalToggle" data-bs-backdrop="false" aria-hidden="true"
+  aria-labelledby="joinModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content w-100">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      {{!-- <div class="modal-header">
+        <h1 class="modal-title fs-5" id="joinModalToggleLabel">INTRODUZCA CODIGO DE PARTIDA</h1>
+
+      </div> --}}
+      <form action="/partidas/join" method="POST">
+        <div class="modal-body">
+          <div class="m-1 cajita">
+            <div class="inputBox">
+              <input class="w-100" type="text" placeholder="Introduzca codigo de partida" name="id_partida" autofocus
+                required>
+              {{!-- <span>Codigo</span> --}}
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-warning w-50" data-bs-target="#joinModalToggle" data-bs-toggle="modal"
+          data-bs-dismiss="modal">Unirse</button>
+    </div>
+    </form>
+  </div>
+</div>
